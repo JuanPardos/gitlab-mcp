@@ -9,7 +9,6 @@ Pipeline + job control (trigger, retry, cancel, play manual jobs, fetch logs/art
 
 - [`list_pipelines`](#list_pipelines) — 📖 Read-only
 - [`get_pipeline`](#get_pipeline) — 📖 Read-only
-- [`get_pipeline_variables`](#get_pipeline_variables) — 📖 Read-only
 - [`get_pipeline_test_report`](#get_pipeline_test_report) — 📖 Read-only
 - [`get_pipeline_test_report_summary`](#get_pipeline_test_report_summary) — 📖 Read-only
 - [`delete_pipeline`](#delete_pipeline) — ✏️ Writes
@@ -22,7 +21,6 @@ Pipeline + job control (trigger, retry, cancel, play manual jobs, fetch logs/art
 - [`list_deployment_merge_requests`](#list_deployment_merge_requests) — 📖 Read-only
 - [`approve_deployment`](#approve_deployment) — ✏️ Writes
 - [`list_environments`](#list_environments) — 📖 Read-only
-- [`get_environment`](#get_environment) — 📖 Read-only
 - [`update_environment`](#update_environment) — ✏️ Writes
 - [`delete_environment`](#delete_environment) — ✏️ Writes
 - [`stop_environment`](#stop_environment) — ✏️ Writes
@@ -35,7 +33,6 @@ Pipeline + job control (trigger, retry, cancel, play manual jobs, fetch logs/art
 - [`delete_pipeline_trigger`](#delete_pipeline_trigger) — ✏️ Writes
 - [`trigger_pipeline`](#trigger_pipeline) — ✏️ Writes
 - [`list_pipeline_jobs`](#list_pipeline_jobs) — 📖 Read-only
-- [`list_pipeline_trigger_jobs`](#list_pipeline_trigger_jobs) — 📖 Read-only
 - [`get_pipeline_job`](#get_pipeline_job) — 📖 Read-only
 - [`get_pipeline_job_output`](#get_pipeline_job_output) — 📖 Read-only
 - [`create_pipeline`](#create_pipeline) — ✏️ Writes
@@ -43,24 +40,19 @@ Pipeline + job control (trigger, retry, cancel, play manual jobs, fetch logs/art
 - [`cancel_pipeline`](#cancel_pipeline) — ✏️ Writes
 - [`list_pipeline_schedules`](#list_pipeline_schedules) — 📖 Read-only
 - [`get_pipeline_schedule`](#get_pipeline_schedule) — 📖 Read-only
-- [`list_pipeline_schedule_pipelines`](#list_pipeline_schedule_pipelines) — 📖 Read-only
 - [`create_pipeline_schedule`](#create_pipeline_schedule) — ✏️ Writes
 - [`update_pipeline_schedule`](#update_pipeline_schedule) — ✏️ Writes
 - [`delete_pipeline_schedule`](#delete_pipeline_schedule) — ✏️ Writes
-- [`play_pipeline_schedule`](#play_pipeline_schedule) — ✏️ Writes
 - [`take_ownership_pipeline_schedule`](#take_ownership_pipeline_schedule) — ✏️ Writes
-- [`get_pipeline_schedule_variable`](#get_pipeline_schedule_variable) — 📖 Read-only
 - [`create_pipeline_schedule_variable`](#create_pipeline_schedule_variable) — ✏️ Writes
 - [`update_pipeline_schedule_variable`](#update_pipeline_schedule_variable) — ✏️ Writes
 - [`delete_pipeline_schedule_variable`](#delete_pipeline_schedule_variable) — ✏️ Writes
 - [`play_pipeline_job`](#play_pipeline_job) — ✏️ Writes
-- [`play_pipeline_jobs`](#play_pipeline_jobs) — ✏️ Writes
 - [`retry_pipeline_job`](#retry_pipeline_job) — ✏️ Writes
 - [`cancel_pipeline_job`](#cancel_pipeline_job) — ✏️ Writes
 - [`erase_pipeline_job`](#erase_pipeline_job) — ✏️ Writes
 - [`wait_for_pipeline`](#wait_for_pipeline) — 📖 Read-only
 - [`wait_for_job`](#wait_for_job) — 📖 Read-only
-- [`list_job_artifacts`](#list_job_artifacts) — 📖 Read-only
 - [`download_job_artifacts`](#download_job_artifacts) — 📖 Read-only
 - [`get_job_artifact_file`](#get_job_artifact_file) — 📖 Read-only
 
@@ -102,21 +94,6 @@ Get details of a specific pipeline. Use this for a known resource or result; cho
 |---|---|:-:|---|
 | `project_id` | string | ✓ | Project ID or URL-encoded path |
 | `pipeline_id` | string | ✓ | The ID of the pipeline |
-
-### `get_pipeline_variables`
-
-*📖 Read-only*
-
-Get variables configured for a pipeline. Use this for a known resource or result; choose the corresponding list or search tool when you need to discover multiple resources. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `pipeline_id` | string | ✓ | The ID of the pipeline |
-| `page` | number |  | Page number for pagination (default: 1) |
-| `per_page` | number |  | Number of items per page (max: 100, default: 20) |
 
 ### `get_pipeline_test_report`
 
@@ -302,19 +279,6 @@ List environments in a project. Use this for a collection of resources; choose t
 | `page` | number |  | Page number for pagination (default: 1) |
 | `per_page` | number |  | Number of items per page (max: 100, default: 20) |
 
-### `get_environment`
-
-*📖 Read-only*
-
-Get details of a specific environment. Use this for a known resource or result; choose the corresponding list or search tool when you need to discover multiple resources. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `environment_id` | string | ✓ | The ID of the environment |
-
 ### `update_environment`
 
 *✏️ Writes*
@@ -484,22 +448,6 @@ List all jobs in a specific pipeline. Use this for a collection of resources; ch
 | `page` | number |  | Page number for pagination (default: 1) |
 | `per_page` | number |  | Number of items per page (max: 100, default: 20) |
 
-### `list_pipeline_trigger_jobs`
-
-*📖 Read-only*
-
-List trigger jobs (bridges) in a pipeline. Use this for a collection of resources; choose the corresponding get tool when you already know the single resource to inspect. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `pipeline_id` | string | ✓ | The ID of the pipeline |
-| `scope` | enum (`canceled` \| `canceling` \| `created` \| `failed` \| `manual` \| `pending` \| `preparing` \| `running` \| `scheduled` \| `skipped` \| `success` \| `waiting_for_resource`) |  | The scope of trigger jobs to show |
-| `page` | number |  | Page number for pagination (default: 1) |
-| `per_page` | number |  | Number of items per page (max: 100, default: 20) |
-
 ### `get_pipeline_job`
 
 *📖 Read-only*
@@ -588,7 +536,7 @@ List pipeline schedules in a project, optionally filtered to active or inactive.
 
 *📖 Read-only*
 
-Get details of a specific pipeline schedule, including its variables and last pipeline. Use this to inspect one schedule's cron, owner, last pipeline, variables, and inputs; use `list_pipeline_schedules` to discover schedule IDs and `list_pipeline_schedule_pipelines` for the pipelines it produced. It is read-only, returns `variables` and `inputs` only to Maintainers, Owners, or the schedule owner, and returns the schedule or an error when the schedule is missing or access is denied.
+Get details of a specific pipeline schedule, including its variables and last pipeline. Use this to inspect one schedule's cron, owner, last pipeline, variables, and inputs; use `list_pipeline_schedules` to discover schedule IDs. It is read-only, returns `variables` and `inputs` only to Maintainers, Owners, or the schedule owner, and returns the schedule or an error when the schedule is missing or access is denied.
 
 **Parameters**
 
@@ -596,28 +544,6 @@ Get details of a specific pipeline schedule, including its variables and last pi
 |---|---|:-:|---|
 | `project_id` | string | ✓ | Project ID or URL-encoded path |
 | `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule |
-
-### `list_pipeline_schedule_pipelines`
-
-*📖 Read-only*
-
-List the pipelines that a pipeline schedule has triggered. Use this to review the pipelines a schedule has actually triggered, for example to see whether the nightly run succeeded; use `get_pipeline` for one pipeline's full detail and `list_pipelines` for project-wide filtering. Narrow the result with `scope`, `status`, `sort`, and the `created_*` / `updated_*` date bounds. It is read-only and paginated, requires project access, and returns pipeline records or an error when the schedule is missing or access is denied.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule |
-| `scope` | enum (`running` \| `pending` \| `finished` \| `branches` \| `tags`) |  | The scope of pipelines |
-| `status` | enum (`created` \| `waiting_for_resource` \| `preparing` \| `waiting_for_callback` \| `pending` \| `running` \| `success` \| `failed` \| `canceling` \| `canceled` \| `skipped` \| `manual` \| `scheduled`) |  | The status of pipelines |
-| `sort` | enum (`asc` \| `desc`) |  | Sort pipelines (default: asc) |
-| `updated_after` | string |  | Return pipelines updated after the specified ISO 8601 date |
-| `updated_before` | string |  | Return pipelines updated before the specified ISO 8601 date |
-| `created_after` | string |  | Return pipelines created after the specified ISO 8601 date |
-| `created_before` | string |  | Return pipelines created before the specified ISO 8601 date |
-| `page` | number |  | Page number for pagination (default: 1) |
-| `per_page` | number |  | Number of items per page (max: 100, default: 20) |
 
 ### `create_pipeline_schedule`
 
@@ -669,19 +595,6 @@ Delete a pipeline schedule. Use this only after confirming the schedule with `ge
 | `project_id` | string | ✓ | Project ID or URL-encoded path |
 | `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule to delete |
 
-### `play_pipeline_schedule`
-
-*✏️ Writes*
-
-Run a pipeline schedule immediately. Use this to run a schedule's pipeline immediately without waiting for its cron; it does not shift `next_run_at`, so the regular cadence continues unchanged, and it does not modify the schedule itself. Use `create_pipeline` when you want a one-off pipeline that is unrelated to a schedule. It creates a pipeline on GitLab, requires ownership of the schedule and permission to run pipelines on its ref, is rate-limited to once per minute per schedule, and returns GitLab's acknowledgement message or a permission, rate-limit, or missing-schedule error.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule to run |
-
 ### `take_ownership_pipeline_schedule`
 
 *✏️ Writes*
@@ -694,20 +607,6 @@ Take ownership of a pipeline schedule. Use this to transfer a schedule's ownersh
 |---|---|:-:|---|
 | `project_id` | string | ✓ | Project ID or URL-encoded path |
 | `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule to take ownership of |
-
-### `get_pipeline_schedule_variable`
-
-*📖 Read-only*
-
-Get a single variable of a pipeline schedule. Use this to read one variable attached to a pipeline schedule by key; use `get_pipeline_schedule` to list every variable at once and `get_project_variable` for project-level CI/CD variables, which are a separate set. It is read-only, requires the Maintainer or Owner role or ownership of the schedule (GitLab 18.7 or later exposes this endpoint), and returns the variable or an error when the schedule, key, or permission is missing.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `pipeline_schedule_id` | string | ✓ | The ID of the pipeline schedule |
-| `key` | string | ✓ | The key of the variable |
 
 ### `create_pipeline_schedule_variable`
 
@@ -745,7 +644,7 @@ Update a variable of a pipeline schedule. Use this to change the value or type o
 
 *✏️ Writes*
 
-Delete a variable from a pipeline schedule. Use this only after confirming the key with `get_pipeline_schedule` or `get_pipeline_schedule_variable`; use `update_pipeline_schedule_variable` to change a value without removing it. The operation permanently removes the variable from the schedule so later scheduled pipelines no longer receive it, requires the Developer, Maintainer, or Owner role and ownership of the schedule, and returns a confirmation or a missing-key or permission error.
+Delete a variable from a pipeline schedule. Use this only after confirming the key with `get_pipeline_schedule`; use `update_pipeline_schedule_variable` to change a value without removing it. The operation permanently removes the variable from the schedule so later scheduled pipelines no longer receive it, requires the Developer, Maintainer, or Owner role and ownership of the schedule, and returns a confirmation or a missing-key or permission error.
 
 **Parameters**
 
@@ -769,22 +668,6 @@ Run a manual pipeline job. Use this for the specific operation described; choose
 | `job_id` | string | ✓ | The ID of the job |
 | `job_variables_attributes` | array<object> |  | Custom job variables to use when running the job |
 | `job_inputs` | object |  | Typed job input values |
-
-### `play_pipeline_jobs`
-
-*✏️ Writes*
-
-Play multiple manual pipeline jobs sequentially. Use this for the specific operation described; choose a sibling tool when you need a different resource or lifecycle action. It changes remote GitLab state and requires the necessary project or group permission; GitLab returns validation, conflict, permission, or rate-limit errors instead of silently applying an invalid request. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `job_ids` | array<string> | ✓ | Job IDs to play, in dependency order |
-| `job_variables_attributes` | array<object> |  | Custom job variables to use when running each job |
-| `timeout_seconds` | integer |  | Maximum seconds to wait for each job to reach a terminal status (applied per job; total duration scales with the batch size) |
-| `poll_interval_seconds` | integer |  | Seconds between status polls while waiting for each job |
 
 ### `retry_pipeline_job`
 
@@ -856,21 +739,6 @@ Wait for a job to reach a terminal status. Use this for the specific operation d
 | `job_id` | string | ✓ | The ID of the job |
 | `timeout_seconds` | integer |  | Maximum seconds to wait for this job to reach a terminal status |
 | `poll_interval_seconds` | integer |  | Seconds between status polls while waiting for this job |
-
-### `list_job_artifacts`
-
-*📖 Read-only*
-
-List artifact files in a job's archive. Use this for a collection of resources; choose the corresponding get tool when you already know the single resource to inspect. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `job_id` | string | ✓ | The ID of the job |
-| `path` | string |  | Directory path within the artifacts archive (defaults to root) |
-| `recursive` | boolean |  | Whether to list artifacts recursively |
 
 ### `download_job_artifacts`
 

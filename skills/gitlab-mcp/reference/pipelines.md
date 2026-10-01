@@ -50,7 +50,6 @@ wait_for_job               -> poll until a job reaches a terminal status
 ## Artifacts
 
 ```
-list_job_artifacts         -> list files in a job's artifact archive
 get_job_artifact_file      -> get content of a single artifact file
 download_job_artifacts     -> download full artifact archive (zip) to local_path
 ```
@@ -100,5 +99,5 @@ trigger_pipeline             -> run a pipeline with a trigger token
 
 ### Download test results
 
-1. `list_job_artifacts` -> find the test report file path
+1. Find the test report file path in the job artifacts
 2. `get_job_artifact_file` -> read the report content

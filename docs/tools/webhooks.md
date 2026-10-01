@@ -11,8 +11,6 @@ Create, update, and delete project or group webhooks, and inspect recent webhook
 - [`create_webhook`](#create_webhook) — ✏️ Writes
 - [`update_webhook`](#update_webhook) — ✏️ Writes
 - [`delete_webhook`](#delete_webhook) — ✏️ Writes
-- [`list_webhook_events`](#list_webhook_events) — 📖 Read-only
-- [`get_webhook_event`](#get_webhook_event) — 📖 Read-only
 
 ---
 
@@ -129,37 +127,3 @@ Delete a project or group webhook. Use this only after verifying the target; cho
 | `project_id` | string |  | Project ID or URL-encoded path. Provide either project_id or group_id, not both. |
 | `group_id` | string |  | Group ID or URL-encoded path. Provide either project_id or group_id, not both. |
 | `hook_id` | number | ✓ | ID of the webhook to delete |
-
-### `list_webhook_events`
-
-*📖 Read-only*
-
-List recent webhook events (past 7 days). Use this for a collection of resources; choose the corresponding get tool when you already know the single resource to inspect. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string |  | Project ID or URL-encoded path. Provide either project_id or group_id, not both. |
-| `group_id` | string |  | Group ID or URL-encoded path. Provide either project_id or group_id, not both. |
-| `hook_id` | number | ✓ | ID of the webhook |
-| `status` | number \| string |  | Filter by response status code (e.g. 200, 500) or category: successful, client_failure, server_failure |
-| `summary` | boolean |  | If true, return only summary fields (id, url, trigger, response_status, execution_duration) without full request/response payloads. Recommended for overview queries to avoid huge responses. |
-| `per_page` | number |  | Number of events per page |
-| `page` | number |  | Page number for pagination |
-
-### `get_webhook_event`
-
-*📖 Read-only*
-
-Get full details of a specific webhook event. Use this for a known resource or result; choose the corresponding list or search tool when you need to discover multiple resources. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string |  | Project ID or URL-encoded path. Provide either project_id or group_id, not both. |
-| `group_id` | string |  | Group ID or URL-encoded path. Provide either project_id or group_id, not both. |
-| `hook_id` | number | ✓ | ID of the webhook |
-| `event_id` | number | ✓ | ID of the webhook event to retrieve |
-| `page` | number |  | If known, the page where the event is located (from list_webhook_events). Skips auto-pagination and fetches only this page. |

@@ -16,11 +16,7 @@ Issue CRUD, links, discussions and notes, todos, and emoji reactions.
 - [`mark_all_todos_done`](#mark_all_todos_done) — ✏️ Writes
 - [`create_issue_note`](#create_issue_note) — ✏️ Writes
 - [`update_issue_note`](#update_issue_note) — ✏️ Writes
-- [`list_issue_links`](#list_issue_links) — 📖 Read-only
 - [`list_issue_discussions`](#list_issue_discussions) — 📖 Read-only
-- [`get_issue_link`](#get_issue_link) — 📖 Read-only
-- [`create_issue_link`](#create_issue_link) — ✏️ Writes
-- [`delete_issue_link`](#delete_issue_link) — ✏️ Writes
 - [`create_note`](#create_note) — ✏️ Writes
 - [`list_issue_emoji_reactions`](#list_issue_emoji_reactions) — 📖 Read-only
 - [`list_issue_note_emoji_reactions`](#list_issue_note_emoji_reactions) — 📖 Read-only
@@ -248,19 +244,6 @@ Modify an existing issue thread note. Use this for an existing resource; choose 
 | `body` | string |  | The content of the note or reply |
 | `resolved` | boolean |  | Resolve or unresolve the note |
 
-### `list_issue_links`
-
-*📖 Read-only*
-
-List all issue links for a specific issue. Use this for a collection of resources; choose the corresponding get tool when you already know the single resource to inspect. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `issue_iid` | string | ✓ | The internal ID of a project's issue |
-
 ### `list_issue_discussions`
 
 *📖 Read-only*
@@ -275,50 +258,6 @@ List discussions for an issue. Use this to inspect threaded discussions for an i
 | `issue_iid` | string | ✓ | The internal ID of the project issue |
 | `page` | number |  | Page number for pagination (default: 1) |
 | `per_page` | number |  | Number of items per page (max: 100, default: 20) |
-
-### `get_issue_link`
-
-*📖 Read-only*
-
-Get a specific issue link. Use this for a known resource or result; choose the corresponding list or search tool when you need to discover multiple resources. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `issue_iid` | string | ✓ | The internal ID of a project's issue |
-| `issue_link_id` | string | ✓ | ID of an issue relationship |
-
-### `create_issue_link`
-
-*✏️ Writes*
-
-Create an issue link between two issues. Use this for a new resource or action; choose the corresponding update or edit tool when the resource already exists. It changes remote GitLab state and requires the necessary project or group permission; GitLab returns validation, conflict, permission, or rate-limit errors instead of silently applying an invalid request. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `issue_iid` | string | ✓ | The internal ID of a project's issue |
-| `target_project_id` | string | ✓ | The ID or URL-encoded path of a target project |
-| `target_issue_iid` | string | ✓ | The internal ID of a target project's issue |
-| `link_type` | enum (`relates_to` \| `blocks` \| `is_blocked_by`) |  | The type of the relation, defaults to relates_to |
-
-### `delete_issue_link`
-
-*✏️ Writes*
-
-Delete an issue link. Use this to remove an existing relationship between two issues; use `list_issue_links` or `get_issue_link` to verify the link first. The operation changes issue relationships, requires issue-edit permission, and returns the result or an error when the link is missing or access is denied.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `issue_iid` | string | ✓ | The internal ID of a project's issue |
-| `issue_link_id` | string | ✓ | The ID of an issue relationship |
 
 ### `create_note`
 

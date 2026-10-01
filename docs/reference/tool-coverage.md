@@ -8,36 +8,31 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 
 | | |
 | --- | ---: |
-| Tools | 263 |
-| Invoked | 155 |
-| Coverage | 58.9% |
+| Tools | 177 |
+| Invoked | 107 |
+| Coverage | 60.5% |
 
 ## By toolset
 
 | Toolset | Invoked | Total | Coverage |
 | --- | ---: | ---: | ---: |
-| [Projects & Namespaces](#projects) | 6 | 11 | 54.5% |
+| [Projects & Namespaces](#projects) | 6 | 9 | 66.7% |
 | [Projects & Files](#repositories) | 6 | 7 | 85.7% |
-| [Branches & Commits](#branches) | 6 | 15 | 40.0% |
+| [Branches & Commits](#branches) | 5 | 14 | 35.7% |
 | [Groups](#groups) | 1 | 1 | 100.0% |
-| [Merge Requests](#merge_requests) | 12 | 45 | 26.7% |
-| [Issues](#issues) | 10 | 24 | 41.7% |
+| [Merge Requests](#merge_requests) | 5 | 26 | 19.2% |
+| [Issues](#issues) | 10 | 20 | 50.0% |
 | [Labels](#labels) | 5 | 5 | 100.0% |
-| [Work Items](#workitems) | 3 | 18 | 16.7% |
-| [CI Lint](#ci) | 4 | 4 | 100.0% |
-| [Pipelines, Jobs & Deployments](#pipelines) | 30 | 56 | 53.6% |
-| [Milestones](#milestones) | 17 | 17 | 100.0% |
-| [Wiki](#wiki) | 10 | 10 | 100.0% |
-| [Releases](#releases) | 7 | 7 | 100.0% |
-| [Tags](#tags) | 5 | 5 | 100.0% |
+| [CI Lint](#ci) | 1 | 1 | 100.0% |
+| [Pipelines, Jobs & Deployments](#pipelines) | 25 | 48 | 52.1% |
+| [Milestones](#milestones) | 14 | 14 | 100.0% |
+| [Wiki](#wiki) | 5 | 5 | 100.0% |
+| [Tags](#tags) | 4 | 4 | 100.0% |
 | [Users & Events](#users) | 3 | 7 | 42.9% |
 | [Variables](#variables) | 10 | 10 | 100.0% |
-| [Webhooks](#webhooks) | 3 | 6 | 50.0% |
+| [Webhooks](#webhooks) | 3 | 4 | 75.0% |
 | [Search](#search) | 3 | 3 | 100.0% |
-| [Dependency Proxy](#dependency_proxy) | 4 | 4 | 100.0% |
-| [Vulnerabilities](#vulnerabilities) | 4 | 4 | 100.0% |
-| [GitLab Orbit](#orbit) | 4 | 4 | 100.0% |
-| [Meta & GraphQL](#meta) | 2 | 2 | 100.0% |
+| [Meta & GraphQL](#meta) | 1 | 1 | 100.0% |
 
 ## Projects & Namespaces
 
@@ -50,9 +45,7 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`list_group_members`](../tools/projects.md#list_group_members) — `test/test-list-group-members.ts`
 - [ ] [`list_namespaces`](../tools/projects.md#list_namespaces)
 - [ ] [`get_namespace`](../tools/projects.md#get_namespace)
-- [ ] [`verify_namespace`](../tools/projects.md#verify_namespace)
 - [ ] [`list_group_projects`](../tools/projects.md#list_group_projects)
-- [ ] [`list_group_iterations`](../tools/projects.md#list_group_iterations)
 - [x] [`health_check`](../tools/projects.md#health_check) — `test/test-health-check.ts`
 
 ## Projects & Files
@@ -83,7 +76,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [ ] [`list_commits`](../tools/branches.md#list_commits)
 - [ ] [`get_commit`](../tools/branches.md#get_commit)
 - [ ] [`get_commit_diff`](../tools/branches.md#get_commit_diff)
-- [x] [`get_file_blame`](../tools/branches.md#get_file_blame) — `test/test-get-file-blame.ts`
 - [ ] [`list_commit_statuses`](../tools/branches.md#list_commit_statuses)
 - [ ] [`create_commit_status`](../tools/branches.md#create_commit_status)
 
@@ -98,24 +90,16 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 <a id="merge_requests"></a>
 
 - [ ] [`merge_merge_request`](../tools/merge-requests.md#merge_merge_request)
-- [x] [`approve_merge_request`](../tools/merge-requests.md#approve_merge_request) — `test/test-merge-request-approvals.ts`
-- [x] [`unapprove_merge_request`](../tools/merge-requests.md#unapprove_merge_request) — `test/test-merge-request-approvals.ts`
-- [x] [`get_merge_request_approval_state`](../tools/merge-requests.md#get_merge_request_approval_state) — `test/test-merge-request-approval-state-tools.ts`, `test/test-merge-request-approvals.ts`
 - [ ] [`get_branch`](../tools/merge-requests.md#get_branch)
 - [ ] [`list_branches`](../tools/merge-requests.md#list_branches)
-- [ ] [`get_merge_request_conflicts`](../tools/merge-requests.md#get_merge_request_conflicts)
 - [x] [`list_merge_request_pipelines`](../tools/merge-requests.md#list_merge_request_pipelines) — `test/test-merge-request-pipelines.ts`
 - [x] [`get_merge_request`](../tools/merge-requests.md#get_merge_request) — `test/test-deployment-tools.ts`
 - [x] [`get_merge_request_diffs`](../tools/merge-requests.md#get_merge_request_diffs) — `test/test-mr-diffs-filter.ts`
-- [x] [`list_merge_request_changed_files`](../tools/merge-requests.md#list_merge_request_changed_files) — `test/test-mr-file-diffs.ts`
-- [ ] [`list_merge_request_diffs`](../tools/merge-requests.md#list_merge_request_diffs)
-- [x] [`get_merge_request_file_diff`](../tools/merge-requests.md#get_merge_request_file_diff) — `test/test-mr-file-diffs.ts`
 - [ ] [`list_merge_request_versions`](../tools/merge-requests.md#list_merge_request_versions)
 - [ ] [`get_merge_request_version`](../tools/merge-requests.md#get_merge_request_version)
 - [ ] [`update_merge_request`](../tools/merge-requests.md#update_merge_request)
 - [x] [`create_merge_request`](../tools/merge-requests.md#create_merge_request) — `test/response-masking.test.ts`
-- [x] [`list_merge_requests`](../tools/merge-requests.md#list_merge_requests) — `test/remote-auth-tests.ts`, `test/response-masking.test.ts`, `test/test-all-transport-server.ts`, `test/test-list-merge-requests.ts`, `test/test-merge-request-approvals.ts`
-- [x] [`list_group_merge_requests`](../tools/merge-requests.md#list_group_merge_requests) — `test/response-masking.test.ts`, `test/test-list-group-merge-requests.ts`
+- [x] [`list_merge_requests`](../tools/merge-requests.md#list_merge_requests) — `test/remote-auth-tests.ts`, `test/response-masking.test.ts`, `test/test-all-transport-server.ts`, `test/test-list-merge-requests.ts`
 - [ ] [`get_branch_diffs`](../tools/merge-requests.md#get_branch_diffs)
 - [ ] [`mr_discussions`](../tools/merge-requests.md#mr_discussions)
 - [ ] [`get_merge_request_discussion`](../tools/merge-requests.md#get_merge_request_discussion)
@@ -127,21 +111,10 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [ ] [`delete_merge_request_discussion_note`](../tools/merge-requests.md#delete_merge_request_discussion_note)
 - [ ] [`update_merge_request_discussion_note`](../tools/merge-requests.md#update_merge_request_discussion_note)
 - [ ] [`create_merge_request_discussion_note`](../tools/merge-requests.md#create_merge_request_discussion_note)
-- [x] [`get_draft_note`](../tools/merge-requests.md#get_draft_note) — `test/test-geteffectiveprojectid.ts`
-- [ ] [`list_draft_notes`](../tools/merge-requests.md#list_draft_notes)
-- [ ] [`create_draft_note`](../tools/merge-requests.md#create_draft_note)
-- [ ] [`update_draft_note`](../tools/merge-requests.md#update_draft_note)
-- [ ] [`delete_draft_note`](../tools/merge-requests.md#delete_draft_note)
-- [ ] [`publish_draft_note`](../tools/merge-requests.md#publish_draft_note)
-- [ ] [`bulk_publish_draft_notes`](../tools/merge-requests.md#bulk_publish_draft_notes)
 - [ ] [`create_merge_request_thread`](../tools/merge-requests.md#create_merge_request_thread)
-- [ ] [`resolve_merge_request_thread`](../tools/merge-requests.md#resolve_merge_request_thread)
 - [ ] [`list_merge_request_emoji_reactions`](../tools/merge-requests.md#list_merge_request_emoji_reactions)
-- [ ] [`list_merge_request_note_emoji_reactions`](../tools/merge-requests.md#list_merge_request_note_emoji_reactions)
 - [ ] [`create_merge_request_emoji_reaction`](../tools/merge-requests.md#create_merge_request_emoji_reaction)
 - [ ] [`delete_merge_request_emoji_reaction`](../tools/merge-requests.md#delete_merge_request_emoji_reaction)
-- [ ] [`create_merge_request_note_emoji_reaction`](../tools/merge-requests.md#create_merge_request_note_emoji_reaction)
-- [ ] [`delete_merge_request_note_emoji_reaction`](../tools/merge-requests.md#delete_merge_request_note_emoji_reaction)
 
 ## Issues
 
@@ -159,11 +132,7 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`mark_all_todos_done`](../tools/issues.md#mark_all_todos_done) — `test/test-todos.ts`
 - [ ] [`create_issue_note`](../tools/issues.md#create_issue_note)
 - [ ] [`update_issue_note`](../tools/issues.md#update_issue_note)
-- [ ] [`list_issue_links`](../tools/issues.md#list_issue_links)
 - [ ] [`list_issue_discussions`](../tools/issues.md#list_issue_discussions)
-- [ ] [`get_issue_link`](../tools/issues.md#get_issue_link)
-- [ ] [`create_issue_link`](../tools/issues.md#create_issue_link)
-- [ ] [`delete_issue_link`](../tools/issues.md#delete_issue_link)
 - [ ] [`create_note`](../tools/issues.md#create_note)
 - [ ] [`list_issue_emoji_reactions`](../tools/issues.md#list_issue_emoji_reactions)
 - [ ] [`list_issue_note_emoji_reactions`](../tools/issues.md#list_issue_note_emoji_reactions)
@@ -182,37 +151,11 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`update_label`](../tools/labels.md#update_label) — `test/test-empty-toolsets.ts`
 - [x] [`delete_label`](../tools/labels.md#delete_label) — `test/test-empty-toolsets.ts`
 
-## Work Items
-
-<a id="workitems"></a>
-
-- [ ] [`get_work_item`](../tools/workitems.md#get_work_item)
-- [x] [`list_work_items`](../tools/workitems.md#list_work_items) — `test/test-geteffectiveprojectid.ts`
-- [x] [`create_work_item`](../tools/workitems.md#create_work_item) — `test/test-geteffectiveprojectid.ts`
-- [x] [`update_work_item`](../tools/workitems.md#update_work_item) — `test/response-masking.test.ts`, `test/test-geteffectiveprojectid.ts`
-- [ ] [`convert_work_item_type`](../tools/workitems.md#convert_work_item_type)
-- [ ] [`list_work_item_statuses`](../tools/workitems.md#list_work_item_statuses)
-- [ ] [`list_custom_field_definitions`](../tools/workitems.md#list_custom_field_definitions)
-- [ ] [`move_work_item`](../tools/workitems.md#move_work_item)
-- [ ] [`list_work_item_notes`](../tools/workitems.md#list_work_item_notes)
-- [ ] [`create_work_item_note`](../tools/workitems.md#create_work_item_note)
-- [ ] [`list_work_item_emoji_reactions`](../tools/workitems.md#list_work_item_emoji_reactions)
-- [ ] [`list_work_item_note_emoji_reactions`](../tools/workitems.md#list_work_item_note_emoji_reactions)
-- [ ] [`create_work_item_emoji_reaction`](../tools/workitems.md#create_work_item_emoji_reaction)
-- [ ] [`delete_work_item_emoji_reaction`](../tools/workitems.md#delete_work_item_emoji_reaction)
-- [ ] [`create_work_item_note_emoji_reaction`](../tools/workitems.md#create_work_item_note_emoji_reaction)
-- [ ] [`delete_work_item_note_emoji_reaction`](../tools/workitems.md#delete_work_item_note_emoji_reaction)
-- [ ] [`get_timeline_events`](../tools/workitems.md#get_timeline_events)
-- [ ] [`create_timeline_event`](../tools/workitems.md#create_timeline_event)
-
 ## CI Lint
 
 <a id="ci"></a>
 
 - [x] [`validate_ci_lint`](../tools/ci.md#validate_ci_lint) — `test/test-ci-lint.ts`
-- [x] [`validate_project_ci_lint`](../tools/ci.md#validate_project_ci_lint) — `test/test-ci-lint.ts`
-- [x] [`list_ci_catalog_resources`](../tools/ci.md#list_ci_catalog_resources) — `test/test-ci-catalog.ts`
-- [x] [`get_ci_catalog_resource`](../tools/ci.md#get_ci_catalog_resource) — `test/test-ci-catalog.ts`
 
 ## Pipelines, Jobs & Deployments
 
@@ -220,7 +163,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 
 - [x] [`list_pipelines`](../tools/pipelines.md#list_pipelines) — `test/test-blank-filters.ts`
 - [ ] [`get_pipeline`](../tools/pipelines.md#get_pipeline)
-- [ ] [`get_pipeline_variables`](../tools/pipelines.md#get_pipeline_variables)
 - [ ] [`get_pipeline_test_report`](../tools/pipelines.md#get_pipeline_test_report)
 - [ ] [`get_pipeline_test_report_summary`](../tools/pipelines.md#get_pipeline_test_report_summary)
 - [ ] [`delete_pipeline`](../tools/pipelines.md#delete_pipeline)
@@ -233,7 +175,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`list_deployment_merge_requests`](../tools/pipelines.md#list_deployment_merge_requests) — `test/test-deployment-tools.ts`
 - [x] [`approve_deployment`](../tools/pipelines.md#approve_deployment) — `test/test-deployment-tools.ts`
 - [x] [`list_environments`](../tools/pipelines.md#list_environments) — `test/test-blank-filters.ts`, `test/test-deployment-tools.ts`
-- [x] [`get_environment`](../tools/pipelines.md#get_environment) — `test/test-deployment-tools.ts`
 - [ ] [`update_environment`](../tools/pipelines.md#update_environment)
 - [ ] [`delete_environment`](../tools/pipelines.md#delete_environment)
 - [x] [`stop_environment`](../tools/pipelines.md#stop_environment) — `test/test-permission-mode.ts`
@@ -246,7 +187,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [ ] [`delete_pipeline_trigger`](../tools/pipelines.md#delete_pipeline_trigger)
 - [ ] [`trigger_pipeline`](../tools/pipelines.md#trigger_pipeline)
 - [ ] [`list_pipeline_jobs`](../tools/pipelines.md#list_pipeline_jobs)
-- [ ] [`list_pipeline_trigger_jobs`](../tools/pipelines.md#list_pipeline_trigger_jobs)
 - [ ] [`get_pipeline_job`](../tools/pipelines.md#get_pipeline_job)
 - [x] [`get_pipeline_job_output`](../tools/pipelines.md#get_pipeline_job_output) — `test/response-masking.test.ts`
 - [ ] [`create_pipeline`](../tools/pipelines.md#create_pipeline)
@@ -254,24 +194,19 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`cancel_pipeline`](../tools/pipelines.md#cancel_pipeline) — `test/test-permission-mode.ts`
 - [x] [`list_pipeline_schedules`](../tools/pipelines.md#list_pipeline_schedules) — `test/test-pipeline-schedules.ts`
 - [x] [`get_pipeline_schedule`](../tools/pipelines.md#get_pipeline_schedule) — `test/test-pipeline-schedules.ts`
-- [x] [`list_pipeline_schedule_pipelines`](../tools/pipelines.md#list_pipeline_schedule_pipelines) — `test/test-pipeline-schedules.ts`
 - [x] [`create_pipeline_schedule`](../tools/pipelines.md#create_pipeline_schedule) — `test/test-pipeline-schedules.ts`
 - [x] [`update_pipeline_schedule`](../tools/pipelines.md#update_pipeline_schedule) — `test/test-pipeline-schedules.ts`
 - [x] [`delete_pipeline_schedule`](../tools/pipelines.md#delete_pipeline_schedule) — `test/test-pipeline-schedules.ts`
-- [x] [`play_pipeline_schedule`](../tools/pipelines.md#play_pipeline_schedule) — `test/test-pipeline-schedules.ts`
 - [x] [`take_ownership_pipeline_schedule`](../tools/pipelines.md#take_ownership_pipeline_schedule) — `test/test-pipeline-schedules.ts`
-- [x] [`get_pipeline_schedule_variable`](../tools/pipelines.md#get_pipeline_schedule_variable) — `test/test-pipeline-schedules.ts`
 - [x] [`create_pipeline_schedule_variable`](../tools/pipelines.md#create_pipeline_schedule_variable) — `test/test-pipeline-schedules.ts`
 - [x] [`update_pipeline_schedule_variable`](../tools/pipelines.md#update_pipeline_schedule_variable) — `test/test-pipeline-schedules.ts`
 - [x] [`delete_pipeline_schedule_variable`](../tools/pipelines.md#delete_pipeline_schedule_variable) — `test/test-pipeline-schedules.ts`
 - [ ] [`play_pipeline_job`](../tools/pipelines.md#play_pipeline_job)
-- [ ] [`play_pipeline_jobs`](../tools/pipelines.md#play_pipeline_jobs)
 - [ ] [`retry_pipeline_job`](../tools/pipelines.md#retry_pipeline_job)
 - [x] [`cancel_pipeline_job`](../tools/pipelines.md#cancel_pipeline_job) — `test/test-permission-mode.ts`
 - [ ] [`erase_pipeline_job`](../tools/pipelines.md#erase_pipeline_job)
 - [ ] [`wait_for_pipeline`](../tools/pipelines.md#wait_for_pipeline)
 - [ ] [`wait_for_job`](../tools/pipelines.md#wait_for_job)
-- [x] [`list_job_artifacts`](../tools/pipelines.md#list_job_artifacts) — `test/test-blank-filters.ts`, `test/test-job-artifacts.ts`
 - [x] [`download_job_artifacts`](../tools/pipelines.md#download_job_artifacts) — `test/test-job-artifacts.ts`, `test/test-remote-downloads.ts`
 - [x] [`get_job_artifact_file`](../tools/pipelines.md#get_job_artifact_file) — `test/test-job-artifacts.ts`
 
@@ -286,8 +221,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`delete_milestone`](../tools/milestones.md#delete_milestone) — `test/test-empty-toolsets.ts`
 - [x] [`get_milestone_issue`](../tools/milestones.md#get_milestone_issue) — `test/test-empty-toolsets.ts`
 - [x] [`get_milestone_merge_requests`](../tools/milestones.md#get_milestone_merge_requests) — `test/test-empty-toolsets.ts`
-- [x] [`promote_milestone`](../tools/milestones.md#promote_milestone) — `test/test-empty-toolsets.ts`
-- [x] [`get_milestone_burndown_events`](../tools/milestones.md#get_milestone_burndown_events) — `test/test-empty-toolsets.ts`
 - [x] [`list_group_milestones`](../tools/milestones.md#list_group_milestones) — `test/test-empty-toolsets.ts`, `test/test-list-milestones.ts`
 - [x] [`get_group_milestone`](../tools/milestones.md#get_group_milestone) — `test/test-empty-toolsets.ts`
 - [x] [`create_group_milestone`](../tools/milestones.md#create_group_milestone) — `test/test-empty-toolsets.ts`
@@ -295,7 +228,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`delete_group_milestone`](../tools/milestones.md#delete_group_milestone) — `test/test-empty-toolsets.ts`
 - [x] [`get_group_milestone_issue`](../tools/milestones.md#get_group_milestone_issue) — `test/test-empty-toolsets.ts`
 - [x] [`get_group_milestone_merge_requests`](../tools/milestones.md#get_group_milestone_merge_requests) — `test/test-empty-toolsets.ts`
-- [x] [`get_group_milestone_burndown_events`](../tools/milestones.md#get_group_milestone_burndown_events) — `test/test-empty-toolsets.ts`
 
 ## Wiki
 
@@ -306,23 +238,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`create_wiki_page`](../tools/wiki.md#create_wiki_page) — `test/test-empty-toolsets.ts`
 - [x] [`update_wiki_page`](../tools/wiki.md#update_wiki_page) — `test/test-empty-toolsets.ts`
 - [x] [`delete_wiki_page`](../tools/wiki.md#delete_wiki_page) — `test/test-empty-toolsets.ts`
-- [x] [`list_group_wiki_pages`](../tools/wiki.md#list_group_wiki_pages) — `test/test-empty-toolsets.ts`
-- [x] [`get_group_wiki_page`](../tools/wiki.md#get_group_wiki_page) — `test/test-empty-toolsets.ts`
-- [x] [`create_group_wiki_page`](../tools/wiki.md#create_group_wiki_page) — `test/test-empty-toolsets.ts`
-- [x] [`update_group_wiki_page`](../tools/wiki.md#update_group_wiki_page) — `test/test-empty-toolsets.ts`
-- [x] [`delete_group_wiki_page`](../tools/wiki.md#delete_group_wiki_page) — `test/test-empty-toolsets.ts`
-
-## Releases
-
-<a id="releases"></a>
-
-- [x] [`list_releases`](../tools/releases.md#list_releases) — `test/test-empty-toolsets.ts`
-- [x] [`get_release`](../tools/releases.md#get_release) — `test/test-empty-toolsets.ts`
-- [x] [`create_release`](../tools/releases.md#create_release) — `test/test-empty-toolsets.ts`
-- [x] [`update_release`](../tools/releases.md#update_release) — `test/test-empty-toolsets.ts`
-- [x] [`delete_release`](../tools/releases.md#delete_release) — `test/test-empty-toolsets.ts`
-- [x] [`create_release_evidence`](../tools/releases.md#create_release_evidence) — `test/test-empty-toolsets.ts`
-- [x] [`download_release_asset`](../tools/releases.md#download_release_asset) — `test/test-empty-toolsets.ts`
 
 ## Tags
 
@@ -332,7 +247,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`get_tag`](../tools/tags.md#get_tag) — `test/test-tags.ts`
 - [x] [`create_tag`](../tools/tags.md#create_tag) — `test/test-tags.ts`
 - [x] [`delete_tag`](../tools/tags.md#delete_tag) — `test/test-tags.ts`
-- [x] [`get_tag_signature`](../tools/tags.md#get_tag_signature) — `test/test-tags.ts`
 
 ## Users & Events
 
@@ -369,8 +283,6 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`create_webhook`](../tools/webhooks.md#create_webhook) — `test/test-webhooks.ts`
 - [x] [`update_webhook`](../tools/webhooks.md#update_webhook) — `test/test-webhooks.ts`
 - [x] [`delete_webhook`](../tools/webhooks.md#delete_webhook) — `test/test-webhooks.ts`
-- [ ] [`list_webhook_events`](../tools/webhooks.md#list_webhook_events)
-- [ ] [`get_webhook_event`](../tools/webhooks.md#get_webhook_event)
 
 ## Search
 
@@ -380,36 +292,8 @@ A tool counts as invoked when a test sends that name through MCP (`callTool` / `
 - [x] [`search_project_code`](../tools/search.md#search_project_code) — `test/test-search-code.ts`
 - [x] [`search_group_code`](../tools/search.md#search_group_code) — `test/test-search-code.ts`
 
-## Dependency Proxy
-
-<a id="dependency_proxy"></a>
-
-- [x] [`get_dependency_proxy_settings`](../tools/dependency-proxy.md#get_dependency_proxy_settings) — `test/test-dependency-proxy.ts`, `test/test-geteffectiveprojectid.ts`
-- [x] [`update_dependency_proxy_settings`](../tools/dependency-proxy.md#update_dependency_proxy_settings) — `test/test-dependency-proxy.ts`
-- [x] [`list_dependency_proxy_blobs`](../tools/dependency-proxy.md#list_dependency_proxy_blobs) — `test/test-dependency-proxy.ts`
-- [x] [`purge_dependency_proxy_cache`](../tools/dependency-proxy.md#purge_dependency_proxy_cache) — `test/test-dependency-proxy.ts`, `test/test-geteffectiveprojectid.ts`, `test/test-permission-mode.ts`
-
-## Vulnerabilities
-
-<a id="vulnerabilities"></a>
-
-- [x] [`list_project_vulnerabilities`](../tools/vulnerabilities.md#list_project_vulnerabilities) — `test/test-vulnerabilities.ts`
-- [x] [`get_vulnerability`](../tools/vulnerabilities.md#get_vulnerability) — `test/test-dynamic-project-scope.ts`, `test/test-vulnerabilities.ts`
-- [x] [`dismiss_vulnerability`](../tools/vulnerabilities.md#dismiss_vulnerability) — `test/test-vulnerabilities.ts`
-- [x] [`confirm_vulnerability`](../tools/vulnerabilities.md#confirm_vulnerability) — `test/test-vulnerabilities.ts`
-
-## GitLab Orbit
-
-<a id="orbit"></a>
-
-- [x] [`orbit_query`](../tools/orbit.md#orbit_query) — `test/test-orbit.ts`
-- [x] [`orbit_get_schema`](../tools/orbit.md#orbit_get_schema) — `test/test-orbit.ts`
-- [x] [`orbit_get_status`](../tools/orbit.md#orbit_get_status) — `test/test-orbit.ts`
-- [x] [`orbit_list_tools`](../tools/orbit.md#orbit_list_tools) — `test/test-orbit.ts`
-
 ## Meta & GraphQL
 
 <a id="meta"></a>
 
-- [x] [`execute_graphql`](../tools/meta.md#execute_graphql) — `test/test-dynamic-project-scope.ts`, `test/test-permission-mode.ts`
 - [x] [`discover_tools`](../tools/meta.md#discover_tools) — `test/streamable-http-sse-stream.test.ts`, `test/test-token-optimizations.ts`

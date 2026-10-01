@@ -376,26 +376,13 @@ describe("response masking", () => {
 
   test("includes the default primary project alongside explicit and nested references", () => {
     const createMergeRequest = allTools.find(tool => tool.name === "create_merge_request");
-    const updateWorkItem = allTools.find(tool => tool.name === "update_work_item");
     assert.ok(createMergeRequest);
-    assert.ok(updateWorkItem);
     assert.deepEqual(
       getManagedMaskingProjectIds(
         createMergeRequest.inputSchema,
         {
           project_id: "",
           target_project_id: "13",
-        },
-        () => "12"
-      ),
-      { hasProjectScope: true, projectIds: ["12", "13"] }
-    );
-    assert.deepEqual(
-      getManagedMaskingProjectIds(
-        updateWorkItem.inputSchema,
-        {
-          project_id: "",
-          children_to_add: [{ project_id: "13", iid: 1 }],
         },
         () => "12"
       ),
@@ -418,19 +405,6 @@ describe("response masking", () => {
       hasProjectScope: true,
       projectIds: [],
     });
-    const groupMergeRequests = allTools.find(tool => tool.name === "list_group_merge_requests");
-    assert.ok(groupMergeRequests);
-    assert.deepEqual(
-      getManagedMaskingProjectIds(
-        groupMergeRequests.inputSchema,
-        {
-          group_id: "99",
-          source_project_id: "12",
-        },
-        () => "12"
-      ),
-      { hasProjectScope: false, projectIds: [] }
-    );
   });
 
   test("does not use a default project for a selected group scope", () => {
@@ -471,19 +445,6 @@ describe("response masking", () => {
         project_id: "12",
         children_to_add: [{ project_id: "13", iid: 1 }],
         linked_items_to_remove: [{ project_id: "14", iid: 2 }],
-      }),
-      { hasProjectScope: true, projectIds: ["12", "13", "14"] }
-    );
-  });
-
-  test("uses the registered work item schema to reject cross-project actions", () => {
-    const updateWorkItem = allTools.find(tool => tool.name === "update_work_item");
-    assert.ok(updateWorkItem);
-    assert.deepEqual(
-      getManagedMaskingProjectIds(updateWorkItem.inputSchema, {
-        project_id: "12",
-        children_to_add: [{ project_id: "13", iid: 1 }],
-        linked_items_to_add: [{ project_id: "14", iid: 2 }],
       }),
       { hasProjectScope: true, projectIds: ["12", "13", "14"] }
     );

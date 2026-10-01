@@ -93,7 +93,7 @@ resolve_merge_request_thread
 For small MRs where batching is unnecessary:
 
 - `get_merge_request_diffs` - all diffs at once (can be large)
-- `list_merge_request_diffs` - paginated diffs
+
 
 For comparing arbitrary refs:
 

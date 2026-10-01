@@ -602,267 +602,181 @@ Register the skill directory in your AI client to get optimal tool usage guidanc
 <!-- TOOLS-START -->
 
 1. `merge_merge_request` - Merge a merge request
-2. `approve_merge_request` - Approve a merge request
-3. `unapprove_merge_request` - Unapprove a merge request
-4. `get_merge_request_approval_state` - Get merge request approval details including approvers
-5. `get_merge_request_conflicts` - Get the conflicts of a merge request
-6. `list_merge_request_pipelines` - List pipelines for a merge request with pagination
-7. `execute_graphql` - Execute a GitLab GraphQL query
-8. `create_or_update_file` - Create or update a file in a GitLab project
-9. `search_repositories` - Search for GitLab projects
-10. `create_repository` - Create a new GitLab project
-11. `create_group` - Create new group or subgroup
-12. `get_file_contents` - Get contents of a file or directory from a GitLab project
-13. `push_files` - Push multiple files in a single commit
-14. `create_issue` - Create a new issue
-15. `create_merge_request` - Create a new merge request
-16. `fork_repository` - Fork a project to your account or specified namespace
-17. `create_branch` - Create a new branch
-18. `get_branch` - Get branch details (commit, protection status)
-19. `list_branches` - List branches in project with search filter
-20. `delete_branch` - Delete branch from project
-21. `list_protected_branches` - List protected branches in a project, supports search filter
-22. `get_protected_branch` - Get details of a single protected branch (access levels, force push settings)
-23. `protect_branch` - Protect a repository branch (set push/merge/unprotect access levels)
-24. `unprotect_branch` - Remove protection from a previously protected branch
-25. `update_default_branch` - Change the default branch of a project
-26. `get_merge_request` - Get details of a merge request (mergeRequestIid or branchName required). Set include_summaries=true for deployment/commit/approval summaries
-27. `get_merge_request_diffs` - Get the changes/diffs of a merge request (mergeRequestIid or branchName required)
-28. `list_merge_request_changed_files` - List changed file paths in a merge request without diff content (mergeRequestIid or branchName required)
-29. `list_merge_request_diffs` - List merge request diffs with pagination (mergeRequestIid or branchName required)
-30. `get_merge_request_file_diff` - Get diffs for specific files from a merge request (mergeRequestIid or branchName required)
-31. `list_merge_request_versions` - List all versions of a merge request
-32. `get_merge_request_version` - Get a specific version of a merge request
-33. `get_branch_diffs` - Get diffs between two branches or commits
-34. `update_merge_request` - Update a merge request (mergeRequestIid or branchName required)
-35. `create_note` - Create a new note (comment) to an issue or merge request
-36. `create_merge_request_thread` - Create a new thread on a merge request
-37. `resolve_merge_request_thread` - Resolve a thread on a merge request
-38. `mr_discussions` - List discussion items for a merge request
-39. `delete_merge_request_discussion_note` - Delete a discussion note on a merge request
-40. `update_merge_request_discussion_note` - Update a discussion note on a merge request
-41. `create_merge_request_discussion_note` - Add a new discussion note to an existing merge request thread
-42. `create_merge_request_note` - Add a new note to a merge request
-43. `delete_merge_request_note` - Delete an existing merge request note
-44. `get_merge_request_note` - Get a specific note for a merge request
-45. `get_merge_request_notes` - List notes for a merge request
-46. `update_merge_request_note` - Modify an existing merge request note
-47. `get_draft_note` - Get a single draft note from a merge request
-48. `list_draft_notes` - List draft notes for a merge request
-49. `create_draft_note` - Create a draft note for a merge request
-50. `update_draft_note` - Update an existing draft note
-51. `delete_draft_note` - Delete a draft note
-52. `publish_draft_note` - Publish a single draft note
-53. `bulk_publish_draft_notes` - Publish all draft notes for a merge request. Optionally sets reviewer_state and posts a summary note (GitLab 19.2+). Can set reviewer_state even with no drafts.
-54. `list_merge_request_emoji_reactions` - List all emoji reactions on a merge request
-55. `list_merge_request_note_emoji_reactions` - List all emoji reactions on a merge request note. Pass discussion_id for discussion thread replies.
-56. `create_merge_request_emoji_reaction` - Add an emoji reaction to a merge request (e.g. thumbsup, rocket, eyes)
-57. `delete_merge_request_emoji_reaction` - Remove an emoji reaction from a merge request
-58. `create_merge_request_note_emoji_reaction` - Add an emoji reaction to a merge request note. Pass discussion_id for discussion thread replies.
-59. `delete_merge_request_note_emoji_reaction` - Remove an emoji reaction from a merge request note. Pass discussion_id for discussion thread replies.
-60. `update_issue_note` - Modify an existing issue thread note
-61. `create_issue_note` - Add a note to an issue, optionally replying to a discussion thread
-62. `list_issue_emoji_reactions` - List all emoji reactions on an issue
-63. `list_issue_note_emoji_reactions` - List all emoji reactions on an issue note. Pass discussion_id for discussion thread replies.
-64. `create_issue_emoji_reaction` - Add an emoji reaction to an issue (e.g. thumbsup, rocket, eyes)
-65. `delete_issue_emoji_reaction` - Remove an emoji reaction from an issue
-66. `create_issue_note_emoji_reaction` - Add an emoji reaction to an issue note. Pass discussion_id for discussion thread replies.
-67. `delete_issue_note_emoji_reaction` - Remove an emoji reaction from an issue note. Pass discussion_id for discussion thread replies.
-68. `list_issues` - List issues (default: created by current user; use scope='all' for all)
-69. `my_issues` - List issues assigned to the authenticated user
-70. `get_issue` - Get details of a specific issue. Returns a slim milestone by default; set full_response=true for the complete milestone object
-71. `update_issue` - Update an issue. Returns a slim confirmation by default; set full_response=true for the complete updated issue object
-72. `update_issue_description_patch` - Apply a patch (search/replace or unified diff) to an issue description. Reduces token usage by allowing small changes without sending the full description. Supports dry_run to preview changes and create_note to summarize updates.
-73. `delete_issue` - Delete an issue
-74. `list_todos` - List GitLab to-do items for the current user
-75. `mark_todo_done` - Mark a GitLab to-do item as done
-76. `mark_all_todos_done` - Mark all pending GitLab to-do items as done for the current user
-77. `list_issue_links` - List all issue links for a specific issue
-78. `list_issue_discussions` - List discussions for an issue
-79. `get_issue_link` - Get a specific issue link
-80. `create_issue_link` - Create an issue link between two issues
-81. `delete_issue_link` - Delete an issue link
-82. `list_namespaces` - List all namespaces (users and groups) available to the current user. Filter by kind='group' for groups only.
-83. `get_namespace` - Get details of a namespace (user or group) by ID or path. Groups are namespaces with kind='group'.
-84. `verify_namespace` - Verify if a namespace path exists. Use parent_id to scope the check to a specific parent namespace — required for nested namespaces where the same path may exist under different parents.
-85. `get_project` - Get details of a specific project
-86. `list_projects` - List projects accessible by the current user
-87. `update_project` - Update project settings such as description, visibility, default branch, and feature access levels
-88. `list_project_members` - List members of a GitLab project
-89. `list_group_members` - List members of a GitLab group with optional name or username search
-90. `list_labels` - List labels for a project
-91. `get_label` - Get a single label from a project
-92. `create_label` - Create a new label in a project
-93. `update_label` - Update an existing label in a project
-94. `delete_label` - Delete a label from a project
-95. `list_group_projects` - List projects in a group
-96. `list_wiki_pages` - List wiki pages in a project
-97. `get_wiki_page` - Get details of a specific wiki page
-98. `create_wiki_page` - Create a wiki page in a project
-99. `update_wiki_page` - Update a wiki page in a project
-100. `delete_wiki_page` - Delete a wiki page from a project
-101. `list_group_wiki_pages` - List wiki pages in a group
-102. `get_group_wiki_page` - Get details of a specific group wiki page
-103. `create_group_wiki_page` - Create a wiki page in a group
-104. `update_group_wiki_page` - Update a wiki page in a group
-105. `delete_group_wiki_page` - Delete a wiki page from a group
-106. `get_repository_tree` - List files and directories in a repository
-107. `list_pipelines` - List pipelines with filtering options
-108. `get_pipeline` - Get details of a specific pipeline
-109. `get_pipeline_variables` - Get variables configured for a pipeline
-110. `get_pipeline_test_report` - Get pipeline test report
-111. `get_pipeline_test_report_summary` - Get pipeline test report summary
-112. `delete_pipeline` - Delete a pipeline. Requires the project Owner role, cannot be undone, and does not automatically delete child pipelines.
-113. `update_pipeline_metadata` - Update pipeline metadata
-114. `list_deployments` - List deployments with filtering options
-115. `get_deployment` - Get deployment details, including approval_summary, approvals, and pending_approval_count when GitLab provides them
-116. `create_deployment` - Create a deployment
-117. `update_deployment` - Update a deployment status
-118. `delete_deployment` - Delete a deployment
-119. `list_deployment_merge_requests` - List merge requests shipped with a deployment
-120. `approve_deployment` - Approve or reject a protected-environment deployment
-121. `list_environments` - List environments in a project
-122. `get_environment` - Get details of a specific environment
-123. `update_environment` - Update an environment
-124. `delete_environment` - Delete a stopped environment
-125. `stop_environment` - Stop an environment
-126. `stop_stale_environments` - Stop eligible stale environments; protected environments are excluded and environments are stopped, not deleted
-127. `delete_review_app_environments` - Schedule deletion of stopped review-app environments one week later; dry_run defaults to true and actual scheduling requires dry_run=false
-128. `list_pipeline_triggers` - List project pipeline trigger tokens
-129. `get_pipeline_trigger` - Get a project pipeline trigger
-130. `create_pipeline_trigger` - Create a project pipeline trigger
-131. `update_pipeline_trigger` - Update a project pipeline trigger
-132. `delete_pipeline_trigger` - Delete a project pipeline trigger
-133. `trigger_pipeline` - Trigger a pipeline with a pipeline trigger token
-134. `list_pipeline_jobs` - List all jobs in a specific pipeline
-135. `list_pipeline_trigger_jobs` - List trigger jobs (bridges) in a pipeline
-136. `get_pipeline_job` - Get details of a GitLab pipeline job number
-137. `get_pipeline_job_output` - Get the output/trace of a pipeline job with optional pagination
-138. `validate_ci_lint` - Validate provided GitLab CI/CD YAML content for a project
-139. `validate_project_ci_lint` - Validate an existing .gitlab-ci.yml configuration for a project
-140. `list_ci_catalog_resources` - List GitLab CI/CD Catalog resources/components visible to the user
-141. `get_ci_catalog_resource` - Get details for a GitLab CI/CD Catalog resource, including versions and components
-142. `create_pipeline` - Create a new pipeline for a branch or tag
-143. `retry_pipeline` - Retry a failed or canceled pipeline
-144. `cancel_pipeline` - Cancel a running pipeline
-145. `list_pipeline_schedules` - List pipeline schedules in a project, optionally filtered to active or inactive
-146. `get_pipeline_schedule` - Get details of a specific pipeline schedule, including its variables and last pipeline
-147. `list_pipeline_schedule_pipelines` - List the pipelines that a pipeline schedule has triggered
-148. `create_pipeline_schedule` - Create a new pipeline schedule for a branch or tag
-149. `update_pipeline_schedule` - Update an existing pipeline schedule
-150. `delete_pipeline_schedule` - Delete a pipeline schedule
-151. `play_pipeline_schedule` - Run a pipeline schedule immediately
-152. `take_ownership_pipeline_schedule` - Take ownership of a pipeline schedule
-153. `get_pipeline_schedule_variable` - Get a single variable of a pipeline schedule
-154. `create_pipeline_schedule_variable` - Create a variable for a pipeline schedule
-155. `update_pipeline_schedule_variable` - Update a variable of a pipeline schedule
-156. `delete_pipeline_schedule_variable` - Delete a variable from a pipeline schedule
-157. `play_pipeline_job` - Run a manual pipeline job
-158. `play_pipeline_jobs` - Play multiple manual pipeline jobs sequentially
-159. `retry_pipeline_job` - Retry a failed or canceled pipeline job
-160. `cancel_pipeline_job` - Cancel a running pipeline job
-161. `erase_pipeline_job` - Erase a pipeline job log and artifacts
-162. `wait_for_pipeline` - Wait for a pipeline to reach a terminal status
-163. `wait_for_job` - Wait for a job to reach a terminal status
-164. `list_job_artifacts` - List artifact files in a job's archive
-165. `download_job_artifacts` - Download job artifact archive (zip) and save to a local path
-166. `get_job_artifact_file` - Get content of a single file from a job's artifacts
-167. `list_merge_requests` - List merge requests (without project_id: user's MRs; with project_id: project MRs)
-168. `list_group_merge_requests` - List merge requests across all projects of a group and its subgroups
-169. `list_milestones` - List milestones with filtering options
-170. `get_milestone` - Get details of a specific milestone
-171. `create_milestone` - Create a new milestone
-172. `edit_milestone` - Edit an existing milestone
-173. `delete_milestone` - Delete a milestone
-174. `get_milestone_issue` - Get issues associated with a specific milestone
-175. `get_milestone_merge_requests` - Get merge requests associated with a specific milestone
-176. `promote_milestone` - Promote a milestone to the next stage
-177. `get_milestone_burndown_events` - Get burndown events for a specific milestone
-178. `list_group_milestones` - List group milestones with filtering options
-179. `get_group_milestone` - Get details of a specific group milestone
-180. `create_group_milestone` - Create a new group milestone
-181. `edit_group_milestone` - Edit an existing group milestone
-182. `delete_group_milestone` - Delete a group milestone
-183. `get_group_milestone_issue` - Get issues associated with a specific group milestone
-184. `get_group_milestone_merge_requests` - Get merge requests associated with a specific group milestone
-185. `get_group_milestone_burndown_events` - Get burndown events for a specific group milestone
-186. `get_users` - Get GitLab user details by usernames
-187. `get_user` - Get user details by ID
-188. `whoami` - Get current authenticated user details
-189. `list_commits` - List repository commits with filtering options
-190. `get_commit` - Get details of a specific commit
-191. `get_commit_diff` - Get changes/diffs of a specific commit
-192. `get_file_blame` - Get git blame for a file at a given ref. Each entry maps a contiguous range of source lines to the commit that last changed them (id, author, authored_date, message). Use range_start/range_end to limit blame to specific lines.
-193. `list_commit_statuses` - List statuses for a commit
-194. `create_commit_status` - Create or update the status of a commit
-195. `list_group_iterations` - List group iterations with filtering options
-196. `upload_markdown` - Upload a file for use in markdown content
-197. `download_attachment` - Download an uploaded file from a project (images returned as base64; use local_path to save to disk)
-198. `health_check` - Verify server status and authentication. Always reports the MCP server version (mcp_server_version). When authenticated, also reports the GitLab instance version from GET /api/v4/version (version, revision, enterprise). Version lookup failures do not fail the health check — those fields are omitted.
-199. `list_events` - List events for the authenticated user (before/after: YYYY-MM-DD)
-200. `get_project_events` - List events for a project (before/after: YYYY-MM-DD)
-201. `list_releases` - List all releases for a project
-202. `get_release` - Get a release by tag name
-203. `create_release` - Create a new release
-204. `update_release` - Update an existing release
-205. `delete_release` - Delete a release (does not delete the tag)
-206. `create_release_evidence` - Create release evidence (Premium/Ultimate)
-207. `download_release_asset` - Download a release asset file by direct asset path
-208. `list_tags` - List repository tags for a project
-209. `get_tag` - Get a repository tag by name
-210. `create_tag` - Create a new repository tag
-211. `delete_tag` - Delete a repository tag
-212. `get_tag_signature` - Get the X.509 signature of a signed tag (404 if unsigned)
-213. `get_work_item` - Get a work item with full details including status, hierarchy, type, and widgets
-214. `list_work_items` - List work items with filters (type, state, search, assignees, labels)
-215. `create_work_item` - Create a work item (issue, task, incident, epic, etc.) with full field support
-216. `update_work_item` - Update a work item (title, description, labels, assignees, state, parent, custom fields, etc.)
-217. `convert_work_item_type` - Convert a work item to a different type
-218. `list_work_item_statuses` - List available statuses for a work item type (Premium/Ultimate)
-219. `list_custom_field_definitions` - List custom field definitions for a work item type
-220. `move_work_item` - Move a work item to a different project
-221. `list_work_item_notes` - List notes and discussions on a work item
-222. `create_work_item_note` - Add a note to a work item (supports Markdown, internal notes, threads)
-223. `list_work_item_emoji_reactions` - List all emoji reactions on a work item
-224. `list_work_item_note_emoji_reactions` - List all emoji reactions on a work item note (comment, thread, or thread reply)
-225. `create_work_item_emoji_reaction` - Add an emoji reaction to a work item (e.g. thumbsup, rocket, eyes)
-226. `delete_work_item_emoji_reaction` - Remove an emoji reaction from a work item
-227. `create_work_item_note_emoji_reaction` - Add an emoji reaction to a work item note (comment, thread, or thread reply)
-228. `delete_work_item_note_emoji_reaction` - Remove an emoji reaction from a work item note (comment, thread, or thread reply)
-229. `get_timeline_events` - List timeline events for an incident
-230. `create_timeline_event` - Create a timeline event on an incident
-231. `list_webhooks` - List webhooks for a project or group
-232. `create_webhook` - Create a webhook on a project or group
-233. `update_webhook` - Update an existing project or group webhook
-234. `delete_webhook` - Delete a project or group webhook
-235. `list_webhook_events` - List recent webhook events (past 7 days)
-236. `get_webhook_event` - Get full details of a specific webhook event
-237. `search_code` - Search for code across all projects (requires advanced search or Zoekt)
-238. `search_project_code` - Search for code within a specific project (requires advanced search or Zoekt)
-239. `search_group_code` - Search for code within a specific group (requires advanced search or Zoekt)
-240. `list_project_variables` - List CI/CD variables for a project
-241. `get_project_variable` - Get a single CI/CD variable from a project
-242. `create_project_variable` - Create a CI/CD variable for a project
-243. `update_project_variable` - Update an existing CI/CD variable in a project
-244. `delete_project_variable` - Delete a CI/CD variable from a project
-245. `list_group_variables` - List CI/CD variables for a group
-246. `get_group_variable` - Get a single CI/CD variable from a group
-247. `create_group_variable` - Create a CI/CD variable for a group
-248. `update_group_variable` - Update an existing CI/CD variable in a group
-249. `delete_group_variable` - Delete a CI/CD variable from a group
-250. `get_dependency_proxy_settings` - Get dependency proxy settings for a group
-251. `update_dependency_proxy_settings` - Update dependency proxy settings for a group (enable/disable, credentials for authenticated Docker Hub pulls)
-252. `list_dependency_proxy_blobs` - List cached dependency proxy blobs for a group
-253. `purge_dependency_proxy_cache` - Schedule purge of all cached dependency proxy blobs for a group
-254. `list_project_vulnerabilities` - List vulnerabilities for a project with optional state, severity, and report type filters (GraphQL-backed, cursor pagination)
-255. `get_vulnerability` - Get full details of a specific vulnerability
-256. `dismiss_vulnerability` - Dismiss a vulnerability with a reason (acceptable_risk, false_positive, used_in_tests, mitigating_control, not_applicable) and optional comment
-257. `confirm_vulnerability` - Confirm a vulnerability as a real finding requiring remediation
-258. `orbit_query` - Execute a GitLab Orbit graph query over the indexed SDLC knowledge graph
-259. `orbit_get_schema` - Fetch the current GitLab Orbit graph schema (node and edge types)
-260. `orbit_get_status` - Check GitLab Orbit indexing status for the enabled scope
-261. `orbit_list_tools` - List the MCP tool definitions exposed by GitLab Orbit
-262. `discover_tools` - Discover and activate additional tool categories for this session. Available categories: merge_requests, issues, repositories, branches, projects, labels, ci, groups, pipelines, milestones, wiki, releases, tags, users, workitems, webhooks, search, variables, dependency_proxy, vulnerabilities, orbit. Already-active categories are listed in the response.
+2. `list_merge_request_pipelines` - List pipelines for a merge request with pagination
+3. `create_or_update_file` - Create or update a file in a GitLab project
+4. `search_repositories` - Search for GitLab projects
+5. `create_repository` - Create a new GitLab project
+6. `create_group` - Create new group or subgroup
+7. `get_file_contents` - Get contents of a file or directory from a GitLab project
+8. `push_files` - Push multiple files in a single commit
+9. `create_issue` - Create a new issue
+10. `create_merge_request` - Create a new merge request
+11. `fork_repository` - Fork a project to your account or specified namespace
+12. `create_branch` - Create a new branch
+13. `get_branch` - Get branch details (commit, protection status)
+14. `list_branches` - List branches in project with search filter
+15. `delete_branch` - Delete branch from project
+16. `list_protected_branches` - List protected branches in a project, supports search filter
+17. `get_protected_branch` - Get details of a single protected branch (access levels, force push settings)
+18. `protect_branch` - Protect a repository branch (set push/merge/unprotect access levels)
+19. `unprotect_branch` - Remove protection from a previously protected branch
+20. `update_default_branch` - Change the default branch of a project
+21. `get_merge_request` - Get details of a merge request (mergeRequestIid or branchName required). Set include_summaries=true for deployment/commit/approval summaries
+22. `get_merge_request_diffs` - Get the changes/diffs of a merge request (mergeRequestIid or branchName required)
+23. `list_merge_request_versions` - List all versions of a merge request
+24. `get_merge_request_version` - Get a specific version of a merge request
+25. `get_branch_diffs` - Get diffs between two branches or commits
+26. `update_merge_request` - Update a merge request (mergeRequestIid or branchName required)
+27. `create_note` - Create a new note (comment) to an issue or merge request
+28. `create_merge_request_thread` - Create a new thread on a merge request
+29. `mr_discussions` - List discussion items for a merge request
+30. `delete_merge_request_discussion_note` - Delete a discussion note on a merge request
+31. `update_merge_request_discussion_note` - Update a discussion note on a merge request
+32. `create_merge_request_discussion_note` - Add a new discussion note to an existing merge request thread
+33. `create_merge_request_note` - Add a new note to a merge request
+34. `delete_merge_request_note` - Delete an existing merge request note
+35. `get_merge_request_note` - Get a specific note for a merge request
+36. `get_merge_request_notes` - List notes for a merge request
+37. `update_merge_request_note` - Modify an existing merge request note
+38. `list_merge_request_emoji_reactions` - List all emoji reactions on a merge request
+39. `create_merge_request_emoji_reaction` - Add an emoji reaction to a merge request (e.g. thumbsup, rocket, eyes)
+40. `delete_merge_request_emoji_reaction` - Remove an emoji reaction from a merge request
+41. `update_issue_note` - Modify an existing issue thread note
+42. `create_issue_note` - Add a note to an issue, optionally replying to a discussion thread
+43. `list_issue_emoji_reactions` - List all emoji reactions on an issue
+44. `list_issue_note_emoji_reactions` - List all emoji reactions on an issue note. Pass discussion_id for discussion thread replies.
+45. `create_issue_emoji_reaction` - Add an emoji reaction to an issue (e.g. thumbsup, rocket, eyes)
+46. `delete_issue_emoji_reaction` - Remove an emoji reaction from an issue
+47. `create_issue_note_emoji_reaction` - Add an emoji reaction to an issue note. Pass discussion_id for discussion thread replies.
+48. `delete_issue_note_emoji_reaction` - Remove an emoji reaction from an issue note. Pass discussion_id for discussion thread replies.
+49. `list_issues` - List issues (default: created by current user; use scope='all' for all)
+50. `my_issues` - List issues assigned to the authenticated user
+51. `get_issue` - Get details of a specific issue. Returns a slim milestone by default; set full_response=true for the complete milestone object
+52. `update_issue` - Update an issue. Returns a slim confirmation by default; set full_response=true for the complete updated issue object
+53. `update_issue_description_patch` - Apply a patch (search/replace or unified diff) to an issue description. Reduces token usage by allowing small changes without sending the full description. Supports dry_run to preview changes and create_note to summarize updates.
+54. `delete_issue` - Delete an issue
+55. `list_todos` - List GitLab to-do items for the current user
+56. `mark_todo_done` - Mark a GitLab to-do item as done
+57. `mark_all_todos_done` - Mark all pending GitLab to-do items as done for the current user
+58. `list_issue_discussions` - List discussions for an issue
+59. `list_namespaces` - List all namespaces (users and groups) available to the current user. Filter by kind='group' for groups only.
+60. `get_namespace` - Get details of a namespace (user or group) by ID or path. Groups are namespaces with kind='group'.
+61. `get_project` - Get details of a specific project
+62. `list_projects` - List projects accessible by the current user
+63. `update_project` - Update project settings such as description, visibility, default branch, and feature access levels
+64. `list_project_members` - List members of a GitLab project
+65. `list_group_members` - List members of a GitLab group with optional name or username search
+66. `list_labels` - List labels for a project
+67. `get_label` - Get a single label from a project
+68. `create_label` - Create a new label in a project
+69. `update_label` - Update an existing label in a project
+70. `delete_label` - Delete a label from a project
+71. `list_group_projects` - List projects in a group
+72. `list_wiki_pages` - List wiki pages in a project
+73. `get_wiki_page` - Get details of a specific wiki page
+74. `create_wiki_page` - Create a wiki page in a project
+75. `update_wiki_page` - Update a wiki page in a project
+76. `delete_wiki_page` - Delete a wiki page from a project
+77. `get_repository_tree` - List files and directories in a repository
+78. `list_pipelines` - List pipelines with filtering options
+79. `get_pipeline` - Get details of a specific pipeline
+80. `get_pipeline_test_report` - Get pipeline test report
+81. `get_pipeline_test_report_summary` - Get pipeline test report summary
+82. `delete_pipeline` - Delete a pipeline. Requires the project Owner role, cannot be undone, and does not automatically delete child pipelines.
+83. `update_pipeline_metadata` - Update pipeline metadata
+84. `list_deployments` - List deployments with filtering options
+85. `get_deployment` - Get deployment details, including approval_summary, approvals, and pending_approval_count when GitLab provides them
+86. `create_deployment` - Create a deployment
+87. `update_deployment` - Update a deployment status
+88. `delete_deployment` - Delete a deployment
+89. `list_deployment_merge_requests` - List merge requests shipped with a deployment
+90. `approve_deployment` - Approve or reject a protected-environment deployment
+91. `list_environments` - List environments in a project
+92. `update_environment` - Update an environment
+93. `delete_environment` - Delete a stopped environment
+94. `stop_environment` - Stop an environment
+95. `stop_stale_environments` - Stop eligible stale environments; protected environments are excluded and environments are stopped, not deleted
+96. `delete_review_app_environments` - Schedule deletion of stopped review-app environments one week later; dry_run defaults to true and actual scheduling requires dry_run=false
+97. `list_pipeline_triggers` - List project pipeline trigger tokens
+98. `get_pipeline_trigger` - Get a project pipeline trigger
+99. `create_pipeline_trigger` - Create a project pipeline trigger
+100. `update_pipeline_trigger` - Update a project pipeline trigger
+101. `delete_pipeline_trigger` - Delete a project pipeline trigger
+102. `trigger_pipeline` - Trigger a pipeline with a pipeline trigger token
+103. `list_pipeline_jobs` - List all jobs in a specific pipeline
+104. `get_pipeline_job` - Get details of a GitLab pipeline job number
+105. `get_pipeline_job_output` - Get the output/trace of a pipeline job with optional pagination
+106. `validate_ci_lint` - Validate provided GitLab CI/CD YAML content for a project
+107. `create_pipeline` - Create a new pipeline for a branch or tag
+108. `retry_pipeline` - Retry a failed or canceled pipeline
+109. `cancel_pipeline` - Cancel a running pipeline
+110. `list_pipeline_schedules` - List pipeline schedules in a project, optionally filtered to active or inactive
+111. `get_pipeline_schedule` - Get details of a specific pipeline schedule, including its variables and last pipeline
+112. `create_pipeline_schedule` - Create a new pipeline schedule for a branch or tag
+113. `update_pipeline_schedule` - Update an existing pipeline schedule
+114. `delete_pipeline_schedule` - Delete a pipeline schedule
+115. `take_ownership_pipeline_schedule` - Take ownership of a pipeline schedule
+116. `create_pipeline_schedule_variable` - Create a variable for a pipeline schedule
+117. `update_pipeline_schedule_variable` - Update a variable of a pipeline schedule
+118. `delete_pipeline_schedule_variable` - Delete a variable from a pipeline schedule
+119. `play_pipeline_job` - Run a manual pipeline job
+120. `retry_pipeline_job` - Retry a failed or canceled pipeline job
+121. `cancel_pipeline_job` - Cancel a running pipeline job
+122. `erase_pipeline_job` - Erase a pipeline job log and artifacts
+123. `wait_for_pipeline` - Wait for a pipeline to reach a terminal status
+124. `wait_for_job` - Wait for a job to reach a terminal status
+125. `download_job_artifacts` - Download job artifact archive (zip) and save to a local path
+126. `get_job_artifact_file` - Get content of a single file from a job's artifacts
+127. `list_merge_requests` - List merge requests (without project_id: user's MRs; with project_id: project MRs)
+128. `list_milestones` - List milestones with filtering options
+129. `get_milestone` - Get details of a specific milestone
+130. `create_milestone` - Create a new milestone
+131. `edit_milestone` - Edit an existing milestone
+132. `delete_milestone` - Delete a milestone
+133. `get_milestone_issue` - Get issues associated with a specific milestone
+134. `get_milestone_merge_requests` - Get merge requests associated with a specific milestone
+135. `list_group_milestones` - List group milestones with filtering options
+136. `get_group_milestone` - Get details of a specific group milestone
+137. `create_group_milestone` - Create a new group milestone
+138. `edit_group_milestone` - Edit an existing group milestone
+139. `delete_group_milestone` - Delete a group milestone
+140. `get_group_milestone_issue` - Get issues associated with a specific group milestone
+141. `get_group_milestone_merge_requests` - Get merge requests associated with a specific group milestone
+142. `get_users` - Get GitLab user details by usernames
+143. `get_user` - Get user details by ID
+144. `whoami` - Get current authenticated user details
+145. `list_commits` - List repository commits with filtering options
+146. `get_commit` - Get details of a specific commit
+147. `get_commit_diff` - Get changes/diffs of a specific commit
+148. `list_commit_statuses` - List statuses for a commit
+149. `create_commit_status` - Create or update the status of a commit
+150. `upload_markdown` - Upload a file for use in markdown content
+151. `download_attachment` - Download an uploaded file from a project (images returned as base64; use local_path to save to disk)
+152. `health_check` - Verify server status and authentication. Always reports the MCP server version (mcp_server_version). When authenticated, also reports the GitLab instance version from GET /api/v4/version (version, revision, enterprise). Version lookup failures do not fail the health check — those fields are omitted.
+153. `list_events` - List events for the authenticated user (before/after: YYYY-MM-DD)
+154. `get_project_events` - List events for a project (before/after: YYYY-MM-DD)
+155. `list_tags` - List repository tags for a project
+156. `get_tag` - Get a repository tag by name
+157. `create_tag` - Create a new repository tag
+158. `delete_tag` - Delete a repository tag
+159. `list_webhooks` - List webhooks for a project or group
+160. `create_webhook` - Create a webhook on a project or group
+161. `update_webhook` - Update an existing project or group webhook
+162. `delete_webhook` - Delete a project or group webhook
+163. `search_code` - Search for code across all projects (requires advanced search or Zoekt)
+164. `search_project_code` - Search for code within a specific project (requires advanced search or Zoekt)
+165. `search_group_code` - Search for code within a specific group (requires advanced search or Zoekt)
+166. `list_project_variables` - List CI/CD variables for a project
+167. `get_project_variable` - Get a single CI/CD variable from a project
+168. `create_project_variable` - Create a CI/CD variable for a project
+169. `update_project_variable` - Update an existing CI/CD variable in a project
+170. `delete_project_variable` - Delete a CI/CD variable from a project
+171. `list_group_variables` - List CI/CD variables for a group
+172. `get_group_variable` - Get a single CI/CD variable from a group
+173. `create_group_variable` - Create a CI/CD variable for a group
+174. `update_group_variable` - Update an existing CI/CD variable in a group
+175. `delete_group_variable` - Delete a CI/CD variable from a group
+176. `discover_tools` - Discover and activate additional tool categories for this session. Available categories: merge_requests, issues, repositories, branches, projects, labels, ci, groups, pipelines, milestones, wiki, releases, tags, users, workitems, webhooks, search, variables, dependency_proxy, vulnerabilities, orbit. Already-active categories are listed in the response.
 
 <!-- TOOLS-END -->
 

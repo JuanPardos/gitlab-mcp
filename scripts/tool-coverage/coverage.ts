@@ -39,20 +39,15 @@ export const GROUP_ORDER = [
   "merge_requests",
   "issues",
   "labels",
-  "workitems",
   "ci",
   "pipelines",
   "milestones",
   "wiki",
-  "releases",
   "tags",
   "users",
   "variables",
   "webhooks",
   "search",
-  "dependency_proxy",
-  "vulnerabilities",
-  "orbit",
 ];
 
 export const GROUP_TITLE: Record<string, string> = {
@@ -67,27 +62,21 @@ export const GROUP_TITLE: Record<string, string> = {
   pipelines: "Pipelines, Jobs & Deployments",
   milestones: "Milestones",
   wiki: "Wiki",
-  releases: "Releases",
   tags: "Tags",
   users: "Users & Events",
-  workitems: "Work Items",
   webhooks: "Webhooks",
   search: "Search",
   variables: "Variables",
-  dependency_proxy: "Dependency Proxy",
-  vulnerabilities: "Vulnerabilities",
-  orbit: "GitLab Orbit",
   meta: "Meta & GraphQL",
 };
 
 export const CANARY_INVOKED = [
   "list_project_variables",
-  "orbit_query",
   "list_pipeline_schedules",
   "search_code",
 ];
 
-export const MIN_INVOKED = 146;
+export const MIN_INVOKED = 100;
 
 export interface ToolGroup {
   id: string;

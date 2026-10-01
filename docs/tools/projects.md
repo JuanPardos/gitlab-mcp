@@ -11,9 +11,7 @@ Project/namespace listing, member queries, group iterations, and server health.
 - [`list_group_members`](#list_group_members) — 📖 Read-only
 - [`list_namespaces`](#list_namespaces) — 📖 Read-only
 - [`get_namespace`](#get_namespace) — 📖 Read-only
-- [`verify_namespace`](#verify_namespace) — 📖 Read-only
 - [`list_group_projects`](#list_group_projects) — 📖 Read-only
-- [`list_group_iterations`](#list_group_iterations) — 📖 Read-only
 - [`health_check`](#health_check) — 📖 Read-only
 
 ---
@@ -153,19 +151,6 @@ Get details of a namespace (user or group) by ID or path. Groups are namespaces 
 |---|---|:-:|---|
 | `namespace_id` | string | ✓ | Namespace ID or full path |
 
-### `verify_namespace`
-
-*📖 Read-only*
-
-Verify if a namespace path exists. Use parent_id to scope the check to a specific parent namespace — required for nested namespaces where the same path may exist under different parents.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `path` | string | ✓ | Namespace path to verify |
-| `parent_id` | integer |  | Parent namespace ID; required to correctly resolve paths in nested namespaces where the same path may exist under different parents |
-
 ### `list_group_projects`
 
 *📖 Read-only*
@@ -192,27 +177,6 @@ List projects in a group. Use this for a collection of resources; choose the cor
 | `with_custom_attributes` | boolean |  | Include custom attributes |
 | `with_security_reports` | boolean |  | Include security reports |
 | `topic` | string |  | Filter by topic (projects tagged with this topic) |
-| `page` | number |  | Page number for pagination (default: 1) |
-| `per_page` | number |  | Number of items per page (max: 100, default: 20) |
-
-### `list_group_iterations`
-
-*📖 Read-only*
-
-List group iterations with filtering options. Use this for a collection of resources; choose the corresponding get tool when you already know the single resource to inspect. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `group_id` | string | ✓ | Group ID or URL-encoded path |
-| `state` | enum (`opened` \| `upcoming` \| `current` \| `closed` \| `all`) |  | Return opened, upcoming, current, closed, or all iterations. |
-| `search` | string |  | Return only iterations with a title matching the provided string. |
-| `search_in` | array<enum (`title` \| `cadence_title`)> |  | Fields in which fuzzy search should be performed with the query given in the argument search. The available options are title and cadence_title. Default is [title]. |
-| `include_ancestors` | boolean |  | Include iterations for group and its ancestors. Defaults to true. |
-| `include_descendants` | boolean |  | Include iterations for group and its descendants. Defaults to false. |
-| `updated_before` | string |  | Return only iterations updated before the given datetime. Expected in ISO 8601 format (2019-03-15T08:00:00Z). |
-| `updated_after` | string |  | Return only iterations updated after the given datetime. Expected in ISO 8601 format (2019-03-15T08:00:00Z). |
 | `page` | number |  | Page number for pagination (default: 1) |
 | `per_page` | number |  | Number of items per page (max: 100, default: 20) |
 

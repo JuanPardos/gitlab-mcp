@@ -183,12 +183,7 @@ import {
   filterDiffsByPatterns,
   openSafeOutputWriteStream,
   readSafeExistingFile,
-  summarizeWebhookEvents,
 } from "./utils/helpers.js";
-import {
-  graphqlQueryContainsWriteOperation,
-  graphqlQueryContainsDeleteOperation,
-} from "./utils/graphql-query.js";
 import { resolveNestedWikiUpdateTitle } from "./utils/wiki-title.js";
 import {
   encodeRepoFilePayloadContent,
@@ -203,17 +198,11 @@ import {
   type MaskingEngine,
 } from "./masking/index.js";
 import { checkForNewVersion } from "./utils/version-check.js";
-import { assertGitLabVersionAtLeast } from "./utils/gitlab-version-gate.js";
 import { fetchWithValidatedRedirects } from "./utils/safe-redirect-fetch.js";
 import {
   parseGitLabVersionApiResponse,
   type GitLabInstanceVersionMetadata,
 } from "./utils/gitlab-instance-version.js";
-import {
-  buildBulkPublishDraftNotesBody,
-  needsGitLab19_2BulkPublish,
-  type BulkPublishDraftNotesBody,
-} from "./utils/bulk-publish-options.js";
 import {
   appendFilterParam,
   appendFilterParams,
@@ -252,14 +241,11 @@ import {
   type ToolsetId,
 } from "./tools/registry.js";
 import {
-  BulkPublishDraftNotesSchema,
   CancelPipelineJobSchema,
   ErasePipelineJobSchema,
   CancelPipelineSchema,
   CreateBranchOptionsSchema,
   CreateBranchSchema,
-  CreateDraftNoteSchema,
-  CreateIssueLinkSchema,
   CreateIssueNoteSchema,
   CreateIssueOptionsSchema,
   CreateIssueSchema,
@@ -271,9 +257,7 @@ import {
   CreateMergeRequestNoteSchema,
   CreateMergeRequestDiscussionNoteSchema,
   CreateMergeRequestEmojiReactionSchema,
-  CreateMergeRequestNoteEmojiReactionSchema,
   ListMergeRequestEmojiReactionsSchema,
-  ListMergeRequestNoteEmojiReactionsSchema,
   CreateMergeRequestOptionsSchema,
   CreateMergeRequestSchema,
   CreateMergeRequestThreadSchema,
@@ -288,17 +272,13 @@ import {
   CreateRepositorySchema,
   CreateGroupSchema,
   CreateWikiPageSchema,
-  CreateGroupWikiPageSchema,
   DeleteBranchSchema,
   GetProtectedBranchSchema,
   ListProtectedBranchesSchema,
   ProtectBranchSchema,
   UnprotectBranchSchema,
   UpdateDefaultBranchSchema,
-  DeleteDraftNoteSchema,
   DeleteGroupMilestoneSchema,
-  DeleteGroupWikiPageSchema,
-  DeleteIssueLinkSchema,
   DeleteIssueSchema,
   DeleteIssueEmojiReactionSchema,
   DeleteIssueNoteEmojiReactionSchema,
@@ -307,7 +287,6 @@ import {
   DeleteWikiPageSchema,
   DeleteMergeRequestNoteSchema,
   DeleteMergeRequestEmojiReactionSchema,
-  DeleteMergeRequestNoteEmojiReactionSchema,
   EditProjectMilestoneSchema,
   EditGroupMilestoneSchema,
   type FileOperation,
@@ -316,24 +295,16 @@ import {
   GetBranchSchema,
   GetCommitDiffSchema,
   GetCommitSchema,
-  GetFileBlameSchema,
-  type GetFileBlameOptions,
-  GitLabBlameEntrySchema,
-  type GitLabBlameEntry,
-  GetDraftNoteSchema,
   GetFileContentsSchema,
-  GetIssueLinkSchema,
   GetIssueSchema,
   GetLabelSchema,
   GetMergeRequestDiffsSchema,
   GetMergeRequestSchema,
-  GetMilestoneBurndownEventsSchema,
   GetMilestoneIssuesSchema,
   GetMilestoneMergeRequestsSchema,
   GetGroupMilestoneSchema,
   GetGroupMilestoneIssuesSchema,
   GetGroupMilestoneMergeRequestsSchema,
-  GetGroupMilestoneBurndownEventsSchema,
   GetDeploymentSchema,
   CreateDeploymentSchema,
   UpdateDeploymentSchema,
@@ -356,13 +327,11 @@ import {
   GetPipelineJobOutputSchema,
   PipelineJobControlSchema,
   GetPipelineSchema,
-  GetPipelineVariablesSchema,
   UpdatePipelineMetadataSchema,
   DeletePipelineSchema,
   PipelineReportSchema,
   WaitForPipelineSchema,
   WaitForPipelineJobSchema,
-  PlayPipelineJobsSchema,
   GetProjectMilestoneSchema,
   GetProjectSchema,
   type GetRepositoryTreeOptions,
@@ -390,21 +359,13 @@ import {
   // Discussion Schemas
   GitLabDiscussionNoteSchema, // Added
   GitLabDiscussionSchema,
-  // Draft Notes Types
-  type GitLabDraftNote,
-  // Draft Notes Schemas
-  GitLabDraftNoteSchema,
   type GitLabFork,
   GitLabForkSchema,
   GitLabBranchSchema,
   GitLabProtectedBranchSchema,
   GitLabGroupSchema,
   type GitLabIssue,
-  type GitLabIssueLink,
-  GitLabIssueLinkSchema,
   GitLabIssueSchema,
-  type GitLabIssueWithLinkDetails,
-  GitLabIssueWithLinkDetailsSchema,
   type GitLabLabel,
   GitLabMarkdownUpload,
   GitLabMarkdownUploadSchema,
@@ -417,7 +378,6 @@ import {
   type GitLabGroupMilestones,
   GitLabMilestonesSchema,
   GitLabGroupMilestonesSchema,
-  GitLabNamespaceExistsResponseSchema,
   GitLabNamespaceSchema,
   type GitLabPipeline,
   type GitLabPipelineJob,
@@ -429,24 +389,17 @@ import {
   GitLabPipelineSchema,
   type GitLabPipelineSchedule,
   type GitLabPipelineScheduleVariable,
-  type GitLabPipelineSchedulePlayResult,
   GitLabPipelineScheduleSchema,
   GitLabPipelineScheduleVariableSchema,
-  GitLabPipelineSchedulePlayResultSchema,
   ListPipelineSchedulesSchema,
   GetPipelineScheduleSchema,
-  ListPipelineSchedulePipelinesSchema,
   CreatePipelineScheduleSchema,
   UpdatePipelineScheduleSchema,
   DeletePipelineScheduleSchema,
-  PlayPipelineScheduleSchema,
   TakeOwnershipPipelineScheduleSchema,
-  GetPipelineScheduleVariableSchema,
   CreatePipelineScheduleVariableSchema,
   UpdatePipelineScheduleVariableSchema,
   DeletePipelineScheduleVariableSchema,
-  type GitLabPipelineTriggerJob,
-  GitLabPipelineTriggerJobSchema,
   type GitLabProject,
   type GitLabProjectMember,
   GitLabProjectMemberSchema,
@@ -469,14 +422,11 @@ import {
   GitLabUsersResponseSchema,
   type GitLabWikiPage,
   GitLabWikiPageSchema,
-  GroupIteration,
   type ListCommitsOptions,
   type ListCommitStatusesOptions,
   ListCommitStatusesSchema,
   ListBranchesSchema,
   ListCommitsSchema,
-  ListDraftNotesSchema,
-  ListGroupIterationsSchema,
   ListGroupProjectsSchema,
   type GitLabCiVariable,
   GitLabCiVariableSchema,
@@ -490,32 +440,15 @@ import {
   CreateGroupVariableSchema,
   UpdateGroupVariableSchema,
   DeleteGroupVariableSchema,
-  GitLabDependencyProxySchema,
-  type GitLabDependencyProxy,
-  GitLabDependencyProxyBlobSchema,
-  type GitLabDependencyProxyBlob,
-  GetDependencyProxySettingsSchema,
-  UpdateDependencyProxySettingsSchema,
-  ListDependencyProxyBlobsSchema,
-  PurgeDependencyProxyCacheSchema,
-  ListProjectVulnerabilitiesSchema,
-  GetVulnerabilitySchema,
-  DismissVulnerabilitySchema,
-  ConfirmVulnerabilitySchema,
   ListIssueDiscussionsSchema,
-  ListIssueLinksSchema,
   ListIssuesSchema,
   type ListTodosOptions,
   ListTodosSchema,
   ListLabelsSchema,
-  ListMergeRequestDiffsSchema, // Added
-  GetMergeRequestFileDiffSchema,
-  ListMergeRequestChangedFilesSchema,
   ListMergeRequestDiscussionsSchema,
   type ListMergeRequestPipelinesOptions,
   ListMergeRequestPipelinesSchema,
   ListMergeRequestsSchema,
-  ListGroupMergeRequestsSchema,
   ListMergeRequestVersionsSchema,
   GetMergeRequestVersionSchema,
   GitLabMergeRequestVersionSchema,
@@ -531,14 +464,8 @@ import {
   ListDeploymentsSchema,
   type ListEnvironmentsOptions,
   ListEnvironmentsSchema,
-  type ListPipelineTriggerJobsOptions,
-  ListPipelineTriggerJobsSchema,
   type ValidateCiLintOptions,
   ValidateCiLintSchema,
-  type ValidateProjectCiLintOptions,
-  ValidateProjectCiLintSchema,
-  ListCiCatalogResourcesSchema,
-  GetCiCatalogResourceSchema,
   type ListProjectMembersOptions,
   ListProjectMembersSchema,
   type ListGroupMembersOptions,
@@ -548,23 +475,12 @@ import {
   ListProjectsSchema,
   ListWikiPagesOptions,
   ListWikiPagesSchema,
-  GetGroupWikiPageSchema,
-  ListGroupWikiPagesSchema,
-  UpdateGroupWikiPageSchema,
-  type ListGroupWikiPagesOptions,
   MarkdownUploadSchema,
   MarkdownUploadRemoteSchema,
   DownloadAttachmentSchema,
   DownloadJobArtifactsSchema,
   GetJobArtifactFileSchema,
-  type GitLabArtifactEntry,
-  GitLabArtifactEntrySchema,
-  ListJobArtifactsSchema,
   MergeMergeRequestSchema,
-  ApproveMergeRequestSchema,
-  UnapproveMergeRequestSchema,
-  GetMergeRequestApprovalStateSchema,
-  GetMergeRequestConflictsSchema,
   GitLabMergeRequestApprovalsResponseSchema,
   GitLabMergeRequestApprovalStateSchema,
   type GitLabApprovalUser,
@@ -572,17 +488,11 @@ import {
   type MergeRequestThreadPosition,
   type MyIssuesOptions,
   MyIssuesSchema,
-  OrbitQuerySchema,
-  OrbitSchemaSchema,
-  OrbitStatusSchema,
-  OrbitToolsSchema,
   MarkAllTodosDoneSchema,
   MarkTodoDoneSchema,
   type PaginatedDiscussionsResponse,
   PaginatedDiscussionsResponseSchema,
   type PaginationOptions,
-  PromoteProjectMilestoneSchema,
-  PublishDraftNoteSchema,
   PlayPipelineJobSchema,
   PushFilesSchema,
   RetryPipelineJobSchema,
@@ -591,70 +501,33 @@ import {
   SearchGroupCodeSchema,
   SearchProjectCodeSchema,
   SearchRepositoriesSchema,
-  UpdateDraftNoteSchema,
   UpdateIssueNoteSchema,
   UpdateIssueSchema,
   UpdateIssueDescriptionPatchSchema,
-  type UpdateIssueDescriptionPatchOptions,
   UpdateLabelSchema,
   UpdateProjectSchema,
   UpdateMergeRequestNoteSchema,
   UpdateMergeRequestDiscussionNoteSchema,
   UpdateMergeRequestSchema,
   UpdateWikiPageSchema,
-  VerifyNamespaceSchema,
   GitLabEventSchema,
   ListEventsSchema,
   GetProjectEventsSchema,
   GitLabEvent,
-  ExecuteGraphQLSchema,
-  type GitLabRelease,
-  GitLabReleaseSchema,
-  ListReleasesSchema,
-  GetReleaseSchema,
-  CreateReleaseSchema,
-  UpdateReleaseSchema,
-  DeleteReleaseSchema,
-  CreateReleaseEvidenceSchema,
-  DownloadReleaseAssetSchema,
   ListTagsSchema,
   GetTagSchema,
   CreateTagSchema,
   DeleteTagSchema,
-  GetTagSignatureSchema,
   GitLabTagSchema,
-  GitLabTagSignatureSchema,
   type GitLabTag,
-  type GitLabTagSignature,
   GetMergeRequestNotesSchema,
   GetMergeRequestNoteSchema,
   GetMergeRequestDiscussionSchema,
   DeleteMergeRequestDiscussionNoteSchema,
-  ResolveMergeRequestThreadSchema,
-  GetWorkItemSchema,
-  ListWorkItemsSchema,
-  CreateWorkItemSchema,
-  UpdateWorkItemSchema,
-  ConvertWorkItemTypeSchema,
-  ListWorkItemStatusesSchema,
-  ListWorkItemNotesSchema,
-  CreateWorkItemNoteSchema,
-  CreateWorkItemEmojiReactionSchema,
-  CreateWorkItemNoteEmojiReactionSchema,
-  ListWorkItemEmojiReactionsSchema,
-  ListWorkItemNoteEmojiReactionsSchema,
-  DeleteWorkItemEmojiReactionSchema,
-  DeleteWorkItemNoteEmojiReactionSchema,
-  MoveWorkItemSchema,
-  ListCustomFieldDefinitionsSchema,
-  GetTimelineEventsSchema,
-  CreateTimelineEventSchema,
   ListWebhooksSchema,
   CreateWebhookSchema,
   UpdateWebhookSchema,
   DeleteWebhookSchema,
-  ListWebhookEventsSchema,
-  GetWebhookEventSchema,
   HealthCheckSchema,
 } from "./schemas.js";
 
@@ -697,8 +570,8 @@ const MCP_PROMPTS = [
     ],
     render: (args: Record<string, string>) =>
       `Review merge request !${args.merge_request_iid ?? "<iid>"} in project ${args.project_id ?? "<project_id>"}:\n` +
-      `1. Call list_merge_request_changed_files to get the changed file list (use excluded_file_patterns for lockfiles/dist/generated files).\n` +
-      `2. Call get_merge_request_file_diff in batches of 3-5 files, prioritizing source over config/tests.\n` +
+      `1. Call get_merge_request_diffs to get the changed files and their diffs.\n` +
+      `2. Review source files first, then config/tests.\n` +
       `3. Leave findings with create_merge_request_thread (inline, position: new_path/new_line) or create_merge_request_note (general).\n` +
       `4. Summarize the review verdict in a final top-level note.`,
   },
@@ -715,20 +588,6 @@ const MCP_PROMPTS = [
       `2. Call get_pipeline_job_output (or the job trace tool) on each failed job, focusing on the tail of the log.\n` +
       `3. Identify the root cause (compile error, test failure, timeout, runner issue) and quote the relevant log lines.\n` +
       `4. Suggest the fix or the next diagnostic step.`,
-  },
-  {
-    name: "triage_vulnerabilities",
-    description: "List a project's open vulnerabilities and propose a remediation priority order.",
-    arguments: [
-      { name: "project_id", description: "Numeric project ID or URL-encoded path", required: true },
-    ],
-    render: (args: Record<string, string>) =>
-      `Triage vulnerabilities for project ${args.project_id ?? "<project_id>"}:\n` +
-      `1. Call list_project_vulnerabilities once with state=detected and once with state=confirmed ` +
-      `(the tool only accepts one state per call). Follow pageInfo.endCursor with the "after" ` +
-      `param while pageInfo.hasNextPage is true, and aggregate both states' results.\n` +
-      `2. Group the aggregated results by severity (critical > high > medium > low) and by whether a fix is already available.\n` +
-      `3. Propose a remediation order, calling out any critical/high items with no available fix.`,
   },
 ] as const;
 
@@ -916,8 +775,7 @@ function createServer(): McpServer {
       );
       const isPlainTextResult =
         toolName === "get_pipeline_job_output" ||
-        toolName === "get_job_artifact_file" ||
-        (toolName === "download_release_asset" && !IS_REMOTE);
+        toolName === "get_job_artifact_file";
       const filtered = applyJmespathToToolResult(result, jmespathExpression, {
         ...completionOptions,
         maskValue: maskingEngine
@@ -2615,33 +2473,6 @@ async function listMergeRequests(
 }
 
 /**
- * List merge requests across every project of a GitLab group and its subgroups
- *
- * @param {string} groupId - The ID or URL-encoded path of the group
- * @param {Object} options - Optional filtering parameters
- * @returns {Promise<GitLabMergeRequest[]>} List of merge requests
- */
-async function listGroupMergeRequests(
-  groupId: string,
-  options: Omit<z.infer<typeof ListGroupMergeRequestsSchema>, "group_id"> = {}
-): Promise<GitLabMergeRequest[]> {
-  const decodedGroupId = decodeURIComponent(groupId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(decodedGroupId)}/merge_requests`
-  );
-
-  appendMergeRequestFilters(url, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return z.array(GitLabMergeRequestSchema).parse(data);
-}
-
-/**
  * Get a single issue from a GitLab project
  * 단일 이슈 조회
  *
@@ -2712,1927 +2543,6 @@ async function deleteIssue(projectId: string, issueIid: number | string): Promis
   projectId = decodeURIComponent(projectId); // Decode project ID
   const url = new URL(
     `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/issues/${encodeGitLabPathSegment(issueIid)}`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "DELETE",
-  });
-
-  await handleGitLabError(response);
-}
-
-// --- GraphQL helper ---
-
-/**
- * Execute a GraphQL query against the GitLab instance.
- * Reusable helper for work item operations.
- */
-async function executeGraphQL<T = any>(
-  query: string,
-  variables: Record<string, any> = {}
-): Promise<T> {
-  const apiUrl = new URL(getEffectiveApiUrl());
-  const restPath = apiUrl.pathname || "";
-  const idx = restPath.lastIndexOf("/api/v4");
-  const prefix = idx >= 0 ? restPath.slice(0, idx) : "";
-  const graphqlUrl = process.env.GITLAB_GRAPHQL_URL || `${apiUrl.origin}${prefix}/api/graphql`;
-
-  const response = await fetch(graphqlUrl, {
-    ...getFetchConfig(),
-    method: "POST",
-    headers: {
-      ...BASE_HEADERS,
-      ...buildAuthHeaders(),
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(`GraphQL request failed (${response.status}): ${errorBody}`);
-  }
-
-  const json: any = await response.json();
-  if (json.errors && json.errors.length > 0) {
-    throw new Error(`GraphQL errors: ${json.errors.map((e: any) => e.message).join(", ")}`);
-  }
-  return json.data as T;
-}
-
-/**
- * Resolve a namespace path and issue IID to a work item GraphQL GID.
- */
-async function resolveWorkItemGID(
-  projectId: string,
-  issueIid: number
-): Promise<{
-  workItemGID: string;
-  projectPath: string;
-  namespaceKind: "project" | "group";
-}> {
-  const { path: projectPath, kind: namespaceKind } = await resolveProjectOrGroupPath(projectId);
-
-  // Resolve work item GID via GraphQL
-  const data = await executeGraphQL<{
-    namespace: { workItem: { id: string } | null };
-  }>(
-    `query($path: ID!, $iid: String!) {
-      namespace(fullPath: $path) {
-        workItem(iid: $iid) {
-          id
-        }
-      }
-    }`,
-    { path: projectPath, iid: String(issueIid) }
-  );
-
-  if (!data.namespace?.workItem?.id) {
-    throw new Error(`Work item #${issueIid} not found in namespace ${projectPath}`);
-  }
-
-  return { workItemGID: data.namespace.workItem.id, projectPath, namespaceKind };
-}
-
-/**
- * Resolve label names and usernames to GitLab GIDs in a single GraphQL call.
- */
-async function resolveNamesToIds(
-  projectPath: string,
-  namespaceKind: "project" | "group",
-  labelNames?: string[],
-  usernames?: string[]
-): Promise<{ labelIds: string[]; userIds: string[] }> {
-  if (!labelNames?.length && !usernames?.length) {
-    return { labelIds: [], userIds: [] };
-  }
-
-  labelNames ??= [];
-  usernames ??= [];
-
-  const labelVars = Object.fromEntries(labelNames.map((name, i) => [`l${i}`, name]));
-  // One alias per label — exact title match via the `title` argument, includes ancestor
-  // group labels, single round trip with no pagination needed.
-  const varDefs = labelNames.map((_, i) => `$l${i}: String!`).join(", ");
-  const aliases = labelNames.map((_, i) =>
-    `l${i}: labels(title: $l${i}, includeAncestorGroups: true, first: 1) { nodes { id } }`
-  ).join(" ");
-  const rootField = namespaceKind === "group" ? "group" : "project";
-
-  const data = await executeGraphQL<{
-    project?: { [alias: string]: { nodes: Array<{ id: string }> } } | null;
-    group?: { [alias: string]: { nodes: Array<{ id: string }> } } | null;
-    users: { nodes: Array<{ id: string; username: string }> };
-  }>(
-    `query($path: ID!, $usernames: [String!]!${varDefs ? `, ${varDefs}` : ""}) {
-      ${rootField}(fullPath: $path) { ${aliases || "__typename"} }
-      users(usernames: $usernames) { nodes { id username } }
-    }`,
-    { path: projectPath, usernames, ...labelVars }
-  );
-  const labelNamespace = namespaceKind === "group" ? data.group : data.project;
-
-  if (!labelNamespace) {
-    throw new Error(`Namespace '${projectPath}' not found or inaccessible`);
-  }
-
-  const labelIds = labelNames.map((name, i) => {
-    const nodes = labelNamespace[`l${i}`]?.nodes;
-    if (!nodes?.length) throw new Error(`Label '${name}' not found in namespace`);
-    return nodes[0].id;
-  });
-  const userIds = usernames.map(name => {
-    const user = data.users.nodes.find(u => u.username === name);
-    if (!user) throw new Error(`User '${name}' not found`);
-    return user.id;
-  });
-  return { labelIds, userIds };
-}
-
-// --- Work item type conversion ---
-
-/**
- * Map user-facing type names to GitLab WorkItemType names for GraphQL queries.
- */
-const WORK_ITEM_TYPE_NAMES: Record<string, string> = {
-  issue: "Issue",
-  task: "Task",
-  incident: "Incident",
-  test_case: "Test Case",
-  epic: "Epic",
-  key_result: "Key Result",
-  objective: "Objective",
-  requirement: "Requirement",
-  ticket: "Ticket",
-};
-
-/**
- * Get the GraphQL GID for a work item type by querying the project's available types.
- */
-async function resolveWorkItemTypeGID(projectPath: string, typeName: string): Promise<string> {
-  const targetName = WORK_ITEM_TYPE_NAMES[typeName];
-  if (!targetName) {
-    throw new Error(`Unknown work item type: ${typeName}`);
-  }
-
-  const data = await executeGraphQL<{
-    namespace: { workItemTypes: { nodes: Array<{ id: string; name: string }> } };
-  }>(
-    `query($path: ID!) {
-      namespace(fullPath: $path) {
-        workItemTypes {
-          nodes {
-            id
-            name
-          }
-        }
-      }
-    }`,
-    { path: projectPath }
-  );
-
-  const typeNode = data.namespace?.workItemTypes?.nodes?.find(n => n.name === targetName);
-  if (!typeNode) {
-    throw new Error(`Work item type '${targetName}' not found in project ${projectPath}`);
-  }
-  return typeNode.id;
-}
-
-/**
- * Convert an issue to a different work item type using GraphQL.
- */
-async function convertIssueType(
-  projectId: string,
-  issueIid: number,
-  newType: string
-): Promise<{ id: string; type: string }> {
-  const { workItemGID, projectPath } = await resolveWorkItemGID(projectId, issueIid);
-  const workItemTypeGID = await resolveWorkItemTypeGID(projectPath, newType);
-
-  const data = await executeGraphQL<{
-    workItemConvert: {
-      workItem: { id: string; workItemType: { name: string } } | null;
-      errors: string[];
-    };
-  }>(
-    `mutation($id: WorkItemID!, $typeId: WorkItemsTypeID!) {
-      workItemConvert(input: { id: $id, workItemTypeId: $typeId }) {
-        workItem {
-          id
-          workItemType { name }
-        }
-        errors
-      }
-    }`,
-    { id: workItemGID, typeId: workItemTypeGID }
-  );
-
-  if (data.workItemConvert.errors?.length > 0) {
-    throw new Error(`Conversion failed: ${data.workItemConvert.errors.join(", ")}`);
-  }
-
-  return {
-    id: data.workItemConvert.workItem!.id,
-    type: data.workItemConvert.workItem!.workItemType.name,
-  };
-}
-
-// --- Work item hierarchy ---
-
-/**
- * Remove the parent from a work item.
- */
-async function removeIssueParent(projectId: string, issueIid: number): Promise<void> {
-  const { workItemGID } = await resolveWorkItemGID(projectId, issueIid);
-
-  const data = await executeGraphQL<{
-    workItemUpdate: {
-      workItem: { id: string } | null;
-      errors: string[];
-    };
-  }>(
-    `mutation($id: WorkItemID!) {
-      workItemUpdate(input: { id: $id, hierarchyWidget: { parentId: null } }) {
-        workItem { id }
-        errors
-      }
-    }`,
-    { id: workItemGID }
-  );
-
-  if (data.workItemUpdate.errors?.length > 0) {
-    throw new Error(`Failed to remove parent: ${data.workItemUpdate.errors.join(", ")}`);
-  }
-}
-
-// --- Work item status ---
-
-/**
- * List available statuses for a work item type in a project.
- * Requires Premium/Ultimate with configurable statuses enabled.
- */
-async function listIssueStatuses(projectId: string, workItemType: string = "issue"): Promise<any> {
-  const projectPath = await resolveProjectPath(projectId);
-  const typeName = WORK_ITEM_TYPE_NAMES[workItemType] || "Issue";
-
-  const data = await executeGraphQL<{
-    namespace: {
-      workItemTypes: {
-        nodes: Array<{
-          id: string;
-          name: string;
-          supportedConversionTypes: Array<{ id: string; name: string }>;
-          widgetDefinitions: Array<any>;
-        }>;
-      };
-    };
-  }>(
-    `query($path: ID!, $typeName: IssueType) {
-      namespace(fullPath: $path) {
-        workItemTypes(name: $typeName) {
-          nodes {
-            id
-            name
-            supportedConversionTypes { id name }
-            widgetDefinitions {
-              __typename
-              ... on WorkItemWidgetDefinitionStatus {
-                allowedStatuses {
-                  id
-                  name
-                  iconName
-                  color
-                  position
-                }
-              }
-              ... on WorkItemWidgetDefinitionHierarchy {
-                allowedChildTypes { nodes { id name } }
-                allowedParentTypes { nodes { id name } }
-              }
-            }
-          }
-        }
-      }
-    }`,
-    { path: projectPath, typeName: typeName.replace(/ /g, "_").toUpperCase() }
-  );
-
-  const typeNodes = data.namespace?.workItemTypes?.nodes;
-  if (!typeNodes || typeNodes.length === 0) {
-    throw new Error(`Work item type '${typeName}' not found in project`);
-  }
-
-  const typeNode = typeNodes[0];
-
-  // Extract statuses from the status widget definition
-  const statusWidget = typeNode.widgetDefinitions?.find(
-    (w: any) => w.__typename === "WorkItemWidgetDefinitionStatus"
-  );
-  const statuses = statusWidget?.allowedStatuses || [];
-
-  // Extract hierarchy info
-  const hierarchyWidget = typeNode.widgetDefinitions?.find(
-    (w: any) => w.__typename === "WorkItemWidgetDefinitionHierarchy"
-  );
-
-  const result: Record<string, any> = {
-    work_item_type: typeNode.name,
-    statuses_available: statuses.length > 0,
-    statuses,
-  };
-
-  // Add supported conversion types
-  const conversionTypes = typeNode.supportedConversionTypes || [];
-  if (conversionTypes.length > 0) {
-    result.supported_conversion_types = conversionTypes.map((t: any) => t.name);
-  }
-
-  // Add allowed child/parent types
-  const childTypes = hierarchyWidget?.allowedChildTypes?.nodes || [];
-  const parentTypes = hierarchyWidget?.allowedParentTypes?.nodes || [];
-  if (childTypes.length > 0) {
-    result.allowed_child_types = childTypes.map((t: any) => t.name);
-  }
-  if (parentTypes.length > 0) {
-    result.allowed_parent_types = parentTypes.map((t: any) => t.name);
-  }
-
-  return result;
-}
-
-/**
- * List available custom field definitions for a work item type.
- */
-async function listCustomFieldDefinitions(
-  projectId: string,
-  workItemType: string = "issue"
-): Promise<any> {
-  const projectPath = await resolveProjectPath(projectId);
-  const typeName = WORK_ITEM_TYPE_NAMES[workItemType] || "Issue";
-
-  const data = await executeGraphQL<{
-    namespace: {
-      workItemTypes: {
-        nodes: Array<{
-          id: string;
-          name: string;
-          widgetDefinitions: Array<any>;
-        }>;
-      };
-    };
-  }>(
-    `query($path: ID!, $typeName: IssueType) {
-      namespace(fullPath: $path) {
-        workItemTypes(name: $typeName) {
-          nodes {
-            id
-            name
-            widgetDefinitions {
-              __typename
-              ... on WorkItemWidgetDefinitionCustomFields {
-                customFieldValues {
-                  customField {
-                    id
-                    name
-                    fieldType
-                    selectOptions { id value }
-                    workItemTypes { id name }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }`,
-    { path: projectPath, typeName: typeName.replace(/ /g, "_").toUpperCase() }
-  );
-
-  const typeNodes = data.namespace?.workItemTypes?.nodes;
-  if (!typeNodes || typeNodes.length === 0) {
-    throw new Error(`Work item type '${typeName}' not found in project`);
-  }
-
-  const typeNode = typeNodes[0];
-  const customFieldsWidget = typeNode.widgetDefinitions?.find(
-    (w: any) => w.__typename === "WorkItemWidgetDefinitionCustomFields"
-  );
-
-  const fields = (customFieldsWidget?.customFieldValues || []).map((cfv: any) => {
-    const cf = cfv.customField;
-    const field: Record<string, any> = {
-      id: cf?.id,
-      name: cf?.name,
-      type: cf?.fieldType,
-    };
-    const options = cf?.selectOptions || [];
-    if (options.length > 0) field.selectOptions = options;
-    const types = (cf?.workItemTypes || []).map((t: any) => t.name);
-    if (types.length > 0) field.workItemTypes = types;
-    return field;
-  });
-
-  return {
-    work_item_type: typeNode.name,
-    custom_fields: fields,
-  };
-}
-
-/**
- * Move a work item to a different project.
- */
-async function moveWorkItem(projectId: string, iid: number, targetProjectId: string): Promise<any> {
-  const projectPath = await resolveProjectPath(projectId);
-  const targetPath = await resolveProjectPath(targetProjectId);
-
-  const data = await executeGraphQL<{
-    issueMove: {
-      issue: { id: string; iid: string; webUrl: string } | null;
-      errors: string[];
-    };
-  }>(
-    `mutation($projectPath: ID!, $iid: String!, $targetProjectPath: ID!) {
-      issueMove(input: { projectPath: $projectPath, iid: $iid, targetProjectPath: $targetProjectPath }) {
-        issue { id iid webUrl }
-        errors
-      }
-    }`,
-    { projectPath: projectPath, iid: String(iid), targetProjectPath: targetPath }
-  );
-
-  if (data.issueMove.errors?.length > 0) {
-    throw new Error(`Failed to move work item: ${data.issueMove.errors.join(", ")}`);
-  }
-
-  return data.issueMove.issue;
-}
-
-/**
- * List notes/discussions on a work item.
- */
-async function listWorkItemNotes(
-  projectId: string,
-  iid: number,
-  options: { page_size?: number; after?: string; sort?: string } = {}
-): Promise<any> {
-  const projectPath = await resolveProjectPath(projectId);
-
-  const data = await executeGraphQL<{ namespace: any }>(
-    `query($path: ID!, $iid: String!, $pageSize: Int, $after: String, $sort: WorkItemDiscussionsSort) {
-      namespace(fullPath: $path) {
-        workItem(iid: $iid) {
-          id
-          widgets(onlyTypes: [NOTES]) {
-            ... on WorkItemWidgetNotes {
-              discussionLocked
-              discussions(first: $pageSize, after: $after, filter: ALL_NOTES, sort: $sort) {
-                pageInfo { hasNextPage endCursor }
-                nodes {
-                  id
-                  resolved
-                  resolvable
-                  notes {
-                    nodes {
-                      id
-                      body
-                      system
-                      internal
-                      createdAt
-                      lastEditedAt
-                      author { username }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }`,
-    {
-      path: projectPath,
-      iid: String(iid),
-      pageSize: options.page_size || 20,
-      after: options.after || null,
-      sort: options.sort || "CREATED_ASC",
-    }
-  );
-
-  const workItem = data.namespace?.workItem;
-  if (!workItem) {
-    throw new Error(`Work item #${iid} not found in project ${projectPath}`);
-  }
-
-  const notesWidget = workItem.widgets?.find((w: any) => w.discussions);
-  const discussions = notesWidget?.discussions;
-
-  // Flatten to lean output
-  const items = (discussions?.nodes || []).map((d: any) => {
-    const notes = (d.notes?.nodes || []).map((n: any) => {
-      const note: Record<string, any> = {
-        id: n.id,
-        author: n.author?.username,
-        body: n.body,
-        createdAt: n.createdAt,
-      };
-      if (n.system) note.system = true;
-      if (n.internal) note.internal = true;
-      if (n.lastEditedAt) note.lastEditedAt = n.lastEditedAt;
-      return note;
-    });
-    const discussion: Record<string, any> = { id: d.id, notes };
-    if (d.resolved) discussion.resolved = true;
-    if (d.resolvable) discussion.resolvable = true;
-    return discussion;
-  });
-
-  return {
-    discussions: items,
-    pageInfo: discussions?.pageInfo || {},
-  };
-}
-
-/**
- * Create a note on a work item.
- */
-async function createWorkItemNote(
-  projectId: string,
-  iid: number,
-  body: string,
-  options: { internal?: boolean; discussion_id?: string } = {}
-): Promise<any> {
-  const { workItemGID } = await resolveWorkItemGID(projectId, iid);
-
-  const varDefs = ["$noteableId: NoteableID!", "$body: String!"];
-  const inputParts = ["noteableId: $noteableId", "body: $body"];
-  const variables: Record<string, any> = { noteableId: workItemGID, body };
-
-  if (options.internal) {
-    varDefs.push("$internal: Boolean");
-    inputParts.push("internal: $internal");
-    variables.internal = true;
-  }
-
-  if (options.discussion_id) {
-    varDefs.push("$discussionId: DiscussionID");
-    inputParts.push("discussionId: $discussionId");
-    variables.discussionId = options.discussion_id;
-  }
-
-  const data = await executeGraphQL<{
-    createNote: {
-      note: { id: string; body: string; discussion: { id: string } } | null;
-      errors: string[];
-    };
-  }>(
-    `mutation(${varDefs.join(", ")}) {
-      createNote(input: { ${inputParts.join(", ")} }) {
-        note {
-          id
-          body
-          discussion { id }
-        }
-        errors
-      }
-    }`,
-    variables
-  );
-
-  if (data.createNote.errors?.length > 0) {
-    throw new Error(`Failed to create note: ${data.createNote.errors.join(", ")}`);
-  }
-
-  return data.createNote.note;
-}
-
-// --- Emoji Reactions (GraphQL) ---
-
-async function addGraphQLAwardEmoji(awardableId: string, name: string): Promise<any> {
-  const data = await executeGraphQL<{
-    awardEmojiAdd: {
-      awardEmoji: { name: string; user: { username: string } } | null;
-      errors: string[];
-    };
-  }>(
-    `mutation($awardableId: AwardableID!, $name: String!) {
-      awardEmojiAdd(input: { awardableId: $awardableId, name: $name }) {
-        awardEmoji { name user { username } }
-        errors
-      }
-    }`,
-    { awardableId, name }
-  );
-  if (data.awardEmojiAdd.errors?.length > 0) {
-    throw new Error(`Failed to add emoji reaction: ${data.awardEmojiAdd.errors.join(", ")}`);
-  }
-  return data.awardEmojiAdd.awardEmoji;
-}
-
-async function listGraphQLAwardEmoji(awardableId: string): Promise<any[]> {
-  const data = await executeGraphQL<{
-    awardable: { awardEmoji: { nodes: { name: string; user: { username: string } }[] } } | null;
-  }>(
-    `query($id: AwardableID!) {
-      awardable(id: $id) {
-        awardEmoji { nodes { name user { username } } }
-      }
-    }`,
-    { id: awardableId }
-  );
-  return data.awardable?.awardEmoji?.nodes ?? [];
-}
-
-async function removeGraphQLAwardEmoji(awardableId: string, name: string): Promise<any> {
-  const data = await executeGraphQL<{
-    awardEmojiRemove: { awardEmoji: { name: string } | null; errors: string[] };
-  }>(
-    `mutation($awardableId: AwardableID!, $name: String!) {
-      awardEmojiRemove(input: { awardableId: $awardableId, name: $name }) {
-        awardEmoji { name }
-        errors
-      }
-    }`,
-    { awardableId, name }
-  );
-  if (data.awardEmojiRemove.errors?.length > 0) {
-    throw new Error(`Failed to remove emoji reaction: ${data.awardEmojiRemove.errors.join(", ")}`);
-  }
-  return data.awardEmojiRemove.awardEmoji;
-}
-
-// --- Incident Timeline Events ---
-
-/**
- * List timeline events for an incident.
- */
-async function getTimelineEvents(projectId: string, incidentIid: number): Promise<any> {
-  const { workItemGID, projectPath } = await resolveWorkItemGID(projectId, incidentIid);
-  // Timeline events expect gid://gitlab/Issue/... not gid://gitlab/WorkItem/...
-  const incidentGID = workItemGID.replace("/WorkItem/", "/Issue/");
-
-  const data = await executeGraphQL<{ project: any }>(
-    `query($fullPath: ID!, $incidentId: IssueID!) {
-      project(fullPath: $fullPath) {
-        incidentManagementTimelineEvents(incidentId: $incidentId) {
-          nodes {
-            id
-            note
-            noteHtml
-            action
-            occurredAt
-            createdAt
-            timelineEventTags {
-              nodes {
-                id
-                name
-              }
-            }
-          }
-        }
-      }
-    }`,
-    { fullPath: projectPath, incidentId: incidentGID }
-  );
-
-  const events = data.project?.incidentManagementTimelineEvents?.nodes || [];
-
-  return events.map((e: any) => {
-    const event: Record<string, any> = {
-      id: e.id,
-      note: e.note,
-      action: e.action,
-      occurredAt: e.occurredAt,
-      createdAt: e.createdAt,
-    };
-    if (e.noteHtml) event.noteHtml = e.noteHtml;
-    const tags = (e.timelineEventTags?.nodes || []).map((t: any) => t.name);
-    if (tags.length > 0) event.tags = tags;
-    return event;
-  });
-}
-
-/**
- * Create a timeline event on an incident.
- */
-async function createTimelineEvent(
-  projectId: string,
-  incidentIid: number,
-  note: string,
-  occurredAt: string,
-  tagNames?: string[]
-): Promise<any> {
-  const { workItemGID } = await resolveWorkItemGID(projectId, incidentIid);
-  // Timeline events expect gid://gitlab/Issue/... not gid://gitlab/WorkItem/...
-  const incidentGID = workItemGID.replace("/WorkItem/", "/Issue/");
-
-  const variables: Record<string, any> = {
-    input: {
-      incidentId: incidentGID,
-      note,
-      occurredAt,
-    },
-  };
-  if (tagNames && tagNames.length > 0) {
-    variables.input.timelineEventTagNames = tagNames;
-  }
-
-  const data = await executeGraphQL<{
-    timelineEventCreate: {
-      timelineEvent: any;
-      errors: string[];
-    };
-  }>(
-    `mutation CreateTimelineEvent($input: TimelineEventCreateInput!) {
-      timelineEventCreate(input: $input) {
-        timelineEvent {
-          id
-          note
-          noteHtml
-          action
-          occurredAt
-          createdAt
-          timelineEventTags {
-            nodes {
-              id
-              name
-            }
-          }
-        }
-        errors
-      }
-    }`,
-    variables
-  );
-
-  if (data.timelineEventCreate.errors?.length > 0) {
-    throw new Error(
-      `Failed to create timeline event: ${data.timelineEventCreate.errors.join(", ")}`
-    );
-  }
-
-  const e = data.timelineEventCreate.timelineEvent;
-  const result: Record<string, any> = {
-    id: e.id,
-    note: e.note,
-    action: e.action,
-    occurredAt: e.occurredAt,
-    createdAt: e.createdAt,
-  };
-  if (e.noteHtml) result.noteHtml = e.noteHtml;
-  const tags = (e.timelineEventTags?.nodes || []).map((t: any) => t.name);
-  if (tags.length > 0) result.tags = tags;
-  return result;
-}
-
-/**
- * Update the severity of an incident.
- * Accepts projectPath directly to avoid redundant REST calls when called from updateWorkItem.
- */
-async function updateIncidentSeverity(
-  projectPath: string,
-  incidentIid: number,
-  severity: string
-): Promise<any> {
-  const data = await executeGraphQL<{
-    issueSetSeverity: {
-      errors: string[];
-      issue: { iid: string; id: string; severity: string } | null;
-    };
-  }>(
-    `mutation($projectPath: ID!, $severity: IssuableSeverity!, $iid: String!) {
-      issueSetSeverity(input: { iid: $iid, severity: $severity, projectPath: $projectPath }) {
-        errors
-        issue {
-          iid
-          id
-          severity
-        }
-      }
-    }`,
-    { projectPath, severity, iid: String(incidentIid) }
-  );
-
-  if (data.issueSetSeverity.errors?.length > 0) {
-    throw new Error(`Failed to set severity: ${data.issueSetSeverity.errors.join(", ")}`);
-  }
-
-  return data.issueSetSeverity.issue;
-}
-
-/**
- * Update the escalation status of an incident.
- * Accepts projectPath directly to avoid redundant REST calls when called from updateWorkItem.
- */
-async function updateIncidentEscalationStatus(
-  projectPath: string,
-  incidentIid: number,
-  status: string
-): Promise<any> {
-  const data = await executeGraphQL<{
-    issueSetEscalationStatus: {
-      errors: string[];
-      issue: { id: string; escalationStatus: string } | null;
-    };
-  }>(
-    `mutation($projectPath: ID!, $status: IssueEscalationStatus!, $iid: String!) {
-      issueSetEscalationStatus(input: { projectPath: $projectPath, status: $status, iid: $iid }) {
-        errors
-        issue {
-          id
-          escalationStatus
-        }
-      }
-    }`,
-    { projectPath, status, iid: String(incidentIid) }
-  );
-
-  if (data.issueSetEscalationStatus.errors?.length > 0) {
-    throw new Error(
-      `Failed to set escalation status: ${data.issueSetEscalationStatus.errors.join(", ")}`
-    );
-  }
-
-  return data.issueSetEscalationStatus.issue;
-}
-
-/**
- * Resolve a project ID/path or group ID/path to its full namespace path.
- * Use group:<id-or-path> or project:<id-or-path> to disambiguate numeric IDs.
- */
-async function resolveProjectPath(projectId: string): Promise<string> {
-  const { path } = await resolveProjectOrGroupPath(projectId);
-  return path;
-}
-
-/**
- * Resolve a project or group path and identify which GraphQL root field to use.
- * Bare numeric IDs resolve as projects for backwards compatibility; use group:<id>
- * when the numeric value is a GitLab group ID.
- */
-async function resolveProjectOrGroupPath(
-  projectId: string
-): Promise<{ path: string; kind: "project" | "group" }> {
-  const decodedProjectId = decodeURIComponent(projectId);
-  const namespaceMatch = decodedProjectId.match(/^(group|project):(.+)$/i);
-  const explicitKind = namespaceMatch?.[1]?.toLowerCase() as "group" | "project" | undefined;
-  const requestedProjectId = namespaceMatch ? namespaceMatch[2] : decodedProjectId;
-
-  if (explicitKind === "group" && getEffectiveAllowedProjectIds().length > 0) {
-    throw new Error(
-      "group:<id-or-path> cannot be used while a project allowlist is in effect (GITLAB_ALLOWED_PROJECT_IDS or a session scope), because the project allowlist does not cover groups"
-    );
-  }
-
-  const effectiveProjectId = getEffectiveProjectId(requestedProjectId);
-
-  if (explicitKind === "group") {
-    const groupUrl = new URL(
-      `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(effectiveProjectId)}`
-    );
-    const groupResponse = await fetch(groupUrl.toString(), {
-      ...getFetchConfig(),
-    });
-    await handleGitLabError(groupResponse);
-    const group: any = await groupResponse.json();
-    return { path: group.full_path as string, kind: "group" };
-  }
-
-  const projectUrl = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}`
-  );
-  const projectResponse = await fetch(projectUrl.toString(), {
-    ...getFetchConfig(),
-  });
-
-  // On project 404, fall back to groups — but only for path-like identifiers.
-  // Numeric IDs must not fall back: group and project IDs share no namespace,
-  // so a numeric project 404 should fail immediately rather than silently
-  // resolving to an unrelated group with the same integer ID.
-  if (
-    projectResponse.status === 404 &&
-    !explicitKind &&
-    getEffectiveAllowedProjectIds().length === 0 &&
-    !/^\d+$/.test(effectiveProjectId)
-  ) {
-    const groupUrl = new URL(
-      `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(effectiveProjectId)}`
-    );
-    const groupResponse = await fetch(groupUrl.toString(), {
-      ...getFetchConfig(),
-    });
-    if (groupResponse.ok) {
-      const group: any = await groupResponse.json();
-      return { path: group.full_path as string, kind: "group" };
-    }
-    // Surface the group error
-    await handleGitLabError(groupResponse);
-  }
-
-  await handleGitLabError(projectResponse);
-  const project: any = await projectResponse.json();
-  return { path: project.path_with_namespace, kind: "project" };
-}
-
-/**
- * Get a single work item with all widget data.
- */
-async function getWorkItem(projectId: string, iid: number): Promise<any> {
-  const projectPath = await resolveProjectPath(projectId);
-
-  const data = await executeGraphQL<{
-    namespace: { workItem: any };
-  }>(
-    `query($path: ID!, $iid: String!) {
-      namespace(fullPath: $path) {
-        workItem(iid: $iid) {
-          id
-          iid
-          title
-          state
-          description
-          webUrl
-          confidential
-          author { username }
-          createdAt
-          closedAt
-          workItemType { name }
-          widgets {
-            __typename
-            ... on WorkItemWidgetHierarchy {
-              hasChildren hasParent
-              parent { id iid title webUrl workItemType { name } namespace { fullPath } }
-              children { nodes { id iid title state webUrl workItemType { name } namespace { fullPath } } }
-            }
-            ... on WorkItemWidgetStatus { status { id name category color iconName position } }
-            ... on WorkItemWidgetCustomFields {
-              customFieldValues {
-                __typename
-                customField { id name fieldType }
-                ... on WorkItemNumberFieldValue { value }
-                ... on WorkItemTextFieldValue { value }
-                ... on WorkItemSelectFieldValue {
-                  selectedOptions { id value }
-                }
-              }
-            }
-            ... on WorkItemWidgetLabels { labels { nodes { id title color } } }
-            ... on WorkItemWidgetAssignees { assignees { nodes { id username name } } }
-            ... on WorkItemWidgetWeight { weight rolledUpWeight rolledUpCompletedWeight }
-            ... on WorkItemWidgetHealthStatus { healthStatus }
-            ... on WorkItemWidgetStartAndDueDate { startDate dueDate }
-            ... on WorkItemWidgetMilestone { milestone { id title } }
-            ... on WorkItemWidgetLinkedItems {
-              blocked blockedByCount blockingCount
-              linkedItems { nodes { linkType workItem { id iid title state webUrl workItemType { name } namespace { fullPath } } } }
-            }
-            ... on WorkItemWidgetTimeTracking {
-              timeEstimate totalTimeSpent
-            }
-            ... on WorkItemWidgetDevelopment {
-              willAutoCloseByMergeRequest
-              relatedBranches { nodes { name } }
-              relatedMergeRequests {
-                nodes { iid title webUrl state sourceBranch }
-              }
-              closingMergeRequests {
-                nodes {
-                  mergeRequest { iid title webUrl state sourceBranch }
-                }
-              }
-              featureFlags { nodes { name active } }
-            }
-            ... on WorkItemWidgetIteration {
-              iteration { id title startDate dueDate webUrl iterationCadence { id title } }
-            }
-            ... on WorkItemWidgetProgress { progress }
-            ... on WorkItemWidgetColor { color textColor }
-          }
-        }
-      }
-    }`,
-    { path: projectPath, iid: String(iid) }
-  );
-
-  if (!data.namespace?.workItem) {
-    throw new Error(`Work item #${iid} not found in project ${projectPath}`);
-  }
-
-  const wi = data.namespace.workItem;
-  const widgets = wi.widgets || [];
-
-  // Flatten widget data into a clean response
-  const hierarchyWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetHierarchy");
-  const statusWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetStatus");
-  const labelsWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetLabels");
-  const assigneesWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetAssignees");
-  const weightWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetWeight");
-  const healthStatusWidget = widgets.find(
-    (w: any) => w.__typename === "WorkItemWidgetHealthStatus"
-  );
-  const datesWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetStartAndDueDate");
-  const milestoneWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetMilestone");
-  const linkedItemsWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetLinkedItems");
-  const timeTrackingWidget = widgets.find(
-    (w: any) => w.__typename === "WorkItemWidgetTimeTracking"
-  );
-  const developmentWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetDevelopment");
-  const customFieldsWidget = widgets.find(
-    (w: any) => w.__typename === "WorkItemWidgetCustomFields"
-  );
-
-  // Build response, omitting null/empty values to keep output lean
-  const result: Record<string, any> = {
-    id: wi.id,
-    iid: wi.iid,
-    title: wi.title,
-    state: wi.state,
-    type: wi.workItemType?.name,
-    webUrl: wi.webUrl,
-  };
-
-  if (wi.description) result.description = wi.description;
-  if (wi.confidential) result.confidential = true;
-  if (wi.author?.username) result.author = wi.author.username;
-  if (wi.createdAt) result.createdAt = wi.createdAt;
-  if (wi.closedAt) result.closedAt = wi.closedAt;
-  if (statusWidget?.status)
-    result.status = {
-      name: statusWidget.status.name,
-      id: statusWidget.status.id,
-      category: statusWidget.status.category,
-    };
-
-  const labels = (labelsWidget?.labels?.nodes || []).map((l: any) => l.title);
-  if (labels.length > 0) result.labels = labels;
-
-  const assignees = (assigneesWidget?.assignees?.nodes || []).map((a: any) => a.username);
-  if (assignees.length > 0) result.assignees = assignees;
-
-  if (weightWidget?.weight != null) {
-    result.weight = weightWidget.weight;
-    if (weightWidget.rolledUpWeight != null) result.rolledUpWeight = weightWidget.rolledUpWeight;
-    if (weightWidget.rolledUpCompletedWeight != null)
-      result.rolledUpCompletedWeight = weightWidget.rolledUpCompletedWeight;
-  }
-  if (healthStatusWidget?.healthStatus) result.healthStatus = healthStatusWidget.healthStatus;
-  if (datesWidget?.startDate) result.startDate = datesWidget.startDate;
-  if (datesWidget?.dueDate) result.dueDate = datesWidget.dueDate;
-  if (milestoneWidget?.milestone)
-    result.milestone = { id: milestoneWidget.milestone.id, title: milestoneWidget.milestone.title };
-
-  const iterationWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetIteration");
-  if (iterationWidget?.iteration) {
-    result.iteration = {
-      id: iterationWidget.iteration.id,
-      title: iterationWidget.iteration.title,
-      startDate: iterationWidget.iteration.startDate,
-      dueDate: iterationWidget.iteration.dueDate,
-    };
-  }
-
-  const progressWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetProgress");
-  if (progressWidget?.progress != null) result.progress = progressWidget.progress;
-
-  const colorWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetColor");
-  if (colorWidget?.color) result.color = colorWidget.color;
-
-  if (hierarchyWidget?.parent)
-    result.parent = {
-      iid: hierarchyWidget.parent.iid,
-      title: hierarchyWidget.parent.title,
-      type: hierarchyWidget.parent.workItemType?.name,
-      project: hierarchyWidget.parent.namespace?.fullPath,
-      webUrl: hierarchyWidget.parent.webUrl,
-    };
-  const children = hierarchyWidget?.children?.nodes || [];
-  if (children.length > 0)
-    result.children = children.map((c: any) => ({
-      iid: c.iid,
-      title: c.title,
-      state: c.state,
-      type: c.workItemType?.name,
-      project: c.namespace?.fullPath,
-      webUrl: c.webUrl,
-    }));
-
-  if (linkedItemsWidget?.blocked) result.blocked = true;
-  if (linkedItemsWidget?.blockedByCount > 0)
-    result.blockedByCount = linkedItemsWidget.blockedByCount;
-  if (linkedItemsWidget?.blockingCount > 0) result.blockingCount = linkedItemsWidget.blockingCount;
-  const linkedNodes = linkedItemsWidget?.linkedItems?.nodes || [];
-  if (linkedNodes.length > 0) {
-    result.linkedItems = linkedNodes.map((n: any) => ({
-      linkType: n.linkType,
-      iid: n.workItem?.iid,
-      title: n.workItem?.title,
-      state: n.workItem?.state,
-      type: n.workItem?.workItemType?.name,
-      project: n.workItem?.namespace?.fullPath,
-      webUrl: n.workItem?.webUrl,
-    }));
-  }
-
-  if (timeTrackingWidget?.timeEstimate > 0) result.timeEstimate = timeTrackingWidget.timeEstimate;
-  if (timeTrackingWidget?.totalTimeSpent > 0)
-    result.totalTimeSpent = timeTrackingWidget.totalTimeSpent;
-
-  // Development: only include if there's actual data
-  const relatedMRs = developmentWidget?.relatedMergeRequests?.nodes || [];
-  const closingMRs = (developmentWidget?.closingMergeRequests?.nodes || []).map(
-    (n: any) => n.mergeRequest
-  );
-  const branches = developmentWidget?.relatedBranches?.nodes || [];
-  const flags = developmentWidget?.featureFlags?.nodes || [];
-  if (relatedMRs.length > 0 || closingMRs.length > 0 || branches.length > 0 || flags.length > 0) {
-    const dev: Record<string, any> = {};
-    if (relatedMRs.length > 0) dev.relatedMergeRequests = relatedMRs;
-    if (closingMRs.length > 0) dev.closingMergeRequests = closingMRs;
-    if (branches.length > 0) dev.relatedBranches = branches.map((b: any) => b.name);
-    if (flags.length > 0) dev.featureFlags = flags;
-    result.development = dev;
-  }
-
-  const cfValues = (customFieldsWidget?.customFieldValues || []).filter(
-    (cfv: any) => cfv.value != null || cfv.selectedOptions != null
-  );
-  if (cfValues.length > 0) {
-    result.customFields = cfValues.map((cfv: any) => ({
-      name: cfv.customField?.name,
-      type: cfv.customField?.fieldType,
-      value: cfv.value ?? cfv.selectedOptions ?? null,
-    }));
-  }
-
-  return result;
-}
-
-/**
- * List work items in a project or group namespace with filters.
- */
-async function listWorkItems(
-  projectId: string,
-  options: {
-    types?: string[];
-    state?: string;
-    search?: string;
-    assignee_usernames?: string[];
-    label_names?: string[];
-    first?: number;
-    after?: string;
-  }
-): Promise<any> {
-  const namespace = await resolveProjectOrGroupPath(projectId);
-  const rootField = namespace.kind === "group" ? "group" : "project";
-
-  // Map type names to GraphQL enum values
-  const typeMap: Record<string, string> = {
-    issue: "ISSUE",
-    task: "TASK",
-    incident: "INCIDENT",
-    test_case: "TEST_CASE",
-    epic: "EPIC",
-    key_result: "KEY_RESULT",
-    objective: "OBJECTIVE",
-    requirement: "REQUIREMENT",
-    ticket: "TICKET",
-  };
-
-  const variables: Record<string, any> = {
-    path: namespace.path,
-    first: options.first || 20,
-  };
-
-  if (options.types && options.types.length > 0) {
-    variables.types = options.types.map(t => typeMap[t] || t.replace(/ /g, "_").toUpperCase());
-  }
-  if (options.state) {
-    variables.state = options.state === "opened" ? "opened" : "closed";
-  }
-  if (options.search) {
-    variables.search = options.search;
-  }
-  if (options.assignee_usernames && options.assignee_usernames.length > 0) {
-    variables.assigneeUsernames = options.assignee_usernames;
-  }
-  if (options.label_names && options.label_names.length > 0) {
-    variables.labelName = options.label_names;
-  }
-  if (options.after) {
-    variables.after = options.after;
-  }
-
-  const data = await executeGraphQL<{ project?: any; group?: any }>(
-    `query($path: ID!, $types: [IssueType!], $state: IssuableState, $search: String, $assigneeUsernames: [String!], $labelName: [String!], $first: Int, $after: String) {
-      ${rootField}(fullPath: $path) {
-        workItems(types: $types, state: $state, search: $search, assigneeUsernames: $assigneeUsernames, labelName: $labelName, first: $first, after: $after) {
-          nodes {
-            id iid title state webUrl workItemType { name }
-            widgets {
-              __typename
-              ... on WorkItemWidgetStatus { status { id name category color } }
-              ... on WorkItemWidgetLabels { labels { nodes { title } } }
-              ... on WorkItemWidgetAssignees { assignees { nodes { username } } }
-              ... on WorkItemWidgetWeight { weight }
-              ... on WorkItemWidgetHealthStatus { healthStatus }
-              ... on WorkItemWidgetStartAndDueDate { startDate dueDate }
-              ... on WorkItemWidgetMilestone { milestone { id title } }
-            }
-          }
-          pageInfo { hasNextPage endCursor }
-        }
-      }
-    }`,
-    variables
-  );
-
-  const workItemsRoot = namespace.kind === "group" ? data.group : data.project;
-  const workItems = workItemsRoot?.workItems?.nodes || [];
-  const pageInfo = workItemsRoot?.workItems?.pageInfo || {};
-
-  // Flatten widget data for each item
-  const items = workItems.map((wi: any) => {
-    const widgets = wi.widgets || [];
-    const statusWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetStatus");
-    const labelsWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetLabels");
-    const assigneesWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetAssignees");
-    const weightWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetWeight");
-    const healthStatusWidget = widgets.find(
-      (w: any) => w.__typename === "WorkItemWidgetHealthStatus"
-    );
-    const datesWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetStartAndDueDate");
-    const milestoneWidget = widgets.find((w: any) => w.__typename === "WorkItemWidgetMilestone");
-    const item: Record<string, any> = {
-      iid: wi.iid,
-      title: wi.title,
-      state: wi.state,
-      type: wi.workItemType?.name,
-      webUrl: wi.webUrl,
-    };
-    if (statusWidget?.status) item.status = statusWidget.status.name;
-    const labels = (labelsWidget?.labels?.nodes || []).map((l: any) => l.title);
-    if (labels.length > 0) item.labels = labels;
-    const assignees = (assigneesWidget?.assignees?.nodes || []).map((a: any) => a.username);
-    if (assignees.length > 0) item.assignees = assignees;
-    if (weightWidget?.weight != null) item.weight = weightWidget.weight;
-    if (healthStatusWidget?.healthStatus) item.healthStatus = healthStatusWidget.healthStatus;
-    if (datesWidget?.startDate) item.startDate = datesWidget.startDate;
-    if (datesWidget?.dueDate) item.dueDate = datesWidget.dueDate;
-    if (milestoneWidget?.milestone) item.milestone = milestoneWidget.milestone.title;
-    return item;
-  });
-
-  return { items, pageInfo };
-}
-
-/**
- * Create a new work item using GraphQL.
- */
-async function createWorkItem(
-  projectId: string,
-  options: {
-    title: string;
-    type?: string;
-    description?: string;
-    labels?: string[];
-    assignee_usernames?: string[];
-    parent_iid?: number;
-    weight?: number;
-    health_status?: string;
-    start_date?: string;
-    due_date?: string;
-    milestone_id?: string;
-    iteration_id?: string;
-    confidential?: boolean;
-  }
-): Promise<any> {
-  const { path: projectPath, kind: namespaceKind } = await resolveProjectOrGroupPath(projectId);
-  const typeName = options.type || "issue";
-  const typeGID = await resolveWorkItemTypeGID(projectPath, typeName);
-
-  // Build the input dynamically - only include widgets that have values
-  const inputFields: string[] = [
-    "$projectPath: ID!",
-    "$title: String!",
-    "$typeId: WorkItemsTypeID!",
-  ];
-  const inputValues: string[] = [
-    "namespacePath: $projectPath",
-    "title: $title",
-    "workItemTypeId: $typeId",
-  ];
-  const variables: Record<string, any> = {
-    projectPath,
-    title: options.title,
-    typeId: typeGID,
-  };
-
-  if (options.description !== undefined) {
-    inputFields.push("$description: String!");
-    inputValues.push("descriptionWidget: { description: $description }");
-    variables.description = options.description;
-  }
-
-  // Resolve label names and usernames to GIDs in a single GraphQL call
-  const { labelIds, userIds } = await resolveNamesToIds(
-    projectPath,
-    namespaceKind,
-    options.labels,
-    options.assignee_usernames
-  );
-
-  if (labelIds.length > 0) {
-    inputFields.push("$labelIds: [LabelID!]!");
-    inputValues.push("labelsWidget: { labelIds: $labelIds }");
-    variables.labelIds = labelIds;
-  }
-
-  // Incidents don't support the weight widget
-  if (options.weight !== undefined && typeName !== "incident") {
-    inputFields.push("$weight: Int");
-    inputValues.push("weightWidget: { weight: $weight }");
-    variables.weight = options.weight;
-  }
-
-  // Resolve parent GID if provided
-  if (options.parent_iid !== undefined) {
-    const { workItemGID: parentGID } = await resolveWorkItemGID(projectId, options.parent_iid);
-    inputFields.push("$parentId: WorkItemID");
-    inputValues.push("hierarchyWidget: { parentId: $parentId }");
-    variables.parentId = parentGID;
-  }
-
-  if (userIds.length > 0) {
-    inputFields.push("$assigneeIds: [UserID!]!");
-    inputValues.push("assigneesWidget: { assigneeIds: $assigneeIds }");
-    variables.assigneeIds = userIds;
-  }
-
-  if (options.health_status !== undefined) {
-    inputFields.push("$healthStatus: HealthStatus");
-    inputValues.push("healthStatusWidget: { healthStatus: $healthStatus }");
-    variables.healthStatus = options.health_status;
-  }
-
-  // Start and due date widget - combine into one widget
-  if (options.start_date !== undefined || options.due_date !== undefined) {
-    const dateParts: string[] = [];
-    if (options.start_date !== undefined) {
-      inputFields.push("$startDate: Date");
-      dateParts.push("startDate: $startDate");
-      variables.startDate = options.start_date;
-    }
-    if (options.due_date !== undefined) {
-      inputFields.push("$dueDate: Date");
-      dateParts.push("dueDate: $dueDate");
-      variables.dueDate = options.due_date;
-    }
-    inputValues.push(`startAndDueDateWidget: { ${dateParts.join(", ")} }`);
-  }
-
-  if (options.milestone_id !== undefined) {
-    // Convert numeric ID to GID format if needed
-    const milestoneGID = options.milestone_id.startsWith("gid://")
-      ? options.milestone_id
-      : `gid://gitlab/Milestone/${options.milestone_id}`;
-    inputFields.push("$milestoneId: MilestoneID");
-    inputValues.push("milestoneWidget: { milestoneId: $milestoneId }");
-    variables.milestoneId = milestoneGID;
-  }
-
-  if (options.iteration_id !== undefined) {
-    const iterationGID = options.iteration_id.startsWith("gid://")
-      ? options.iteration_id
-      : `gid://gitlab/Iteration/${options.iteration_id}`;
-    inputFields.push("$iterationId: IterationID");
-    inputValues.push("iterationWidget: { iterationId: $iterationId }");
-    variables.iterationId = iterationGID;
-  }
-
-  if (options.confidential !== undefined) {
-    inputFields.push("$confidential: Boolean");
-    inputValues.push("confidential: $confidential");
-    variables.confidential = options.confidential;
-  }
-
-  const mutation = `mutation(${inputFields.join(", ")}) {
-    workItemCreate(input: { ${inputValues.join(", ")} }) {
-      workItem {
-        id
-        iid
-        title
-        webUrl
-        workItemType { name }
-      }
-      errors
-    }
-  }`;
-
-  const data = await executeGraphQL<{
-    workItemCreate: {
-      workItem: any;
-      errors: string[];
-    };
-  }>(mutation, variables);
-
-  if (data.workItemCreate.errors?.length > 0) {
-    throw new Error(`Failed to create work item: ${data.workItemCreate.errors.join(", ")}`);
-  }
-
-  const wi = data.workItemCreate.workItem;
-  return {
-    id: wi.id,
-    iid: wi.iid,
-    title: wi.title,
-    type: wi.workItemType?.name,
-    webUrl: wi.webUrl,
-  };
-}
-
-/**
- * Update a work item - consolidated handler for title, description, labels, assignees,
- * weight, state, status, parent, and children operations.
- */
-async function updateWorkItem(
-  projectId: string,
-  iid: number,
-  options: {
-    title?: string;
-    description?: string;
-    add_labels?: string[];
-    remove_labels?: string[];
-    assignee_usernames?: string[];
-    state_event?: string;
-    weight?: number;
-    status?: string;
-    parent_iid?: number;
-    parent_project_id?: string;
-    remove_parent?: boolean;
-    children_to_add?: Array<{ project_id?: string; iid: number }>;
-    children_to_remove?: Array<{ project_id?: string; iid: number }>;
-    health_status?: string;
-    start_date?: string;
-    due_date?: string;
-    milestone_id?: string;
-    iteration_id?: string;
-    confidential?: boolean;
-    linked_items_to_add?: Array<{ project_id?: string; iid: number; link_type?: string }>;
-    linked_items_to_remove?: Array<{ project_id?: string; iid: number }>;
-    custom_fields?: Array<{
-      custom_field_id: string;
-      text_value?: string;
-      number_value?: number;
-      selected_option_ids?: string[];
-      date_value?: string;
-    }>;
-    severity?: string;
-    escalation_status?: string;
-  }
-): Promise<any> {
-  const { workItemGID, projectPath, namespaceKind } = await resolveWorkItemGID(projectId, iid);
-
-  // Build the main workItemUpdate mutation dynamically
-  const inputParts: string[] = ["id: $id"];
-  const varDefs: string[] = ["$id: WorkItemID!"];
-  const variables: Record<string, any> = { id: workItemGID };
-
-  if (options.title !== undefined) {
-    varDefs.push("$title: String");
-    inputParts.push("title: $title");
-    variables.title = options.title;
-  }
-
-  if (options.description !== undefined) {
-    varDefs.push("$description: String!");
-    inputParts.push("descriptionWidget: { description: $description }");
-    variables.description = options.description;
-  }
-
-  // Resolve label names and usernames to GIDs in a single GraphQL call
-  const allLabelNames = [...(options.add_labels || []), ...(options.remove_labels || [])];
-  const needsResolve = allLabelNames.length > 0 || options.assignee_usernames?.length;
-  const { labelIds: resolvedLabelIds, userIds } = needsResolve
-    ? await resolveNamesToIds(
-        projectPath,
-        namespaceKind,
-        allLabelNames.length > 0 ? allLabelNames : undefined,
-        options.assignee_usernames
-      )
-    : { labelIds: [] as string[], userIds: [] as string[] };
-
-  if (options.add_labels || options.remove_labels) {
-    const labelParts: string[] = [];
-    let offset = 0;
-
-    if (options.add_labels && options.add_labels.length > 0) {
-      const addIds = resolvedLabelIds.slice(0, options.add_labels.length);
-      offset = options.add_labels.length;
-      varDefs.push("$addLabelIds: [LabelID!]");
-      labelParts.push("addLabelIds: $addLabelIds");
-      variables.addLabelIds = addIds;
-    }
-    if (options.remove_labels && options.remove_labels.length > 0) {
-      const removeIds = resolvedLabelIds.slice(offset);
-      varDefs.push("$removeLabelIds: [LabelID!]");
-      labelParts.push("removeLabelIds: $removeLabelIds");
-      variables.removeLabelIds = removeIds;
-    }
-
-    if (labelParts.length > 0) {
-      inputParts.push(`labelsWidget: { ${labelParts.join(", ")} }`);
-    }
-  }
-
-  if (userIds.length > 0) {
-    varDefs.push("$assigneeIds: [UserID!]!");
-    inputParts.push("assigneesWidget: { assigneeIds: $assigneeIds }");
-    variables.assigneeIds = userIds;
-  }
-
-  if (options.state_event !== undefined) {
-    varDefs.push("$stateEvent: WorkItemStateEvent");
-    inputParts.push("stateEvent: $stateEvent");
-    variables.stateEvent = options.state_event === "close" ? "CLOSE" : "REOPEN";
-  }
-
-  if (options.weight !== undefined) {
-    varDefs.push("$weight: Int");
-    inputParts.push("weightWidget: { weight: $weight }");
-    variables.weight = options.weight;
-  }
-
-  if (options.status !== undefined) {
-    varDefs.push("$status: WorkItemsStatusesStatusID");
-    inputParts.push("statusWidget: { status: $status }");
-    variables.status = options.status;
-  }
-
-  if (options.health_status !== undefined) {
-    varDefs.push("$healthStatus: HealthStatus");
-    inputParts.push("healthStatusWidget: { healthStatus: $healthStatus }");
-    variables.healthStatus = options.health_status;
-  }
-
-  // Start and due date widget - combine into one widget
-  if (options.start_date !== undefined || options.due_date !== undefined) {
-    const dateParts: string[] = [];
-    if (options.start_date !== undefined) {
-      varDefs.push("$startDate: Date");
-      dateParts.push("startDate: $startDate");
-      variables.startDate = options.start_date;
-    }
-    if (options.due_date !== undefined) {
-      varDefs.push("$dueDate: Date");
-      dateParts.push("dueDate: $dueDate");
-      variables.dueDate = options.due_date;
-    }
-    inputParts.push(`startAndDueDateWidget: { ${dateParts.join(", ")} }`);
-  }
-
-  if (options.milestone_id !== undefined) {
-    // Convert numeric ID to GID format if needed
-    const milestoneGID = options.milestone_id.startsWith("gid://")
-      ? options.milestone_id
-      : `gid://gitlab/Milestone/${options.milestone_id}`;
-    varDefs.push("$milestoneId: MilestoneID");
-    inputParts.push("milestoneWidget: { milestoneId: $milestoneId }");
-    variables.milestoneId = milestoneGID;
-  }
-
-  if (options.iteration_id !== undefined) {
-    const iterationGID = options.iteration_id.startsWith("gid://")
-      ? options.iteration_id
-      : `gid://gitlab/Iteration/${options.iteration_id}`;
-    varDefs.push("$iterationId: IterationID");
-    inputParts.push("iterationWidget: { iterationId: $iterationId }");
-    variables.iterationId = iterationGID;
-  }
-
-  if (options.confidential !== undefined) {
-    varDefs.push("$confidential: Boolean");
-    inputParts.push("confidential: $confidential");
-    variables.confidential = options.confidential;
-  }
-
-  // Custom fields widget
-  if (options.custom_fields && options.custom_fields.length > 0) {
-    const cfValues = options.custom_fields.map(cf => {
-      const cfId = cf.custom_field_id.startsWith("gid://")
-        ? cf.custom_field_id
-        : `gid://gitlab/IssuablesCustomField/${cf.custom_field_id}`;
-      const val: any = { customFieldId: cfId };
-      if (cf.text_value !== undefined) val.textValue = cf.text_value;
-      if (cf.number_value !== undefined) val.numberValue = cf.number_value;
-      if (cf.selected_option_ids !== undefined) val.selectedOptionIds = cf.selected_option_ids;
-      if (cf.date_value !== undefined) val.dateValue = cf.date_value;
-      return val;
-    });
-    varDefs.push("$customFieldsWidget: [WorkItemWidgetCustomFieldValueInputType!]");
-    inputParts.push("customFieldsWidget: $customFieldsWidget");
-    variables.customFieldsWidget = cfValues;
-  }
-
-  // Hierarchy: set parent or remove parent
-  if (options.remove_parent) {
-    inputParts.push("hierarchyWidget: { parentId: null }");
-  } else if (options.parent_iid !== undefined) {
-    const parentProjectId = options.parent_project_id || projectId;
-    const { workItemGID: parentGID } = await resolveWorkItemGID(
-      parentProjectId,
-      options.parent_iid
-    );
-    varDefs.push("$parentId: WorkItemID");
-    inputParts.push("hierarchyWidget: { parentId: $parentId }");
-    variables.parentId = parentGID;
-  }
-
-  // Execute the main update mutation
-  const mutation = `mutation(${varDefs.join(", ")}) {
-    workItemUpdate(input: { ${inputParts.join(", ")} }) {
-      workItem {
-        id
-        iid
-        title
-        state
-        webUrl
-        workItemType { name }
-        widgets {
-          __typename
-          ... on WorkItemWidgetStatus { status { id name category color } }
-          ... on WorkItemWidgetLabels { labels { nodes { title } } }
-          ... on WorkItemWidgetAssignees { assignees { nodes { username } } }
-          ... on WorkItemWidgetWeight { weight }
-          ... on WorkItemWidgetHierarchy {
-            parent { id title workItemType { name } }
-          }
-          ... on WorkItemWidgetHealthStatus { healthStatus }
-          ... on WorkItemWidgetStartAndDueDate { startDate dueDate }
-          ... on WorkItemWidgetMilestone { milestone { id title } }
-        }
-      }
-      errors
-    }
-  }`;
-
-  const data = await executeGraphQL<{
-    workItemUpdate: { workItem: any; errors: string[] };
-  }>(mutation, variables);
-
-  if (data.workItemUpdate.errors?.length > 0) {
-    throw new Error(`Failed to update work item: ${data.workItemUpdate.errors.join(", ")}`);
-  }
-
-  // Handle children_to_add: use separate workItemUpdate call with hierarchyWidget.childrenIds
-  if (options.children_to_add && options.children_to_add.length > 0) {
-    const childGIDs: string[] = [];
-    for (const child of options.children_to_add) {
-      const { workItemGID: childGID } = await resolveWorkItemGID(
-        child.project_id || projectId,
-        child.iid
-      );
-      childGIDs.push(childGID);
-    }
-    const addData = await executeGraphQL<{
-      workItemUpdate: { errors: string[] };
-    }>(
-      `mutation($id: WorkItemID!, $childrenIds: [WorkItemID!]!) {
-        workItemUpdate(input: { id: $id, hierarchyWidget: { childrenIds: $childrenIds } }) {
-          errors
-        }
-      }`,
-      { id: workItemGID, childrenIds: childGIDs }
-    );
-    if (addData.workItemUpdate.errors?.length > 0) {
-      throw new Error(`Failed to add children: ${addData.workItemUpdate.errors.join(", ")}`);
-    }
-  }
-
-  // Handle children_to_remove: remove parent from each child
-  if (options.children_to_remove && options.children_to_remove.length > 0) {
-    for (const child of options.children_to_remove) {
-      await removeIssueParent(child.project_id || projectId, child.iid);
-    }
-  }
-
-  // Handle linked_items_to_add: use workItemAddLinkedItems mutation
-  if (options.linked_items_to_add && options.linked_items_to_add.length > 0) {
-    // Group by link_type since each mutation call needs a single linkType
-    const groupedByType: Record<string, string[]> = {};
-    for (const item of options.linked_items_to_add) {
-      const linkType = item.link_type || "RELATED";
-      if (!groupedByType[linkType]) groupedByType[linkType] = [];
-      const { workItemGID: targetGID } = await resolveWorkItemGID(
-        item.project_id || projectId,
-        item.iid
-      );
-      groupedByType[linkType].push(targetGID);
-    }
-    for (const [linkType, targetGIDs] of Object.entries(groupedByType)) {
-      const addLinkedData = await executeGraphQL<{
-        workItemAddLinkedItems: { errors: string[] };
-      }>(
-        `mutation($id: WorkItemID!, $workItemsIds: [WorkItemID!]!, $linkType: WorkItemRelatedLinkType!) {
-          workItemAddLinkedItems(input: { id: $id, workItemsIds: $workItemsIds, linkType: $linkType }) {
-            errors
-          }
-        }`,
-        { id: workItemGID, workItemsIds: targetGIDs, linkType }
-      );
-      if (addLinkedData.workItemAddLinkedItems.errors?.length > 0) {
-        throw new Error(
-          `Failed to add linked items: ${addLinkedData.workItemAddLinkedItems.errors.join(", ")}`
-        );
-      }
-    }
-  }
-
-  // Handle linked_items_to_remove: use workItemRemoveLinkedItems mutation
-  if (options.linked_items_to_remove && options.linked_items_to_remove.length > 0) {
-    const targetGIDs: string[] = [];
-    for (const item of options.linked_items_to_remove) {
-      const { workItemGID: targetGID } = await resolveWorkItemGID(
-        item.project_id || projectId,
-        item.iid
-      );
-      targetGIDs.push(targetGID);
-    }
-    const removeLinkedData = await executeGraphQL<{
-      workItemRemoveLinkedItems: { errors: string[] };
-    }>(
-      `mutation($id: WorkItemID!, $workItemsIds: [WorkItemID!]!) {
-        workItemRemoveLinkedItems(input: { id: $id, workItemsIds: $workItemsIds }) {
-          errors
-        }
-      }`,
-      { id: workItemGID, workItemsIds: targetGIDs }
-    );
-    if (removeLinkedData.workItemRemoveLinkedItems.errors?.length > 0) {
-      throw new Error(
-        `Failed to remove linked items: ${removeLinkedData.workItemRemoveLinkedItems.errors.join(", ")}`
-      );
-    }
-  }
-
-  // Handle incident-specific fields via separate mutations
-  if (options.severity !== undefined) {
-    await updateIncidentSeverity(projectPath, iid, options.severity);
-  }
-  if (options.escalation_status !== undefined) {
-    await updateIncidentEscalationStatus(projectPath, iid, options.escalation_status);
-  }
-
-  // Flatten the response
-  const wi = data.workItemUpdate.workItem;
-  const widgets = wi?.widgets || [];
-  const statusW = widgets.find((w: any) => w.__typename === "WorkItemWidgetStatus");
-  const labelsW = widgets.find((w: any) => w.__typename === "WorkItemWidgetLabels");
-  const assigneesW = widgets.find((w: any) => w.__typename === "WorkItemWidgetAssignees");
-  const weightW = widgets.find((w: any) => w.__typename === "WorkItemWidgetWeight");
-  const hierarchyW = widgets.find((w: any) => w.__typename === "WorkItemWidgetHierarchy");
-  const healthStatusW = widgets.find((w: any) => w.__typename === "WorkItemWidgetHealthStatus");
-  const datesW = widgets.find((w: any) => w.__typename === "WorkItemWidgetStartAndDueDate");
-  const milestoneW = widgets.find((w: any) => w.__typename === "WorkItemWidgetMilestone");
-
-  return {
-    id: wi.id,
-    iid: wi.iid,
-    title: wi.title,
-    state: wi.state,
-    type: wi.workItemType?.name,
-    webUrl: wi.webUrl,
-    status: statusW?.status || null,
-    labels: (labelsW?.labels?.nodes || []).map((l: any) => l.title),
-    assignees: (assigneesW?.assignees?.nodes || []).map((a: any) => a.username),
-    weight: weightW?.weight ?? null,
-    parent: hierarchyW?.parent || null,
-    healthStatus: healthStatusW?.healthStatus || null,
-    startDate: datesW?.startDate || null,
-    dueDate: datesW?.dueDate || null,
-    milestone: milestoneW?.milestone || null,
-    children_added: options.children_to_add?.length || 0,
-    children_removed: options.children_to_remove?.length || 0,
-    linked_items_added: options.linked_items_to_add?.length || 0,
-    linked_items_removed: options.linked_items_to_remove?.length || 0,
-    ...(options.severity !== undefined && { severity: options.severity }),
-    ...(options.escalation_status !== undefined && {
-      escalation_status: options.escalation_status,
-    }),
-  };
-}
-
-/**
- * List all issue links for a specific issue
- * 이슈 관계 목록 조회
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} issueIid - The internal ID of the project issue
- * @returns {Promise<GitLabIssueWithLinkDetails[]>} List of issues with link details
- */
-async function listIssueLinks(
-  projectId: string,
-  issueIid: number | string
-): Promise<GitLabIssueWithLinkDetails[]> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/issues/${encodeGitLabPathSegment(issueIid)}/links`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return z.array(GitLabIssueWithLinkDetailsSchema).parse(data);
-}
-
-/**
- * Get a specific issue link
- * 특정 이슈 관계 조회
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} issueIid - The internal ID of the project issue
- * @param {number} issueLinkId - The ID of the issue link
- * @returns {Promise<GitLabIssueLink>} The issue link
- */
-async function getIssueLink(
-  projectId: string,
-  issueIid: number | string,
-  issueLinkId: number | string
-): Promise<GitLabIssueLink> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/issues/${encodeGitLabPathSegment(issueIid)}/links/${encodeGitLabPathSegment(issueLinkId)}`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabIssueLinkSchema.parse(data);
-}
-
-/**
- * Create an issue link between two issues
- * 이슈 관계 생성
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} issueIid - The internal ID of the project issue
- * @param {string} targetProjectId - The ID or URL-encoded path of the target project
- * @param {number} targetIssueIid - The internal ID of the target project issue
- * @param {string} linkType - The type of the relation (relates_to, blocks, is_blocked_by)
- * @returns {Promise<GitLabIssueLink>} The created issue link
- */
-async function createIssueLink(
-  projectId: string,
-  issueIid: number | string,
-  targetProjectId: string,
-  targetIssueIid: number | string,
-  linkType: "relates_to" | "blocks" | "is_blocked_by" = "relates_to"
-): Promise<GitLabIssueLink> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  targetProjectId = decodeURIComponent(targetProjectId); // Decode target project ID as well
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/issues/${encodeGitLabPathSegment(issueIid)}/links`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-    body: JSON.stringify({
-      target_project_id: targetProjectId,
-      target_issue_iid: targetIssueIid,
-      link_type: linkType,
-    }),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabIssueLinkSchema.parse(data);
-}
-
-/**
- * Delete an issue link
- * 이슈 관계 삭제
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} issueIid - The internal ID of the project issue
- * @param {number} issueLinkId - The ID of the issue link
- * @returns {Promise<void>}
- */
-async function deleteIssueLink(
-  projectId: string,
-  issueIid: number | string,
-  issueLinkId: number | string
-): Promise<void> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/issues/${encodeGitLabPathSegment(issueIid)}/links/${encodeGitLabPathSegment(issueLinkId)}`
   );
 
   const response = await fetch(url.toString(), {
@@ -5856,189 +3766,6 @@ async function getMergeRequestDiffs(
 }
 
 /**
- * Get merge request changes with detailed information including commits, diff_refs, and more
- * 마지막으로 추가된 상세한 MR 변경사항 조회 함수 (Detailed merge request changes retrieval function)
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} mergeRequestIid - The internal ID of the merge request (Either mergeRequestIid or branchName must be provided)
- * @param {string} [branchName] - The name of the branch to search for merge request by branch name (Either mergeRequestIid or branchName must be provided)
- * @param {boolean} [unidiff] - Return diff in unidiff format
- * @returns {Promise<any>} The complete merge request changes response
- */
-async function listMergeRequestDiffs(
-  projectId: string,
-  mergeRequestIid?: number | string,
-  branchName?: string,
-  page?: number,
-  perPage?: number,
-  unidiff?: boolean
-): Promise<any> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  if (!mergeRequestIid && !branchName) {
-    throw new Error("Either mergeRequestIid or branchName must be provided");
-  }
-
-  if (branchName && !mergeRequestIid) {
-    const mergeRequest = await getMergeRequest(projectId, undefined, branchName);
-    mergeRequestIid = mergeRequest.iid;
-  }
-
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/diffs`
-  );
-
-  if (page) {
-    url.searchParams.append("page", page.toString());
-  }
-
-  if (perPage) {
-    url.searchParams.append("per_page", perPage.toString());
-  }
-
-  if (unidiff) {
-    url.searchParams.append("unidiff", "true");
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  return await response.json(); // Return full response including commits, diff_refs, changes, etc.
-}
-
-/**
- * Returns the list of changed files in a merge request WITHOUT diff content.
- * Use this as STEP 1 of code review: get file paths, then fetch diffs in batches
- * with getMergeRequestFileDiff to avoid loading the entire diff payload at once.
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} [mergeRequestIid] - The internal ID of the merge request
- * @param {string} [branchName] - The name of the source branch (used to resolve MR if iid not provided)
- * @param {string[]} [excludedFilePatterns] - Regex patterns to exclude files from the result
- * @returns {Promise<any[]>} Array of changed file metadata (new_path, old_path, new_file, deleted_file, renamed_file)
- */
-async function listMergeRequestChangedFiles(
-  projectId: string,
-  mergeRequestIid?: number | string,
-  branchName?: string,
-  excludedFilePatterns?: string[]
-): Promise<any[]> {
-  projectId = decodeURIComponent(projectId);
-  if (!mergeRequestIid && !branchName) {
-    throw new Error("Either mergeRequestIid or branchName must be provided");
-  }
-
-  if (branchName && !mergeRequestIid) {
-    const mergeRequest = await getMergeRequest(projectId, undefined, branchName);
-    mergeRequestIid = mergeRequest.iid;
-  }
-
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/changes`
-  );
-
-  const response = await fetch(url.toString(), { ...getFetchConfig() });
-  await handleGitLabError(response);
-  const data = (await response.json()) as { changes: any[] };
-
-  const rawFiles = (data.changes || []).map((f: any) => ({
-    new_path: f.new_path,
-    old_path: f.old_path,
-    new_file: f.new_file,
-    deleted_file: f.deleted_file,
-    renamed_file: f.renamed_file,
-  }));
-
-  return filterDiffsByPatterns(rawFiles, excludedFilePatterns);
-}
-
-/**
- * Get diffs for specific files from a merge request.
- * Use this as STEP 2 of code review: pass file paths obtained from
- * listMergeRequestChangedFiles to fetch their diffs efficiently.
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {string[]} filePaths - List of file paths to retrieve diffs for
- * @param {number|string} [mergeRequestIid] - The internal ID of the merge request
- * @param {string} [branchName] - The name of the source branch (used to resolve MR if iid not provided)
- * @param {boolean} [unidiff] - Return diff in unified diff format
- * @returns {Promise<any[]>} Array of diff objects for each requested file, or error objects for files not found
- */
-async function getMergeRequestFileDiff(
-  projectId: string,
-  filePaths: string[],
-  mergeRequestIid?: number | string,
-  branchName?: string,
-  unidiff?: boolean
-): Promise<any[]> {
-  projectId = decodeURIComponent(projectId);
-  if (!mergeRequestIid && !branchName) {
-    throw new Error("Either mergeRequestIid or branchName must be provided");
-  }
-
-  if (branchName && !mergeRequestIid) {
-    const mergeRequest = await getMergeRequest(projectId, undefined, branchName);
-    mergeRequestIid = mergeRequest.iid;
-  }
-
-  // Paginate through /diffs once, collecting all requested files.
-  // More efficient than N separate searches when fetching multiple files.
-  const remaining = new Set(filePaths);
-  const results: any[] = [];
-  let page = 1;
-  const perPage = 20;
-
-  while (remaining.size > 0) {
-    const url = new URL(
-      `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-        getEffectiveProjectId(projectId)
-      )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/diffs`
-    );
-    url.searchParams.append("page", page.toString());
-    url.searchParams.append("per_page", perPage.toString());
-    if (unidiff) {
-      url.searchParams.append("unidiff", "true");
-    }
-
-    const response = await fetch(url.toString(), { ...getFetchConfig() });
-    await handleGitLabError(response);
-    const items = (await response.json()) as any[];
-
-    if (!Array.isArray(items) || items.length === 0) {
-      break;
-    }
-
-    for (const item of items) {
-      if (remaining.has(item.new_path) || remaining.has(item.old_path)) {
-        results.push(item);
-        remaining.delete(item.new_path);
-        remaining.delete(item.old_path);
-      }
-    }
-
-    if (items.length < perPage) {
-      break;
-    }
-
-    page++;
-  }
-
-  for (const notFound of remaining) {
-    results.push({
-      error: `File not found in merge request diffs: ${notFound}`,
-      hint: "Use list_merge_request_changed_files to verify the correct file paths.",
-    });
-  }
-
-  return results;
-}
-
-/**
  * Get branch comparison diffs
  *
  * @param {string} projectId - The ID or URL-encoded path of the project
@@ -6152,70 +3879,6 @@ async function mergeMergeRequest(
 }
 
 /**
- * Approve a merge request
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {string | number} mergeRequestIid - The internal ID of the merge request
- * @param {string} sha - Optional SHA to approve (for validation that MR hasn't changed)
- * @param {string} approvalPassword - Optional password for approvals requiring re-authentication
- * @returns {Promise<GitLabMergeRequestApprovalState>} The approval state after approving
- */
-async function approveMergeRequest(
-  projectId: string,
-  mergeRequestIid: string | number,
-  sha?: string,
-  approvalPassword?: string
-): Promise<GitLabMergeRequestApprovalState> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/approve`
-  );
-
-  const body: Record<string, string> = {};
-  if (sha) {
-    body.sha = sha;
-  }
-  if (approvalPassword) {
-    body.approval_password = approvalPassword;
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-    body: JSON.stringify(body),
-  });
-
-  await handleGitLabError(response);
-  return parseApprovalsResponse(await response.json());
-}
-
-/**
- * Unapprove a previously approved merge request
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {string | number} mergeRequestIid - The internal ID of the merge request
- * @returns {Promise<GitLabMergeRequestApprovalState>} The approval state after unapproving
- */
-async function unapproveMergeRequest(
-  projectId: string,
-  mergeRequestIid: string | number
-): Promise<GitLabMergeRequestApprovalState> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/unapprove`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-    body: JSON.stringify({}),
-  });
-
-  await handleGitLabError(response);
-  return parseApprovalsResponse(await response.json());
-}
-
-/**
  * Get the approval state of a merge request
  *
  * @param {string} projectId - The ID or URL-encoded path of the project
@@ -6278,32 +3941,6 @@ async function getMergeRequestApprovalState(
     approved_by_usernames: approvedByUsernames,
     source_endpoint: "approval_state",
   };
-}
-
-/**
- * Get the conflicts of a merge request
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {string | number} mergeRequestIid - The internal ID of the merge request
- * @returns {Promise<Record<string, unknown>>} The merge request conflicts
- */
-async function getMergeRequestConflicts(
-  projectId: string,
-  mergeRequestIid: string | number
-): Promise<Record<string, unknown>> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/conflicts`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "GET",
-  });
-
-  await handleGitLabError(response);
-
-  return (await response.json()) as Record<string, unknown>;
 }
 
 async function getMergeRequestApprovalsFallback(
@@ -6411,254 +4048,6 @@ async function createNote(
   return await response.json();
 }
 
-/**
- * List draft notes for a merge request
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @returns {Promise<GitLabDraftNote[]>} Array of draft notes
- */
-async function getDraftNote(
-  project_id: string,
-  merge_request_iid: string,
-  draft_note_id: string
-): Promise<GitLabDraftNote> {
-  const effectiveProjectId = getEffectiveProjectId(decodeURIComponent(project_id));
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/merge_requests/${encodeGitLabPathSegment(merge_request_iid)}/draft_notes/${encodeGitLabPathSegment(draft_note_id)}`,
-    { ...getFetchConfig() }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  const data = await response.json();
-  return GitLabDraftNoteSchema.parse(data);
-}
-
-async function listDraftNotes(
-  projectId: string,
-  mergeRequestIid: number | string
-): Promise<GitLabDraftNote[]> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "GET",
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  const data = await response.json();
-  return z.array(GitLabDraftNoteSchema).parse(data);
-}
-
-/**
- * Create a draft note for a merge request
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @param {string} body - The content of the draft note
- * @param {string} [inReplyToDiscussionId] - The ID of a discussion the draft note replies to
- * @param {MergeRequestThreadPosition} [position] - Position information for diff notes
- * @param {boolean} [resolveDiscussion] - Whether to resolve the discussion when publishing
- * @returns {Promise<GitLabDraftNote>} The created draft note
- */
-async function createDraftNote(
-  projectId: string,
-  mergeRequestIid: number | string,
-  body: string,
-  inReplyToDiscussionId?: string,
-  position?: MergeRequestThreadPosition,
-  resolveDiscussion?: boolean
-): Promise<GitLabDraftNote> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes`
-  );
-
-  const requestBody: any = { note: body };
-  if (inReplyToDiscussionId) {
-    requestBody.in_reply_to_discussion_id = inReplyToDiscussionId;
-  }
-  if (position) {
-    requestBody.position = position;
-  }
-  if (resolveDiscussion !== undefined) {
-    requestBody.resolve_discussion = resolveDiscussion;
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-    body: JSON.stringify(requestBody),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  const data = await response.json();
-  return GitLabDraftNoteSchema.parse(data);
-}
-
-/**
- * Update an existing draft note
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @param {number|string} draftNoteId - The ID of the draft note
- * @param {string} [body] - The updated content of the draft note
- * @param {MergeRequestThreadPosition} [position] - Updated position information
- * @param {boolean} [resolveDiscussion] - Whether to resolve the discussion when publishing
- * @returns {Promise<GitLabDraftNote>} The updated draft note
- */
-async function updateDraftNote(
-  projectId: string,
-  mergeRequestIid: number | string,
-  draftNoteId: number | string,
-  body?: string,
-  position?: MergeRequestThreadPosition,
-  resolveDiscussion?: boolean
-): Promise<GitLabDraftNote> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes/${encodeGitLabPathSegment(draftNoteId)}`
-  );
-
-  const requestBody: any = {};
-  if (body !== undefined) {
-    requestBody.note = body;
-  }
-  if (position) {
-    requestBody.position = position;
-  }
-  if (resolveDiscussion !== undefined) {
-    requestBody.resolve_discussion = resolveDiscussion;
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "PUT",
-    body: JSON.stringify(requestBody),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  const data = await response.json();
-  return GitLabDraftNoteSchema.parse(data);
-}
-
-/**
- * Delete a draft note
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @param {number|string} draftNoteId - The ID of the draft note
- * @returns {Promise<void>}
- */
-async function deleteDraftNote(
-  projectId: string,
-  mergeRequestIid: number | string,
-  draftNoteId: number | string
-): Promise<void> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes/${encodeGitLabPathSegment(draftNoteId)}`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "DELETE",
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-}
-
-/**
- * Publish a single draft note
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @param {number|string} draftNoteId - The ID of the draft note
- * @returns {Promise<GitLabDiscussionNote>} The published note
- */
-async function publishDraftNote(
-  projectId: string,
-  mergeRequestIid: number | string,
-  draftNoteId: number | string
-): Promise<GitLabDiscussionNote> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes/${encodeGitLabPathSegment(draftNoteId)}/publish`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "PUT",
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  // Handle empty response (204 No Content) or successful response
-  const responseText = await response.text();
-  if (!responseText || responseText.trim() === "") {
-    // Return a success indicator for empty responses
-    return {
-      id: draftNoteId.toString(),
-      body: "Draft note published successfully",
-      author: { id: "unknown", username: "unknown" },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      system: false,
-      noteable_id: mergeRequestIid.toString(),
-      noteable_type: "MergeRequest",
-    } as any;
-  }
-
-  try {
-    const data = JSON.parse(responseText);
-    return GitLabDiscussionNoteSchema.parse(data);
-  } catch (parseError) {
-    // If JSON parsing fails but the operation was successful (2xx status),
-    // return a success indicator
-    console.warn(`JSON parse error for successful publish operation: ${parseError}`);
-    return {
-      id: draftNoteId.toString(),
-      body: "Draft note published successfully (response parse error)",
-      author: { id: "unknown", username: "unknown" },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      system: false,
-      noteable_id: mergeRequestIid.toString(),
-      noteable_type: "MergeRequest",
-    } as any;
-  }
-}
-
 async function fetchGitLabVersionMetadata(): Promise<GitLabInstanceVersionMetadata | null> {
   try {
     const response = await fetch(`${getEffectiveApiUrl()}/version`, {
@@ -6669,100 +4058,6 @@ async function fetchGitLabVersionMetadata(): Promise<GitLabInstanceVersionMetada
     return parseGitLabVersionApiResponse(data);
   } catch {
     return null;
-  }
-}
-
-async function fetchGitLabInstanceVersion(): Promise<string | null> {
-  const metadata = await fetchGitLabVersionMetadata();
-  return metadata?.version ?? null;
-}
-
-/**
- * Publish all draft notes for a merge request
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} mergeRequestIid - The internal ID of the merge request
- * @param {BulkPublishDraftNotesBody} options - Optional GitLab 19.2+ bulk_publish body fields
- * @returns {Promise<GitLabDiscussionNote[]>} Array of published notes
- */
-async function bulkPublishDraftNotes(
-  projectId: string,
-  mergeRequestIid: number | string,
-  options: BulkPublishDraftNotesBody = {}
-): Promise<GitLabDiscussionNote[]> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/draft_notes/bulk_publish`
-  );
-
-  const body = buildBulkPublishDraftNotesBody(options);
-  if (needsGitLab19_2BulkPublish(body)) {
-    await assertGitLabVersionAtLeast(
-      {
-        major: 19,
-        minor: 2,
-        feature: "reviewer_state, note, and internal on bulk_publish_draft_notes",
-        retryHint: "Omit reviewer_state, note, and internal, then retry.",
-      },
-      fetchGitLabInstanceVersion
-    );
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST", // Changed from PUT to POST
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
-  }
-
-  // Handle empty response (204 No Content) or successful response
-  const responseText = await response.text();
-  if (!responseText || responseText.trim() === "") {
-    // Return empty array for successful bulk publish with no content
-    return [];
-  }
-
-  try {
-    const data = JSON.parse(responseText);
-    return z.array(GitLabDiscussionNoteSchema).parse(data);
-  } catch (parseError) {
-    // If JSON parsing fails but the operation was successful (2xx status),
-    // return empty array indicating successful bulk publish
-    console.warn(`JSON parse error for successful bulk publish operation: ${parseError}`);
-    return [];
-  }
-}
-
-async function resolveMergeRequestThread(
-  projectId: string,
-  mergeRequestIid: number | string,
-  discussionId: string,
-  resolved?: boolean
-): Promise<void> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/merge_requests/${encodeGitLabPathSegment(mergeRequestIid)}/discussions/${encodeGitLabPathSegment(discussionId)}`
-  );
-
-  if (resolved !== undefined) {
-    url.searchParams.append("resolved", resolved ? "true" : "false");
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "PUT",
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`GitLab API error: ${response.status} ${response.statusText}\n${errorText}`);
   }
 }
 
@@ -7199,70 +4494,6 @@ async function deleteWebhook(options: z.infer<typeof DeleteWebhookSchema>): Prom
   return { status: "deleted", hook_id: options.hook_id };
 }
 
-/**
- * Fetch a single page of webhook events
- */
-async function fetchWebhookEventsPage(
-  baseUrl: string,
-  page: number,
-  perPage: number,
-  status?: string | number
-): Promise<Record<string, unknown>[]> {
-  const url = new URL(baseUrl);
-  url.searchParams.set("page", page.toString());
-  url.searchParams.set("per_page", perPage.toString());
-  if (status !== undefined) url.searchParams.append("status", String(status));
-
-  const response = await fetch(url.toString(), { ...getFetchConfig() });
-  await handleGitLabError(response);
-  return (await response.json()) as Record<string, unknown>[];
-}
-
-/**
- * List webhook events for a project or group webhook
- */
-async function listWebhookEvents(
-  options: z.infer<typeof ListWebhookEventsSchema>
-): Promise<unknown[]> {
-  const eventsUrl = `${buildWebhookBaseUrl(options.project_id, options.group_id)}/${options.hook_id}/events`;
-
-  const events = await fetchWebhookEventsPage(
-    eventsUrl,
-    options.page ?? 1,
-    options.per_page ?? 20,
-    options.status
-  );
-  return options.summary ? summarizeWebhookEvents(events) : events;
-}
-
-/**
- * Get a specific webhook event by ID (searches up to 500 recent events)
- */
-async function getWebhookEvent(
-  options: z.infer<typeof GetWebhookEventSchema>
-): Promise<Record<string, unknown> | null> {
-  const eventsUrl = `${buildWebhookBaseUrl(options.project_id, options.group_id)}/${options.hook_id}/events`;
-  // GitLab enforces max per_page=20 for webhook events
-  const perPage = 20;
-
-  if (options.page) {
-    // Direct page lookup — single API call
-    const events = await fetchWebhookEventsPage(eventsUrl, options.page, perPage);
-    const match = events.find(e => e.id === options.event_id);
-    return match ?? null;
-  }
-
-  // Auto-paginate up to 500 events
-  const maxPages = 25;
-  for (let page = 1; page <= maxPages; page++) {
-    const events = await fetchWebhookEventsPage(eventsUrl, page, perPage);
-    const match = events.find(e => e.id === options.event_id);
-    if (match) return match;
-    if (events.length < perPage) break;
-  }
-  return null;
-}
-
 // Wiki API helper functions
 /**
  * List wiki pages in a project
@@ -7384,123 +4615,6 @@ async function deleteWikiPage(projectId: string, slug: string): Promise<void> {
 }
 
 /**
- * List wiki pages in a GitLab group
- */
-async function listGroupWikiPages(
-  groupId: string,
-  options: Omit<ListGroupWikiPagesOptions, "group_id"> = {}
-): Promise<GitLabWikiPage[]> {
-  groupId = decodeURIComponent(groupId); // Decode group ID
-  const url = new URL(`${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/wikis`);
-  if (options.page) url.searchParams.append("page", options.page.toString());
-  if (options.per_page) url.searchParams.append("per_page", options.per_page.toString());
-  if (options.with_content)
-    url.searchParams.append("with_content", options.with_content.toString());
-  if (options.render_html)
-    url.searchParams.append("render_html", options.render_html.toString());
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabWikiPageSchema.array().parse(data);
-}
-
-/**
- * Get a specific group wiki page
- */
-async function getGroupWikiPage(
-  groupId: string,
-  slug: string,
-  renderHtml?: boolean
-): Promise<GitLabWikiPage> {
-  groupId = decodeURIComponent(groupId); // Decode group ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/wikis/${encodeGitLabPathSegment(slug)}`
-  );
-  if (renderHtml) url.searchParams.append("render_html", renderHtml.toString());
-  const response = await fetch(url.toString(), { ...getFetchConfig() });
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabWikiPageSchema.parse(data);
-}
-
-/**
- * Create a new group wiki page
- */
-async function createGroupWikiPage(
-  groupId: string,
-  title: string,
-  content: string,
-  format?: string
-): Promise<GitLabWikiPage> {
-  groupId = decodeURIComponent(groupId); // Decode group ID
-  const body: Record<string, any> = { title, content };
-  if (format) body.format = format;
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/wikis`,
-    {
-      ...getFetchConfig(),
-      method: "POST",
-      body: JSON.stringify(body),
-    }
-  );
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabWikiPageSchema.parse(data);
-}
-
-/**
- * Update an existing group wiki page
- */
-async function updateGroupWikiPage(
-  groupId: string,
-  slug: string,
-  title?: string,
-  content?: string,
-  format?: string
-): Promise<GitLabWikiPage> {
-  groupId = decodeURIComponent(groupId); // Decode group ID
-  const body: Record<string, any> = {};
-  if (title) {
-    if (slug.includes("/") && !title.includes("/")) {
-      const existing = await getGroupWikiPage(groupId, slug);
-      body.title = resolveNestedWikiUpdateTitle(slug, title, existing.title);
-    } else {
-      body.title = title;
-    }
-  }
-  if (content) body.content = content;
-  if (format) body.format = format;
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/wikis/${encodeGitLabPathSegment(slug)}`,
-    {
-      ...getFetchConfig(),
-      method: "PUT",
-      body: JSON.stringify(body),
-    }
-  );
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabWikiPageSchema.parse(data);
-}
-
-/**
- * Delete a group wiki page
- */
-async function deleteGroupWikiPage(groupId: string, slug: string): Promise<void> {
-  groupId = decodeURIComponent(groupId); // Decode group ID
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/wikis/${encodeGitLabPathSegment(slug)}`,
-    {
-      ...getFetchConfig(),
-      method: "DELETE",
-    }
-  );
-  await handleGitLabError(response);
-}
-
-/**
  * List pipelines in a GitLab project
  *
  * @param {string} projectId - The ID or URL-encoded path of the project
@@ -7557,21 +4671,6 @@ async function getPipeline(
   await handleGitLabError(response);
   const data = await response.json();
   return GitLabPipelineSchema.parse(data);
-}
-
-async function getPipelineVariables(
-  projectId: string,
-  pipelineId: number | string,
-  page?: number,
-  perPage?: number
-): Promise<unknown> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(`${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/pipelines/${encodeGitLabPathSegment(pipelineId)}/variables`);
-  if (page !== undefined) url.searchParams.set("page", String(page));
-  if (perPage !== undefined) url.searchParams.set("per_page", String(perPage));
-  const response = await fetch(url.toString(), { ...getFetchConfig() });
-  await handleGitLabError(response);
-  return response.json();
 }
 
 async function getPipelineReport(
@@ -7710,35 +4809,6 @@ async function listEnvironments(
   return z.array(GitLabEnvironmentSchema).parse(data);
 }
 
-/**
- * Get details of a specific environment
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number | string} environmentId - The ID of the environment
- * @returns {Promise<GitLabEnvironment>} Environment details
- */
-async function getEnvironment(
-  projectId: string,
-  environmentId: number | string
-): Promise<GitLabEnvironment> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/environments/${encodeGitLabPathSegment(environmentId)}`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  if (response.status === 404) {
-    throw new Error(`Environment not found`);
-  }
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabEnvironmentSchema.parse(data);
-}
-
 async function environmentRequest(
   projectId: string,
   path: string,
@@ -7820,40 +4890,6 @@ async function listPipelineJobs(
   await handleGitLabError(response);
   const data = await response.json();
   return z.array(GitLabPipelineJobSchema).parse(data);
-}
-
-/**
- * List all trigger jobs (bridges) in a specific pipeline
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} pipelineId - The ID of the pipeline
- * @param {Object} options - Options for filtering trigger jobs
- * @returns {Promise<GitLabPipelineTriggerJob[]>} List of pipeline trigger jobs
- */
-async function listPipelineTriggerJobs(
-  projectId: string,
-  pipelineId: number | string,
-  options: Omit<ListPipelineTriggerJobsOptions, "project_id" | "pipeline_id"> = {}
-): Promise<GitLabPipelineTriggerJob[]> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/pipelines/${encodeGitLabPathSegment(pipelineId)}/bridges`
-  );
-
-  // Add all query parameters
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  if (response.status === 404) {
-    throw new Error(`Pipeline not found`);
-  }
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return z.array(GitLabPipelineTriggerJobSchema).parse(data);
 }
 
 async function getPipelineJob(
@@ -7962,61 +4998,6 @@ async function validateCiLint(
   await handleGitLabError(response);
   const data = await response.json();
   return GitLabCiLintResultSchema.parse(data);
-}
-
-async function validateProjectCiLint(
-  projectId: string,
-  options: Omit<ValidateProjectCiLintOptions, "project_id">
-): Promise<GitLabCiLintResult> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/ci/lint`
-  );
-
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabCiLintResultSchema.parse(data);
-}
-
-/**
- * List artifact files in a job's artifacts archive
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {string} jobId - The ID of the job
- * @param {Object} options - Options for listing artifacts
- * @returns {Promise<GitLabArtifactEntry[]>} List of artifact entries
- */
-async function listJobArtifacts(
-  projectId: string,
-  jobId: string,
-  options: Omit<z.infer<typeof ListJobArtifactsSchema>, "project_id" | "job_id"> = {}
-): Promise<GitLabArtifactEntry[]> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/jobs/${encodeGitLabPathSegment(jobId)}/artifacts/tree`
-  );
-
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  if (response.status === 404) {
-    throw new Error(
-      `Job artifacts not found. The job may not have produced artifacts or the job ID is invalid.`
-    );
-  }
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return z.array(GitLabArtifactEntrySchema).parse(data);
 }
 
 /**
@@ -8240,38 +5221,6 @@ async function getPipelineSchedule(
 }
 
 /**
- * List the pipelines triggered by a pipeline schedule
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} pipelineScheduleId - The ID of the pipeline schedule
- * @param {ListPipelineSchedulePipelinesOptions} options - Pagination options
- * @returns {Promise<GitLabPipeline[]>} List of pipelines the schedule triggered
- */
-async function listPipelineSchedulePipelines(
-  projectId: string,
-  pipelineScheduleId: number | string,
-  options: Omit<
-    z.infer<typeof ListPipelineSchedulePipelinesSchema>,
-    "project_id" | "pipeline_schedule_id"
-  > = {}
-): Promise<GitLabPipeline[]> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/pipeline_schedules/${encodeGitLabPathSegment(pipelineScheduleId)}/pipelines`
-  );
-
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return z.array(GitLabPipelineSchema).parse(data);
-}
-
-/**
  * Create a new pipeline schedule
  *
  * @param {string} projectId - The ID or URL-encoded path of the project
@@ -8352,32 +5301,6 @@ async function deletePipelineSchedule(
 }
 
 /**
- * Run a pipeline schedule immediately, without changing its next scheduled run
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} pipelineScheduleId - The ID of the pipeline schedule to run
- * @returns {Promise<GitLabPipelineSchedulePlayResult>} GitLab's acknowledgement message
- */
-async function playPipelineSchedule(
-  projectId: string,
-  pipelineScheduleId: number | string
-): Promise<GitLabPipelineSchedulePlayResult> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/pipeline_schedules/${encodeGitLabPathSegment(pipelineScheduleId)}/play`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabPipelineSchedulePlayResultSchema.parse(data);
-}
-
-/**
  * Take ownership of a pipeline schedule
  *
  * @param {string} projectId - The ID or URL-encoded path of the project
@@ -8401,33 +5324,6 @@ async function takeOwnershipPipelineSchedule(
   await handleGitLabError(response);
   const data = await response.json();
   return GitLabPipelineScheduleSchema.parse(data);
-}
-
-/**
- * Get a single variable of a pipeline schedule
- *
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number|string} pipelineScheduleId - The ID of the pipeline schedule
- * @param {string} key - The key of the variable
- * @returns {Promise<GitLabPipelineScheduleVariable>} The pipeline schedule variable
- */
-async function getPipelineScheduleVariable(
-  projectId: string,
-  pipelineScheduleId: number | string,
-  key: string
-): Promise<GitLabPipelineScheduleVariable> {
-  projectId = decodeURIComponent(projectId); // Decode project ID
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/pipeline_schedules/${encodeGitLabPathSegment(pipelineScheduleId)}/variables/${encodeGitLabPathSegment(key)}`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabPipelineScheduleVariableSchema.parse(data);
 }
 
 /**
@@ -8556,27 +5452,6 @@ async function playPipelineJob(
   await handleGitLabError(response);
   const data = await response.json();
   return GitLabPipelineJobSchema.parse(data);
-}
-
-async function playPipelineJobs(
-  projectId: string,
-  jobIds: Array<number | string>,
-  variables?: Array<{ key: string; value: string }>,
-  timeoutSeconds = 300,
-  pollIntervalSeconds = 5
-): Promise<GitLabPipelineJob[]> {
-  const jobs: GitLabPipelineJob[] = [];
-  for (const jobId of jobIds) {
-    const played = await playPipelineJob(projectId, jobId, variables);
-    const completed = await waitForStatus(
-      signal => getPipelineJob(projectId, played.id, signal),
-      TERMINAL_JOB_STATUSES,
-      timeoutSeconds,
-      pollIntervalSeconds
-    );
-    jobs.push(completed);
-  }
-  return jobs;
 }
 
 /**
@@ -8910,61 +5785,6 @@ async function getMilestoneMergeRequests(
 }
 
 /**
- * Promote a project milestone to a group milestone
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} milestoneId - The ID of the milestone
- * @returns {Promise<GitLabGroupMilestones>} Promoted milestone
- */
-async function promoteProjectMilestone(
-  projectId: string,
-  milestoneId: number | string
-): Promise<GitLabGroupMilestones> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/milestones/${encodeGitLabPathSegment(milestoneId)}/promote`
-  );
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-  });
-  await handleGitLabError(response);
-  const data = await response.json();
-  return GitLabGroupMilestonesSchema.parse(data);
-}
-
-/**
- * Get all burndown chart events for a single milestone
- * @param {string} projectId - The ID or URL-encoded path of the project
- * @param {number} milestoneId - The ID of the milestone
- * @returns {Promise<any[]>} Burndown chart events
- */
-async function getMilestoneBurndownEvents(
-  projectId: string,
-  milestoneId: number | string,
-  options: Omit<
-    z.infer<typeof GetMilestoneBurndownEventsSchema>,
-    "project_id" | "milestone_id"
-  > = {}
-): Promise<any[]> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(
-      getEffectiveProjectId(projectId)
-    )}/milestones/${encodeGitLabPathSegment(milestoneId)}/burndown_events`
-  );
-
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-  await handleGitLabError(response);
-  const data = await response.json();
-  return data as any[];
-}
-
-/**
  * List milestones in a GitLab group
  */
 async function listGroupMilestones(
@@ -9135,32 +5955,6 @@ async function getGroupMilestoneMergeRequests(
   await handleGitLabError(response);
   const data = await response.json();
   return z.array(GitLabMergeRequestSchema).parse(data);
-}
-
-/**
- * Get burndown chart events for a group milestone
- */
-async function getGroupMilestoneBurndownEvents(
-  groupId: string,
-  milestoneId: number | string,
-  options: Omit<
-    z.infer<typeof GetGroupMilestoneBurndownEventsSchema>,
-    "group_id" | "milestone_id"
-  > = {}
-): Promise<any[]> {
-  groupId = decodeURIComponent(groupId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/milestones/${encodeGitLabPathSegment(milestoneId)}/burndown_events`
-  );
-
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-  await handleGitLabError(response);
-  const data = await response.json();
-  return data as any[];
 }
 
 /**
@@ -9343,42 +6137,6 @@ async function getCommitDiff(
   }
 
   return allDiffs;
-}
-
-/**
- * Get blame for a file at a specific ref.
- *
- * Wraps GitLab REST endpoint
- *   GET /projects/:id/repository/files/:file_path/blame?ref=
- * Returns an array of entries; each entry has `lines` (the source lines covered)
- * and `commit` (the commit that last changed those lines: id, author, message, ...).
- *
- * @param {string} projectId  - Project ID or URL-encoded path
- * @param {Omit<GetFileBlameOptions,"project_id">} options - file_path, ref, optional range_start/range_end
- * @returns {Promise<GitLabBlameEntry[]>} Blame entries in source order.
- */
-async function getFileBlame(
-  projectId: string,
-  options: Omit<GetFileBlameOptions, "project_id">
-): Promise<GitLabBlameEntry[]> {
-  projectId = decodeURIComponent(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(getEffectiveProjectId(projectId))}/repository/files/${encodeGitLabPathSegment(options.file_path)}/blame`
-  );
-  url.searchParams.append("ref", options.ref);
-  if (options.range_start !== undefined && options.range_end !== undefined) {
-    url.searchParams.append("range[start]", options.range_start.toString());
-    url.searchParams.append("range[end]", options.range_end.toString());
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return z.array(GitLabBlameEntrySchema).parse(data);
 }
 
 /**
@@ -9593,43 +6351,6 @@ async function listGroupMembers(
   return z.array(GitLabProjectMemberSchema).parse(data);
 }
 
-/**
- * list group iterations
- *
- * @param {string} groupId
- * @param {Omit<ListGroupIterationsOptions, "group_id">} options
- * @returns {Promise<GetIt[]>}
- */
-async function listGroupIterations(
-  groupId: string,
-  options: Omit<z.infer<typeof ListGroupIterationsSchema>, "group_id"> = {}
-): Promise<GroupIteration[]> {
-  groupId = decodeURIComponent(groupId);
-  const url = new URL(`${getEffectiveApiUrl()}/groups/${encodeGitLabPathSegment(groupId)}/iterations`);
-
-  // クエリパラメータの追加
-  if (options.state) url.searchParams.append("state", options.state);
-  if (options.search) url.searchParams.append("search", options.search);
-  if (options.search_in) url.searchParams.append("in", options.search_in.join(","));
-  if (options.include_ancestors !== undefined)
-    url.searchParams.append("include_ancestors", options.include_ancestors.toString());
-  if (options.include_descendants !== undefined)
-    url.searchParams.append("include_descendants", options.include_descendants.toString());
-  if (options.updated_before) url.searchParams.append("updated_before", options.updated_before);
-  if (options.updated_after) url.searchParams.append("updated_after", options.updated_after);
-  if (options.page) url.searchParams.append("page", options.page.toString());
-  if (options.per_page) url.searchParams.append("per_page", options.per_page.toString());
-
-  const response = await fetch(url.toString(), getFetchConfig());
-
-  if (!response.ok) {
-    await handleGitLabError(response);
-  }
-
-  const data = await response.json();
-  return z.array(GroupIteration).parse(data);
-}
-
 // --- CI/CD Variables ---
 
 async function listProjectVariables(
@@ -9819,512 +6540,6 @@ async function deleteGroupVariable(
   }
   const response = await fetch(url.toString(), { ...getFetchConfig(), method: "DELETE" });
   await handleGitLabError(response);
-}
-
-// --- Dependency Proxy ---
-
-async function resolveGroupFullPath(groupId: string): Promise<string> {
-  const decoded = decodeURIComponent(groupId);
-  if (/^\d+$/.test(decoded)) {
-    const response = await fetch(`${getEffectiveApiUrl()}/groups/${decoded}`, getFetchConfig());
-    await handleGitLabError(response);
-    const data = z.object({ full_path: z.string() }).parse(await response.json());
-    return data.full_path;
-  }
-  return decoded;
-}
-
-async function getDependencyProxySettings(groupPath: string): Promise<GitLabDependencyProxy> {
-  const fullPath = await resolveGroupFullPath(groupPath);
-  const data = await executeGraphQL<{
-    group: {
-      dependencyProxySetting: { enabled: boolean } | null;
-      dependencyProxyBlobCount: number | null;
-      dependencyProxyTotalSize: string | null;
-      dependencyProxyImagePrefix: string | null;
-      dependencyProxyImageTtlPolicy: { enabled: boolean; ttl: number | null } | null;
-    } | null;
-  }>(
-    `query($fullPath: ID!) {
-      group(fullPath: $fullPath) {
-        dependencyProxySetting { enabled }
-        dependencyProxyBlobCount
-        dependencyProxyTotalSize
-        dependencyProxyImagePrefix
-        dependencyProxyImageTtlPolicy { enabled ttl }
-      }
-    }`,
-    { fullPath }
-  );
-  const g = data.group;
-  if (!g) throw new Error(`Group not found: ${fullPath}`);
-  return GitLabDependencyProxySchema.parse({
-    enabled: g.dependencyProxySetting?.enabled ?? false,
-    blob_count: g.dependencyProxyBlobCount,
-    total_size: g.dependencyProxyTotalSize,
-    image_prefix: g.dependencyProxyImagePrefix,
-    ttl_policy: g.dependencyProxyImageTtlPolicy,
-  });
-}
-
-async function updateDependencyProxySettings(
-  groupPath: string,
-  options: Omit<z.infer<typeof UpdateDependencyProxySettingsSchema>, "group_id">
-): Promise<GitLabDependencyProxy> {
-  if (
-    options.enabled === undefined &&
-    options.identity === undefined &&
-    options.secret === undefined
-  ) {
-    throw new Error("At least one of enabled, identity, or secret must be provided");
-  }
-  const fullPath = await resolveGroupFullPath(groupPath);
-  const input: Record<string, unknown> = { groupPath: fullPath };
-  if (options.enabled !== undefined) input["enabled"] = options.enabled;
-  if (options.identity !== undefined) input["identity"] = options.identity;
-  if (options.secret !== undefined) input["secret"] = options.secret;
-  const mutationResult = await executeGraphQL<{
-    updateDependencyProxySettings: { errors: string[] };
-  }>(
-    `mutation($input: UpdateDependencyProxySettingsInput!) {
-      updateDependencyProxySettings(input: $input) { errors }
-    }`,
-    { input }
-  );
-  const errors = mutationResult.updateDependencyProxySettings?.errors;
-  if (errors && errors.length > 0) {
-    throw new Error(`Failed to update dependency proxy settings: ${errors.join(", ")}`);
-  }
-  return getDependencyProxySettings(fullPath);
-}
-
-async function listDependencyProxyBlobs(
-  groupPath: string,
-  options: Omit<z.infer<typeof ListDependencyProxyBlobsSchema>, "group_id"> = {}
-): Promise<{
-  blobs: GitLabDependencyProxyBlob[];
-  pageInfo: { hasNextPage: boolean; endCursor: string | null };
-}> {
-  const fullPath = await resolveGroupFullPath(groupPath);
-  const data = await executeGraphQL<{
-    group: {
-      dependencyProxyBlobs: {
-        nodes: { fileName: string; size: string; createdAt: string | null }[];
-        pageInfo: { hasNextPage: boolean; endCursor: string | null };
-      } | null;
-    } | null;
-  }>(
-    `query($fullPath: ID!, $first: Int, $after: String) {
-      group(fullPath: $fullPath) {
-        dependencyProxyBlobs(first: $first, after: $after) {
-          nodes { fileName size createdAt }
-          pageInfo { hasNextPage endCursor }
-        }
-      }
-    }`,
-    { fullPath, first: options.first ?? 20, after: options.after }
-  );
-  const conn = data.group?.dependencyProxyBlobs;
-  if (!conn) throw new Error(`Group not found or dependency proxy not enabled: ${fullPath}`);
-  return {
-    blobs: conn.nodes.map(n =>
-      GitLabDependencyProxyBlobSchema.parse({
-        file_name: n.fileName,
-        size: n.size,
-        created_at: n.createdAt,
-      })
-    ),
-    pageInfo: conn.pageInfo,
-  };
-}
-
-async function purgeDependencyProxyCache(groupId: string): Promise<void> {
-  const encoded = encodeGitLabPathSegment(groupId);
-  const url = new URL(`${getEffectiveApiUrl()}/groups/${encoded}/dependency_proxy/cache`);
-  const response = await fetch(url.toString(), { ...getFetchConfig(), method: "DELETE" });
-  await handleGitLabError(response);
-}
-
-// --- Vulnerability functions (GraphQL) ---
-//
-// The REST Vulnerabilities API is deprecated and silently ignores filter
-// params on list and reason/comment on dismiss. GitLab recommends the
-// GraphQL API for vulnerability management, which supports all of these.
-
-/** Convert a numeric vulnerability ID (or an existing Vulnerability GID) to a GraphQL global ID. */
-function toVulnerabilityGid(vulnerabilityId: string): string {
-  if (/^\d+$/.test(vulnerabilityId)) {
-    return `gid://gitlab/Vulnerability/${vulnerabilityId}`;
-  }
-  if (/^gid:\/\/gitlab\/Vulnerability\/\d+$/.test(vulnerabilityId)) {
-    return vulnerabilityId;
-  }
-  throw new Error(
-    `Invalid vulnerability ID "${vulnerabilityId}": expected a numeric ID or a gid://gitlab/Vulnerability/<id> global ID`
-  );
-}
-
-/**
- * Resolve a project ID or path to the full namespace path required by
- * GraphQL's `project(fullPath:)` query. Numeric IDs are resolved via a
- * REST lookup; paths are returned as-is (decoded).
- */
-async function resolveProjectFullPath(projectId: string): Promise<string> {
-  const decoded = decodeURIComponent(getEffectiveProjectId(decodeURIComponent(projectId)));
-  if (!/^\d+$/.test(decoded)) {
-    return decoded;
-  }
-  const url = new URL(`${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(decoded)}`);
-  const response = await fetch(url.toString(), { ...getFetchConfig() });
-  await handleGitLabError(response);
-  const project = (await response.json()) as { path_with_namespace?: string };
-  if (!project.path_with_namespace) {
-    throw new Error(`Could not resolve full path for project ${decoded}`);
-  }
-  return project.path_with_namespace;
-}
-
-/**
- * Enforce GITLAB_ALLOWED_PROJECT_IDS for vulnerability tools. Vulnerability
- * GIDs are globally unique rather than project-scoped, so the boundary must
- * be checked against the project the vulnerability actually belongs to —
- * mirroring what getEffectiveProjectId does for project-scoped REST calls.
- * Allowlist entries may be numeric IDs or full namespace paths.
- */
-function assertVulnerabilityProjectAllowed(
-  vulnerabilityId: string,
-  project: { id?: string | null; fullPath?: string | null } | null | undefined
-): void {
-  const allowedProjectIds = getEffectiveAllowedProjectIds();
-  if (allowedProjectIds.length === 0) {
-    return;
-  }
-  const fullPath = project?.fullPath ?? undefined;
-  const numericId = project?.id?.match(/^gid:\/\/gitlab\/Project\/(\d+)$/)?.[1];
-  const allowed =
-    (fullPath !== undefined && allowedProjectIds.includes(fullPath)) ||
-    (numericId !== undefined && allowedProjectIds.includes(numericId));
-  if (!allowed) {
-    throw new Error(
-      `Access denied: Vulnerability ${vulnerabilityId} belongs to project ${
-        fullPath ?? numericId ?? "unknown"
-      }, which is not in the allowed project list: ${allowedProjectIds.join(", ")}`
-    );
-  }
-}
-
-/**
- * Pre-flight allowlist check for vulnerability mutations: resolves the
- * vulnerability's project and verifies it against GITLAB_ALLOWED_PROJECT_IDS
- * before any write is issued. No-op (no extra request) when the allowlist
- * is not configured.
- */
-async function ensureVulnerabilityProjectAllowed(vulnerabilityId: string): Promise<void> {
-  if (getEffectiveAllowedProjectIds().length === 0) {
-    return;
-  }
-  const data = await executeGraphQL<{
-    vulnerability: { project: { id: string; fullPath: string } | null } | null;
-  }>(
-    `query getVulnerabilityProject($id: VulnerabilityID!) {
-      vulnerability(id: $id) {
-        project {
-          id
-          fullPath
-        }
-      }
-    }`,
-    { id: toVulnerabilityGid(vulnerabilityId) }
-  );
-  if (!data.vulnerability) {
-    throw new Error(`Vulnerability not found: ${vulnerabilityId}`);
-  }
-  assertVulnerabilityProjectAllowed(vulnerabilityId, data.vulnerability.project);
-}
-
-/** Shared GraphQL selection set for vulnerability objects. */
-const VULNERABILITY_FIELDS = `
-  id
-  title
-  description
-  state
-  severity
-  reportType
-  detectedAt
-  confirmedAt
-  resolvedAt
-  dismissedAt
-  dismissalReason
-  webUrl
-  scanner {
-    name
-    externalId
-    vendor
-  }
-  identifiers {
-    externalType
-    externalId
-    name
-    url
-  }
-  links {
-    name
-    url
-  }
-  location {
-    ... on VulnerabilityLocationSast {
-      file
-      startLine
-      endLine
-    }
-    ... on VulnerabilityLocationSecretDetection {
-      file
-      startLine
-      endLine
-    }
-    ... on VulnerabilityLocationDependencyScanning {
-      file
-      dependency {
-        package {
-          name
-        }
-        version
-      }
-    }
-    ... on VulnerabilityLocationContainerScanning {
-      image
-      operatingSystem
-      dependency {
-        package {
-          name
-        }
-        version
-      }
-    }
-    ... on VulnerabilityLocationDast {
-      path
-      hostname
-    }
-  }
-`;
-
-async function listProjectVulnerabilities(
-  projectId: string,
-  options: Omit<z.infer<typeof ListProjectVulnerabilitiesSchema>, "project_id"> = {}
-): Promise<unknown> {
-  const fullPath = await resolveProjectFullPath(projectId);
-  const variables: Record<string, unknown> = {
-    fullPath,
-    first: Math.min(options.first ?? 20, 100),
-  };
-  if (options.state) variables.state = [options.state.toUpperCase()];
-  if (options.severity) variables.severity = [options.severity.toUpperCase()];
-  if (options.report_type) variables.reportType = [options.report_type.toUpperCase()];
-  if (options.after) variables.after = options.after;
-
-  const data = await executeGraphQL<{
-    project: {
-      vulnerabilities: {
-        nodes: unknown[];
-        pageInfo: { endCursor: string | null; hasNextPage: boolean };
-      };
-    } | null;
-  }>(
-    `query listProjectVulnerabilities(
-      $fullPath: ID!
-      $state: [VulnerabilityState!]
-      $severity: [VulnerabilitySeverity!]
-      $reportType: [VulnerabilityReportType!]
-      $first: Int
-      $after: String
-    ) {
-      project(fullPath: $fullPath) {
-        vulnerabilities(
-          state: $state
-          severity: $severity
-          reportType: $reportType
-          first: $first
-          after: $after
-        ) {
-          nodes {
-            ${VULNERABILITY_FIELDS}
-          }
-          pageInfo {
-            endCursor
-            hasNextPage
-          }
-        }
-      }
-    }`,
-    variables
-  );
-
-  if (!data.project) {
-    throw new Error(`Project not found or not accessible: ${fullPath}`);
-  }
-  return {
-    vulnerabilities: data.project.vulnerabilities.nodes,
-    pageInfo: data.project.vulnerabilities.pageInfo,
-  };
-}
-
-/**
- * Execute a GitLab Orbit graph query.
- * Note: the `llm` format returns compact plain text, not JSON.
- */
-async function orbitQuery(query: Record<string, unknown>, format: "raw" | "llm"): Promise<unknown> {
-  const url = new URL(`${getEffectiveApiUrl()}/orbit/query`);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-    method: "POST",
-    body: JSON.stringify({ query, format }),
-  });
-
-  await handleGitLabError(response);
-  if (format === "raw") {
-    return response.json();
-  }
-  return response.text();
-}
-
-async function orbitGetSchema(): Promise<unknown> {
-  const url = new URL(`${getEffectiveApiUrl()}/orbit/schema`);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  return response.json();
-}
-
-async function orbitGetStatus(): Promise<unknown> {
-  const url = new URL(`${getEffectiveApiUrl()}/orbit/status`);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  return response.json();
-}
-
-async function orbitListTools(): Promise<unknown> {
-  const url = new URL(`${getEffectiveApiUrl()}/orbit/tools`);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-  return response.json();
-}
-
-async function getVulnerability(vulnerabilityId: string): Promise<unknown> {
-  const data = await executeGraphQL<{
-    vulnerability:
-      | ({ project?: { id?: string; fullPath?: string } | null } & Record<string, unknown>)
-      | null;
-  }>(
-    `query getVulnerability($id: VulnerabilityID!) {
-      vulnerability(id: $id) {
-        ${VULNERABILITY_FIELDS}
-        project {
-          id
-          name
-          fullPath
-        }
-      }
-    }`,
-    { id: toVulnerabilityGid(vulnerabilityId) }
-  );
-  if (!data.vulnerability) {
-    throw new Error(`Vulnerability not found: ${vulnerabilityId}`);
-  }
-  assertVulnerabilityProjectAllowed(vulnerabilityId, data.vulnerability.project);
-  return data.vulnerability;
-}
-
-async function dismissVulnerability(
-  vulnerabilityId: string,
-  reason: string,
-  comment?: string
-): Promise<unknown> {
-  await ensureVulnerabilityProjectAllowed(vulnerabilityId);
-  const input: Record<string, string> = {
-    id: toVulnerabilityGid(vulnerabilityId),
-    dismissalReason: reason.toUpperCase(),
-  };
-  if (comment) input.comment = comment;
-
-  const data = await executeGraphQL<{
-    vulnerabilityDismiss: {
-      vulnerability: unknown | null;
-      errors: string[];
-    };
-  }>(
-    `mutation dismissVulnerability($input: VulnerabilityDismissInput!) {
-      vulnerabilityDismiss(input: $input) {
-        vulnerability {
-          id
-          state
-          dismissedAt
-          dismissalReason
-        }
-        errors
-      }
-    }`,
-    { input }
-  );
-
-  if (data.vulnerabilityDismiss.errors?.length) {
-    throw new Error(
-      `Failed to dismiss vulnerability: ${data.vulnerabilityDismiss.errors.join(", ")}`
-    );
-  }
-  if (!data.vulnerabilityDismiss.vulnerability) {
-    throw new Error(`Vulnerability not returned after dismissal (id: ${vulnerabilityId})`);
-  }
-  return data.vulnerabilityDismiss.vulnerability;
-}
-
-async function confirmVulnerability(
-  vulnerabilityId: string,
-  comment?: string
-): Promise<unknown> {
-  await ensureVulnerabilityProjectAllowed(vulnerabilityId);
-  const input: Record<string, string> = { id: toVulnerabilityGid(vulnerabilityId) };
-  if (comment) input.comment = comment;
-
-  const data = await executeGraphQL<{
-    vulnerabilityConfirm: {
-      vulnerability: unknown | null;
-      errors: string[];
-    };
-  }>(
-    `mutation confirmVulnerability($input: VulnerabilityConfirmInput!) {
-      vulnerabilityConfirm(input: $input) {
-        vulnerability {
-          id
-          state
-          confirmedAt
-        }
-        errors
-      }
-    }`,
-    { input }
-  );
-
-  if (data.vulnerabilityConfirm.errors?.length) {
-    throw new Error(
-      `Failed to confirm vulnerability: ${data.vulnerabilityConfirm.errors.join(", ")}`
-    );
-  }
-  if (!data.vulnerabilityConfirm.vulnerability) {
-    throw new Error(`Vulnerability not returned after confirmation (id: ${vulnerabilityId})`);
-  }
-  return data.vulnerabilityConfirm.vulnerability;
 }
 
 /**
@@ -10529,194 +6744,6 @@ async function getProjectEvents(
 }
 
 /**
- * List all releases for a project
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param options Optional parameters for listing releases
- * @returns Array of GitLab releases
- */
-async function listReleases(
-  projectId: string,
-  options: Omit<z.infer<typeof ListReleasesSchema>, "project_id"> = {}
-): Promise<GitLabRelease[]> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases`
-  );
-
-  // Add query parameters
-  appendFilterParams(url.searchParams, options);
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabReleaseSchema.array().parse(data);
-}
-
-/**
- * Get a release by tag name
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The Git tag the release is associated with
- * @param includeHtmlDescription If true, includes HTML rendered Markdown
- * @returns GitLab release
- */
-async function getRelease(
-  projectId: string,
-  tagName: string,
-  includeHtmlDescription?: boolean
-): Promise<GitLabRelease> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-  const url = new URL(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases/${encodeGitLabPathSegment(tagName)}`
-  );
-
-  if (includeHtmlDescription !== undefined) {
-    url.searchParams.append("include_html_description", includeHtmlDescription.toString());
-  }
-
-  const response = await fetch(url.toString(), {
-    ...getFetchConfig(),
-  });
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabReleaseSchema.parse(data);
-}
-
-/**
- * Create a new release
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param options Options for creating the release
- * @returns Created GitLab release
- */
-async function createRelease(
-  projectId: string,
-  options: Omit<z.infer<typeof CreateReleaseSchema>, "project_id">
-): Promise<GitLabRelease> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases`,
-    {
-      ...getFetchConfig(),
-      method: "POST",
-      body: JSON.stringify(options),
-    }
-  );
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabReleaseSchema.parse(data);
-}
-
-/**
- * Update an existing release
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The Git tag the release is associated with
- * @param options Options for updating the release
- * @returns Updated GitLab release
- */
-async function updateRelease(
-  projectId: string,
-  tagName: string,
-  options: Omit<z.infer<typeof UpdateReleaseSchema>, "project_id" | "tag_name">
-): Promise<GitLabRelease> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases/${encodeGitLabPathSegment(tagName)}`,
-    {
-      ...getFetchConfig(),
-      method: "PUT",
-      body: JSON.stringify(options),
-    }
-  );
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabReleaseSchema.parse(data);
-}
-
-/**
- * Delete a release
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The Git tag the release is associated with
- * @returns Deleted GitLab release
- */
-async function deleteRelease(projectId: string, tagName: string): Promise<GitLabRelease> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases/${encodeGitLabPathSegment(tagName)}`,
-    {
-      ...getFetchConfig(),
-      method: "DELETE",
-    }
-  );
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabReleaseSchema.parse(data);
-}
-
-/**
- * Create release evidence (GitLab Premium/Ultimate only)
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The Git tag the release is associated with
- */
-async function createReleaseEvidence(projectId: string, tagName: string): Promise<void> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases/${encodeGitLabPathSegment(tagName)}/evidence`,
-    {
-      ...getFetchConfig(),
-      method: "POST",
-    }
-  );
-
-  await handleGitLabError(response);
-}
-
-/**
- * Download a release asset
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The Git tag the release is associated with
- * @param directAssetPath Path to the release asset file
- * @returns The asset file content
- */
-async function downloadReleaseAsset(
-  projectId: string,
-  tagName: string,
-  directAssetPath: string
-): Promise<string> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetchWithValidatedRedirects(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/releases/${encodeGitLabPathSegment(tagName)}/downloads/${encodeGitLabPath(directAssetPath)}`,
-    downloadRedirectOptions()
-  );
-
-  await handleGitLabError(response);
-
-  return await response.text();
-}
-
-/**
  * List repository tags
  *
  * @param projectId The ID or URL-encoded path of the project
@@ -10815,58 +6842,6 @@ async function deleteTag(projectId: string, tagName: string): Promise<void> {
   await handleGitLabError(response);
 }
 
-/**
- * Get the signature of a repository tag
- *
- * @param projectId The ID or URL-encoded path of the project
- * @param tagName The name of the tag
- * @returns Tag signature
- */
-async function getTagSignature(projectId: string, tagName: string): Promise<GitLabTagSignature> {
-  const effectiveProjectId = getEffectiveProjectId(projectId);
-
-  const response = await fetch(
-    `${getEffectiveApiUrl()}/projects/${encodeGitLabPathSegment(effectiveProjectId)}/repository/tags/${encodeGitLabPathSegment(tagName)}/signature`,
-    {
-      ...getFetchConfig(),
-    }
-  );
-
-  await handleGitLabError(response);
-
-  const data = await response.json();
-  return GitLabTagSignatureSchema.parse(data);
-}
-
-async function executeGitLabGraphQL(query: string, variables: Record<string, unknown> = {}) {
-  const apiUrl = new URL(getEffectiveApiUrl());
-  const restPath = apiUrl.pathname || "";
-  const idx = restPath.lastIndexOf("/api/v4");
-  const prefix = idx >= 0 ? restPath.slice(0, idx) : "";
-  const graphqlUrl = process.env.GITLAB_GRAPHQL_URL || `${apiUrl.origin}${prefix}/api/graphql`;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 45000);
-  try {
-    const response = await fetch(graphqlUrl, {
-      ...getFetchConfig(),
-      method: "POST",
-      headers: {
-        ...BASE_HEADERS,
-        ...buildAuthHeaders(),
-      },
-      body: JSON.stringify({ query, variables }),
-      signal: controller.signal as any,
-    });
-    if (!response.ok) {
-      await handleGitLabError(response);
-    }
-    return await response.json();
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
 // Request handlers are now registered inside createServer() factory function
 // to ensure each transport connection gets its own Server instance (GHSA-345p-7cg4-v4c7).
 
@@ -10909,68 +6884,6 @@ async function handleToolCall(params: any) {
 
     logger.info({ tool: params.name, event: "tool_call_start" }, `tool_call_start: ${params.name}`);
     switch (params.name) {
-      case "execute_graphql": {
-        rejectIfProjectScopedDeployment("execute_graphql");
-        const args = ExecuteGraphQLSchema.parse(params.arguments);
-        if (
-          GITLAB_PERMISSION_MODE === "readonly" &&
-          graphqlQueryContainsWriteOperation(args.query)
-        ) {
-          throw new Error(
-            "execute_graphql does not allow mutation or subscription operations in read-only mode"
-          );
-        }
-        if (
-          GITLAB_PERMISSION_MODE === "modify" &&
-          graphqlQueryContainsDeleteOperation(args.query)
-        ) {
-          throw new Error("execute_graphql does not allow destructive mutations in modify mode");
-        }
-        const apiUrl = new URL(getEffectiveApiUrl());
-        // Build GraphQL endpoint preserving any instance subpath (e.g. /gitlab)
-        const restPath = apiUrl.pathname || ""; // e.g. /api/v4 or /gitlab/api/v4
-        const idx = restPath.lastIndexOf("/api/v4");
-        const prefix = idx >= 0 ? restPath.slice(0, idx) : "";
-        const graphqlUrl =
-          process.env.GITLAB_GRAPHQL_URL || `${apiUrl.origin}${prefix}/api/graphql`;
-
-        // Add timeout to avoid hanging requests
-        const controller = new AbortController();
-        const timeoutMs = 45000;
-        const timeout = setTimeout(() => controller.abort(), timeoutMs);
-        logger.info({ endpoint: graphqlUrl }, "execute_graphql request");
-        try {
-          const response = await fetch(graphqlUrl, {
-            ...getFetchConfig(),
-            method: "POST",
-            headers: {
-              ...BASE_HEADERS,
-              ...buildAuthHeaders(),
-            },
-            body: JSON.stringify({ query: args.query, variables: args.variables || {} }),
-            signal: controller.signal as any,
-          });
-          if (!response.ok) {
-            await handleGitLabError(response);
-          }
-          const json = await response.json();
-          return {
-            content: [{ type: "text", text: JSON.stringify(json) }],
-          };
-        } catch (err) {
-          const message = err instanceof Error ? err.message : String(err);
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify({ error: `GraphQL request failed: ${message}` }),
-              },
-            ],
-          };
-        } finally {
-          clearTimeout(timeout);
-        }
-      }
       case "fork_repository": {
         rejectIfProjectScopedDeployment("fork_repository");
         const forkArgs = ForkRepositorySchema.parse(params.arguments);
@@ -11316,18 +7229,6 @@ async function handleToolCall(params: any) {
         return { content: [{ type: "text", text: JSON.stringify(result) }] };
       }
 
-      case "list_merge_request_note_emoji_reactions": {
-        const args = ListMergeRequestNoteEmojiReactionsSchema.parse(params.arguments);
-        const path = buildAwardEmojiPath(
-          "merge_requests",
-          args.project_id,
-          args.merge_request_iid,
-          { noteId: args.note_id, discussionId: args.discussion_id }
-        );
-        const result = await listRestAwardEmoji(path);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
       case "create_merge_request_emoji_reaction": {
         const args = CreateMergeRequestEmojiReactionSchema.parse(params.arguments);
         const path = buildAwardEmojiPath("merge_requests", args.project_id, args.merge_request_iid);
@@ -11346,34 +7247,6 @@ async function handleToolCall(params: any) {
         await deleteRestAwardEmoji(path);
         return {
           content: [{ type: "text", text: "Merge request emoji reaction deleted successfully" }],
-        };
-      }
-
-      case "create_merge_request_note_emoji_reaction": {
-        const args = CreateMergeRequestNoteEmojiReactionSchema.parse(params.arguments);
-        const path = buildAwardEmojiPath(
-          "merge_requests",
-          args.project_id,
-          args.merge_request_iid,
-          { noteId: args.note_id, discussionId: args.discussion_id }
-        );
-        const result = await createRestAwardEmoji(path, args.name);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "delete_merge_request_note_emoji_reaction": {
-        const args = DeleteMergeRequestNoteEmojiReactionSchema.parse(params.arguments);
-        const path = buildAwardEmojiPath(
-          "merge_requests",
-          args.project_id,
-          args.merge_request_iid,
-          { noteId: args.note_id, discussionId: args.discussion_id, awardId: args.award_id }
-        );
-        await deleteRestAwardEmoji(path);
-        return {
-          content: [
-            { type: "text", text: "Merge request note emoji reaction deleted successfully" },
-          ],
         };
       }
 
@@ -11555,54 +7428,12 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_merge_request_changed_files": {
-        const args = ListMergeRequestChangedFilesSchema.parse(params.arguments);
-        const files = await listMergeRequestChangedFiles(
-          args.project_id,
-          args.merge_request_iid,
-          args.source_branch,
-          args.excluded_file_patterns
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(files) }],
-        };
-      }
-
       case "list_merge_request_pipelines": {
         const args = ListMergeRequestPipelinesSchema.parse(params.arguments);
         const { project_id, merge_request_iid, ...options } = args;
         const pipelines = await listMergeRequestPipelines(project_id, merge_request_iid, options);
         return {
           content: [{ type: "text", text: JSON.stringify(pipelines) }],
-        };
-      }
-
-      case "list_merge_request_diffs": {
-        const args = ListMergeRequestDiffsSchema.parse(params.arguments);
-        const changes = await listMergeRequestDiffs(
-          args.project_id,
-          args.merge_request_iid,
-          args.source_branch,
-          args.page,
-          args.per_page,
-          args.unidiff
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(changes) }],
-        };
-      }
-
-      case "get_merge_request_file_diff": {
-        const args = GetMergeRequestFileDiffSchema.parse(params.arguments);
-        const fileDiff = await getMergeRequestFileDiff(
-          args.project_id,
-          args.file_paths,
-          args.merge_request_iid,
-          args.source_branch,
-          args.unidiff
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(fileDiff) }],
         };
       }
 
@@ -11647,46 +7478,6 @@ async function handleToolCall(params: any) {
         const mergeRequest = await mergeMergeRequest(project_id, options, merge_request_iid);
         return {
           content: [{ type: "text", text: JSON.stringify(mergeRequest) }],
-        };
-      }
-
-      case "approve_merge_request": {
-        const args = ApproveMergeRequestSchema.parse(params.arguments);
-        const approvalState = await approveMergeRequest(
-          args.project_id,
-          args.merge_request_iid,
-          args.sha,
-          args.approval_password
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(approvalState) }],
-        };
-      }
-
-      case "unapprove_merge_request": {
-        const args = UnapproveMergeRequestSchema.parse(params.arguments);
-        const approvalState = await unapproveMergeRequest(args.project_id, args.merge_request_iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(approvalState) }],
-        };
-      }
-
-      case "get_merge_request_approval_state": {
-        const args = GetMergeRequestApprovalStateSchema.parse(params.arguments);
-        const approvalState = await getMergeRequestApprovalState(
-          args.project_id,
-          args.merge_request_iid
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(approvalState) }],
-        };
-      }
-
-      case "get_merge_request_conflicts": {
-        const args = GetMergeRequestConflictsSchema.parse(params.arguments);
-        const conflicts = await getMergeRequestConflicts(args.project_id, args.merge_request_iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(conflicts) }],
         };
       }
 
@@ -11749,24 +7540,6 @@ async function handleToolCall(params: any) {
 
         return {
           content: [{ type: "text", text: JSON.stringify(namespace) }],
-        };
-      }
-
-      case "verify_namespace": {
-        const args = VerifyNamespaceSchema.parse(params.arguments);
-        const url = new URL(`${GITLAB_API_URL}/namespaces/${encodeGitLabPathSegment(args.path)}/exists`);
-        if (args.parent_id !== undefined) url.searchParams.set("parent_id", String(args.parent_id));
-
-        const response = await fetch(url.toString(), {
-          ...getFetchConfig(),
-        });
-
-        await handleGitLabError(response);
-        const data = await response.json();
-        const namespaceExists = GitLabNamespaceExistsResponseSchema.parse(data);
-
-        return {
-          content: [{ type: "text", text: JSON.stringify(namespaceExists) }],
         };
       }
 
@@ -11905,98 +7678,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_draft_note": {
-        const args = GetDraftNoteSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, draft_note_id } = args;
-
-        const draftNote = await getDraftNote(project_id, merge_request_iid, draft_note_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(draftNote) }],
-        };
-      }
-
-      case "list_draft_notes": {
-        const args = ListDraftNotesSchema.parse(params.arguments);
-        const { project_id, merge_request_iid } = args;
-
-        const draftNotes = await listDraftNotes(project_id, merge_request_iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(draftNotes) }],
-        };
-      }
-
-      case "create_draft_note": {
-        const args = CreateDraftNoteSchema.parse(params.arguments);
-        const {
-          project_id,
-          merge_request_iid,
-          body,
-          in_reply_to_discussion_id,
-          position,
-          resolve_discussion,
-        } = args;
-
-        const draftNote = await createDraftNote(
-          project_id,
-          merge_request_iid,
-          body,
-          in_reply_to_discussion_id,
-          position,
-          resolve_discussion
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(draftNote) }],
-        };
-      }
-
-      case "update_draft_note": {
-        const args = UpdateDraftNoteSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, draft_note_id, body, position, resolve_discussion } =
-          args;
-
-        const draftNote = await updateDraftNote(
-          project_id,
-          merge_request_iid,
-          draft_note_id,
-          body,
-          position,
-          resolve_discussion
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(draftNote) }],
-        };
-      }
-
-      case "delete_draft_note": {
-        const args = DeleteDraftNoteSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, draft_note_id } = args;
-
-        await deleteDraftNote(project_id, merge_request_iid, draft_note_id);
-        return {
-          content: [{ type: "text", text: "Draft note deleted successfully" }],
-        };
-      }
-
-      case "publish_draft_note": {
-        const args = PublishDraftNoteSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, draft_note_id } = args;
-
-        const publishedNote = await publishDraftNote(project_id, merge_request_iid, draft_note_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(publishedNote) }],
-        };
-      }
-
-      case "bulk_publish_draft_notes": {
-        const args = BulkPublishDraftNotesSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, ...options } = args;
-
-        const publishedNotes = await bulkPublishDraftNotes(project_id, merge_request_iid, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(publishedNotes) }],
-        };
-      }
-
       case "create_merge_request_thread": {
         const args = CreateMergeRequestThreadSchema.parse(params.arguments);
         const { project_id, merge_request_iid, body, position, created_at } = args;
@@ -12010,15 +7691,6 @@ async function handleToolCall(params: any) {
         );
         return {
           content: [{ type: "text", text: JSON.stringify(thread) }],
-        };
-      }
-
-      case "resolve_merge_request_thread": {
-        const args = ResolveMergeRequestThreadSchema.parse(params.arguments);
-        const { project_id, merge_request_iid, discussion_id, resolved } = args;
-        await resolveMergeRequestThread(project_id, merge_request_iid, discussion_id, resolved);
-        return {
-          content: [{ type: "text", text: "Thread resolved successfully" }],
         };
       }
 
@@ -12195,14 +7867,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_issue_links": {
-        const args = ListIssueLinksSchema.parse(params.arguments);
-        const links = await listIssueLinks(args.project_id, args.issue_iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(links) }],
-        };
-      }
-
       case "list_issue_discussions": {
         const args = ListIssueDiscussionsSchema.parse(params.arguments);
         const { project_id, issue_iid, ...options } = args;
@@ -12210,192 +7874,6 @@ async function handleToolCall(params: any) {
         const discussions = await listIssueDiscussions(project_id, issue_iid, options);
         return {
           content: [{ type: "text", text: JSON.stringify(discussions) }],
-        };
-      }
-
-      case "get_issue_link": {
-        const args = GetIssueLinkSchema.parse(params.arguments);
-        const link = await getIssueLink(args.project_id, args.issue_iid, args.issue_link_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(link) }],
-        };
-      }
-
-      case "create_issue_link": {
-        const args = CreateIssueLinkSchema.parse(params.arguments);
-        const link = await createIssueLink(
-          args.project_id,
-          args.issue_iid,
-          args.target_project_id,
-          args.target_issue_iid,
-          args.link_type
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(link) }],
-        };
-      }
-
-      case "delete_issue_link": {
-        const args = DeleteIssueLinkSchema.parse(params.arguments);
-        await deleteIssueLink(args.project_id, args.issue_iid, args.issue_link_id);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                {
-                  status: "success",
-                  message: "Issue link deleted successfully",
-                },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
-      case "get_work_item": {
-        const args = GetWorkItemSchema.parse(params.arguments);
-        const result = await getWorkItem(args.project_id, args.iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_work_items": {
-        const args = ListWorkItemsSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const result = await listWorkItems(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "create_work_item": {
-        const args = CreateWorkItemSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const result = await createWorkItem(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "update_work_item": {
-        const args = UpdateWorkItemSchema.parse(params.arguments);
-        const { project_id, iid, ...options } = args;
-        const result = await updateWorkItem(project_id, iid, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "convert_work_item_type": {
-        const args = ConvertWorkItemTypeSchema.parse(params.arguments);
-        const result = await convertIssueType(args.project_id, args.iid, args.new_type);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_work_item_statuses": {
-        const args = ListWorkItemStatusesSchema.parse(params.arguments);
-        const result = await listIssueStatuses(args.project_id, args.work_item_type);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_custom_field_definitions": {
-        const args = ListCustomFieldDefinitionsSchema.parse(params.arguments);
-        const result = await listCustomFieldDefinitions(args.project_id, args.work_item_type);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "move_work_item": {
-        const args = MoveWorkItemSchema.parse(params.arguments);
-        const result = await moveWorkItem(args.project_id, args.iid, args.target_project_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_work_item_notes": {
-        const args = ListWorkItemNotesSchema.parse(params.arguments);
-        const result = await listWorkItemNotes(args.project_id, args.iid, args);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "create_work_item_note": {
-        const args = CreateWorkItemNoteSchema.parse(params.arguments);
-        const result = await createWorkItemNote(args.project_id, args.iid, args.body, args);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_work_item_emoji_reactions": {
-        const args = ListWorkItemEmojiReactionsSchema.parse(params.arguments);
-        const { workItemGID } = await resolveWorkItemGID(args.project_id, args.iid);
-        const result = await listGraphQLAwardEmoji(workItemGID);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "list_work_item_note_emoji_reactions": {
-        const args = ListWorkItemNoteEmojiReactionsSchema.parse(params.arguments);
-        const result = await listGraphQLAwardEmoji(args.note_id);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "create_work_item_emoji_reaction": {
-        const args = CreateWorkItemEmojiReactionSchema.parse(params.arguments);
-        const { workItemGID } = await resolveWorkItemGID(args.project_id, args.iid);
-        const result = await addGraphQLAwardEmoji(workItemGID, args.name);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "delete_work_item_emoji_reaction": {
-        const args = DeleteWorkItemEmojiReactionSchema.parse(params.arguments);
-        const { workItemGID } = await resolveWorkItemGID(args.project_id, args.iid);
-        const result = await removeGraphQLAwardEmoji(workItemGID, args.name);
-        return { content: [{ type: "text", text: JSON.stringify(result ?? { status: "success", message: "Work item emoji reaction removed" }) }] };
-      }
-
-      case "create_work_item_note_emoji_reaction": {
-        const args = CreateWorkItemNoteEmojiReactionSchema.parse(params.arguments);
-        const result = await addGraphQLAwardEmoji(args.note_id, args.name);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "delete_work_item_note_emoji_reaction": {
-        const args = DeleteWorkItemNoteEmojiReactionSchema.parse(params.arguments);
-        const result = await removeGraphQLAwardEmoji(args.note_id, args.name);
-        return { content: [{ type: "text", text: JSON.stringify(result ?? { status: "success", message: "Work item note emoji reaction removed" }) }] };
-      }
-
-      case "get_timeline_events": {
-        const args = GetTimelineEventsSchema.parse(params.arguments);
-        const result = await getTimelineEvents(args.project_id, args.incident_iid);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "create_timeline_event": {
-        const args = CreateTimelineEventSchema.parse(params.arguments);
-        const result = await createTimelineEvent(
-          args.project_id,
-          args.incident_iid,
-          args.note,
-          args.occurred_at,
-          args.tag_names
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
         };
       }
 
@@ -12517,73 +7995,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_group_wiki_pages": {
-        rejectIfStrictProjectScope("list_group_wiki_pages");
-        const { group_id, page, per_page, with_content, render_html } =
-          ListGroupWikiPagesSchema.parse(params.arguments);
-        const wikiPages = await listGroupWikiPages(group_id, {
-          page,
-          per_page,
-          with_content,
-          render_html,
-        });
-        return {
-          content: [{ type: "text", text: JSON.stringify(wikiPages) }],
-        };
-      }
-
-      case "get_group_wiki_page": {
-        rejectIfStrictProjectScope("get_group_wiki_page");
-        const { group_id, slug, render_html } = GetGroupWikiPageSchema.parse(params.arguments);
-        const wikiPage = await getGroupWikiPage(group_id, slug, render_html);
-        return {
-          content: [{ type: "text", text: JSON.stringify(wikiPage) }],
-        };
-      }
-
-      case "create_group_wiki_page": {
-        rejectIfStrictProjectScope("create_group_wiki_page");
-        const { group_id, title, content, format } = CreateGroupWikiPageSchema.parse(
-          params.arguments
-        );
-        const wikiPage = await createGroupWikiPage(group_id, title, content, format);
-        return {
-          content: [{ type: "text", text: JSON.stringify(wikiPage) }],
-        };
-      }
-
-      case "update_group_wiki_page": {
-        rejectIfStrictProjectScope("update_group_wiki_page");
-        const { group_id, slug, title, content, format } = UpdateGroupWikiPageSchema.parse(
-          params.arguments
-        );
-        const wikiPage = await updateGroupWikiPage(group_id, slug, title, content, format);
-        return {
-          content: [{ type: "text", text: JSON.stringify(wikiPage) }],
-        };
-      }
-
-      case "delete_group_wiki_page": {
-        rejectIfStrictProjectScope("delete_group_wiki_page");
-        const { group_id, slug } = DeleteGroupWikiPageSchema.parse(params.arguments);
-        await deleteGroupWikiPage(group_id, slug);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                {
-                  status: "success",
-                  message: "Group wiki page deleted successfully",
-                },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
       case "get_repository_tree": {
         const args = GetRepositoryTreeSchema.parse(params.arguments);
         const { items, next_page_token } = await getRepositoryTree(args);
@@ -12622,11 +8033,6 @@ async function handleToolCall(params: any) {
             },
           ],
         };
-      }
-
-      case "get_pipeline_variables": {
-        const { project_id, pipeline_id, page, per_page } = GetPipelineVariablesSchema.parse(params.arguments);
-        return { content: [{ type: "text", text: JSON.stringify(await getPipelineVariables(project_id, pipeline_id, page, per_page)) }] };
       }
 
       case "get_pipeline_test_report": {
@@ -12692,14 +8098,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_environment": {
-        const { project_id, environment_id } = GetEnvironmentSchema.parse(params.arguments);
-        const environment = await getEnvironment(project_id, environment_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(environment) }],
-        };
-      }
-
       case "update_environment": {
         const { project_id, environment_id, ...body } = UpdateEnvironmentSchema.parse(params.arguments);
         return { content: [{ type: "text", text: JSON.stringify(await environmentRequest(project_id, `/${encodeGitLabPathSegment(environment_id)}`, "PUT", body)) }] };
@@ -12760,21 +8158,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_pipeline_trigger_jobs": {
-        const { project_id, pipeline_id, ...options } = ListPipelineTriggerJobsSchema.parse(
-          params.arguments
-        );
-        const triggerJobs = await listPipelineTriggerJobs(project_id, pipeline_id, options);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(triggerJobs),
-            },
-          ],
-        };
-      }
-
       case "get_pipeline_job": {
         const { project_id, job_id } = PipelineJobControlSchema.parse(params.arguments);
         const jobDetails = await getPipelineJob(project_id, job_id);
@@ -12810,147 +8193,6 @@ async function handleToolCall(params: any) {
         return {
           content: [{ type: "text", text: JSON.stringify(result) }],
         };
-      }
-
-      case "validate_project_ci_lint": {
-        const args = ValidateProjectCiLintSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const result = await validateProjectCiLint(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_ci_catalog_resources": {
-        const args = ListCiCatalogResourcesSchema.parse(params.arguments);
-        const result = await executeGitLabGraphQL(
-          `query ListCiCatalogResources(
-            $search: String,
-            $first: Int,
-            $after: String,
-            $groupIds: [GroupID!],
-            $scope: CiCatalogResourceScope,
-            $sort: CiCatalogResourceSort,
-            $topics: [String!],
-            $verificationLevel: CiCatalogResourceVerificationLevel
-          ) {
-            ciCatalogResources(
-              search: $search,
-              first: $first,
-              after: $after,
-              groupIds: $groupIds,
-              scope: $scope,
-              sort: $sort,
-              topics: $topics,
-              verificationLevel: $verificationLevel
-            ) {
-              nodes {
-                id
-                name
-                description
-                fullPath
-                icon
-                starCount
-                topics
-                verificationLevel
-                visibilityLevel
-                webPath
-                latestReleasedAt
-                last30DayUsageCount
-              }
-              pageInfo { hasNextPage endCursor }
-            }
-          }`,
-          {
-            search: args.search,
-            first: args.first ?? 20,
-            after: args.after,
-            groupIds: args.group_ids,
-            scope: args.scope,
-            sort: args.sort,
-            topics: args.topics,
-            verificationLevel: args.verification_level,
-          }
-        );
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-      }
-
-      case "get_ci_catalog_resource": {
-        const args = GetCiCatalogResourceSchema.parse(params.arguments);
-        const result = await executeGitLabGraphQL(
-          `query GetCiCatalogResource(
-            $id: CiCatalogResourceID,
-            $fullPath: ID,
-            $versionLimit: Int!,
-            $componentLimit: Int!,
-            $includeReadme: Boolean!
-          ) {
-            ciCatalogResource(id: $id, fullPath: $fullPath) {
-              id
-              name
-              description
-              fullPath
-              icon
-              starCount
-              topics
-              verificationLevel
-              visibilityLevel
-              webPath
-              latestReleasedAt
-              last30DayUsageCount
-              versions(first: $versionLimit) {
-                nodes {
-                  id
-                  name
-                  path
-                  createdAt
-                  releasedAt
-                  readme @include(if: $includeReadme)
-                  semver { major minor patch }
-                  components(first: $componentLimit) {
-                    nodes {
-                      id
-                      name
-                      description
-                      includePath
-                      last30DayUsageCount
-                      inputs {
-                        name
-                        description
-                        type
-                        required
-                        default
-                        options
-                        regex
-                      }
-                    }
-                    pageInfo { hasNextPage endCursor }
-                  }
-                }
-                pageInfo { hasNextPage endCursor }
-              }
-            }
-          }`,
-          {
-            id: args.id,
-            fullPath: args.full_path,
-            versionLimit: args.version_limit ?? 5,
-            componentLimit: args.component_limit ?? 20,
-            includeReadme: args.include_readme ?? false,
-          }
-        );
-
-        if (args.component_name) {
-          const resource = (result as any)?.data?.ciCatalogResource;
-          for (const version of resource?.versions?.nodes ?? []) {
-            const components = version?.components?.nodes;
-            if (Array.isArray(components)) {
-              version.components.nodes = components.filter(component => component?.name === args.component_name);
-            }
-          }
-        }
-
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
 
       case "create_pipeline": {
@@ -13011,19 +8253,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_pipeline_schedule_pipelines": {
-        const args = ListPipelineSchedulePipelinesSchema.parse(params.arguments);
-        const { project_id, pipeline_schedule_id, ...options } = args;
-        const pipelines = await listPipelineSchedulePipelines(
-          project_id,
-          pipeline_schedule_id,
-          options
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(pipelines, null, 2) }],
-        };
-      }
-
       case "create_pipeline_schedule": {
         const args = CreatePipelineScheduleSchema.parse(params.arguments);
         const { project_id, ...options } = args;
@@ -13067,21 +8296,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "play_pipeline_schedule": {
-        const { project_id, pipeline_schedule_id } = PlayPipelineScheduleSchema.parse(
-          params.arguments
-        );
-        const result = await playPipelineSchedule(project_id, pipeline_schedule_id);
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Ran pipeline schedule #${pipeline_schedule_id} immediately; the next scheduled run is unchanged. GitLab responded: ${result.message ?? "accepted"}`,
-            },
-          ],
-        };
-      }
-
       case "take_ownership_pipeline_schedule": {
         const { project_id, pipeline_schedule_id } = TakeOwnershipPipelineScheduleSchema.parse(
           params.arguments
@@ -13094,16 +8308,6 @@ async function handleToolCall(params: any) {
               text: `Took ownership of pipeline schedule #${schedule.id} "${schedule.description}". Owner: ${schedule.owner?.username ?? "unknown"}`,
             },
           ],
-        };
-      }
-
-      case "get_pipeline_schedule_variable": {
-        const { project_id, pipeline_schedule_id, key } = GetPipelineScheduleVariableSchema.parse(
-          params.arguments
-        );
-        const variable = await getPipelineScheduleVariable(project_id, pipeline_schedule_id, key);
-        return {
-          content: [{ type: "text", text: JSON.stringify(variable, null, 2) }],
         };
       }
 
@@ -13173,12 +8377,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "play_pipeline_jobs": {
-        const { project_id, job_ids, job_variables_attributes, timeout_seconds, poll_interval_seconds } = PlayPipelineJobsSchema.parse(params.arguments);
-        const jobs = await playPipelineJobs(project_id, job_ids, job_variables_attributes, timeout_seconds, poll_interval_seconds);
-        return { content: [{ type: "text", text: JSON.stringify(jobs) }] };
-      }
-
       case "retry_pipeline_job": {
         const { project_id, job_id, job_inputs } = RetryPipelineJobSchema.parse(params.arguments);
         const job = await retryPipelineJob(project_id, job_id, job_inputs);
@@ -13220,19 +8418,6 @@ async function handleToolCall(params: any) {
         const { project_id, job_id, timeout_seconds, poll_interval_seconds } = WaitForPipelineJobSchema.parse(params.arguments);
         const job = await waitForStatus(signal => getPipelineJob(project_id, job_id, signal), TERMINAL_JOB_STATUSES, timeout_seconds, poll_interval_seconds);
         return { content: [{ type: "text", text: JSON.stringify(job) }] };
-      }
-
-      case "list_job_artifacts": {
-        const { project_id, job_id, ...options } = ListJobArtifactsSchema.parse(params.arguments);
-        const artifacts = await listJobArtifacts(project_id, job_id, options);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(artifacts),
-            },
-          ],
-        };
       }
 
       case "download_job_artifacts": {
@@ -13284,20 +8469,6 @@ async function handleToolCall(params: any) {
         );
 
         const mergeRequests = await listMergeRequests(project_id, cleanedOptions);
-        return {
-          content: [{ type: "text", text: JSON.stringify(mergeRequests) }],
-        };
-      }
-
-      case "list_group_merge_requests": {
-        rejectIfStrictProjectScope("list_group_merge_requests");
-        const { group_id, ...options } = ListGroupMergeRequestsSchema.parse(params.arguments);
-        const cleanedOptions = cleanMutuallyExclusiveIdUsernameOptions(
-          options,
-          LIST_MERGE_REQUESTS_ID_USERNAME_PAIRS
-        );
-
-        const mergeRequests = await listGroupMergeRequests(group_id, cleanedOptions);
         return {
           content: [{ type: "text", text: JSON.stringify(mergeRequests) }],
         };
@@ -13402,34 +8573,6 @@ async function handleToolCall(params: any) {
             {
               type: "text",
               text: JSON.stringify(mergeRequests),
-            },
-          ],
-        };
-      }
-
-      case "promote_milestone": {
-        const { project_id, milestone_id } = PromoteProjectMilestoneSchema.parse(params.arguments);
-        const milestone = await promoteProjectMilestone(project_id, milestone_id);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(milestone),
-            },
-          ],
-        };
-      }
-
-      case "get_milestone_burndown_events": {
-        const { project_id, milestone_id, ...options } = GetMilestoneBurndownEventsSchema.parse(
-          params.arguments
-        );
-        const events = await getMilestoneBurndownEvents(project_id, milestone_id, options);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(events),
             },
           ],
         };
@@ -13550,21 +8693,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_group_milestone_burndown_events": {
-        rejectIfStrictProjectScope("get_group_milestone_burndown_events");
-        const { group_id, milestone_id, ...options } =
-          GetGroupMilestoneBurndownEventsSchema.parse(params.arguments);
-        const events = await getGroupMilestoneBurndownEvents(group_id, milestone_id, options);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(events),
-            },
-          ],
-        };
-      }
-
       case "list_commits": {
         const args = ListCommitsSchema.parse(params.arguments);
         const commits = await listCommits(args.project_id, args);
@@ -13589,15 +8717,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_file_blame": {
-        const args = GetFileBlameSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const blame = await getFileBlame(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(blame) }],
-        };
-      }
-
       case "list_commit_statuses": {
         const args = ListCommitStatusesSchema.parse(params.arguments);
         const { project_id, sha, ...options } = args;
@@ -13613,15 +8732,6 @@ async function handleToolCall(params: any) {
         const status = await createCommitStatus(project_id, sha, options);
         return {
           content: [{ type: "text", text: JSON.stringify(status) }],
-        };
-      }
-
-      case "list_group_iterations": {
-        rejectIfStrictProjectScope("list_group_iterations");
-        const args = ListGroupIterationsSchema.parse(params.arguments);
-        const iterations = await listGroupIterations(args.group_id, args);
-        return {
-          content: [{ type: "text", text: JSON.stringify(iterations) }],
         };
       }
 
@@ -13720,109 +8830,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_dependency_proxy_settings": {
-        rejectIfProjectScopedDeployment("get_dependency_proxy_settings");
-        const args = GetDependencyProxySettingsSchema.parse(params.arguments);
-        const settings = await getDependencyProxySettings(args.group_id);
-        return {
-          content: [{ type: "text", text: JSON.stringify(settings) }],
-        };
-      }
-
-      case "update_dependency_proxy_settings": {
-        rejectIfProjectScopedDeployment("update_dependency_proxy_settings");
-        const args = UpdateDependencyProxySettingsSchema.parse(params.arguments);
-        const { group_id, ...options } = args;
-        const settings = await updateDependencyProxySettings(group_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(settings) }],
-        };
-      }
-
-      case "list_dependency_proxy_blobs": {
-        rejectIfProjectScopedDeployment("list_dependency_proxy_blobs");
-        const args = ListDependencyProxyBlobsSchema.parse(params.arguments);
-        const { group_id, ...options } = args;
-        const result = await listDependencyProxyBlobs(group_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "purge_dependency_proxy_cache": {
-        rejectIfProjectScopedDeployment("purge_dependency_proxy_cache");
-        const args = PurgeDependencyProxyCacheSchema.parse(params.arguments);
-        await purgeDependencyProxyCache(args.group_id);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                { status: "success", message: "Dependency proxy cache purge scheduled" },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
-      // --- Vulnerability tools ---
-
-      case "list_project_vulnerabilities": {
-        const args = ListProjectVulnerabilitiesSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const result = await listProjectVulnerabilities(project_id, options);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "get_vulnerability": {
-        const args = GetVulnerabilitySchema.parse(params.arguments);
-        const result = await getVulnerability(args.vulnerability_id);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "dismiss_vulnerability": {
-        const args = DismissVulnerabilitySchema.parse(params.arguments);
-        const result = await dismissVulnerability(args.vulnerability_id, args.reason, args.comment);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "confirm_vulnerability": {
-        const args = ConfirmVulnerabilitySchema.parse(params.arguments);
-        const result = await confirmVulnerability(args.vulnerability_id, args.comment);
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "orbit_query": {
-        rejectIfStrictProjectScope("orbit_query");
-        const args = OrbitQuerySchema.parse(params.arguments);
-        const result = await orbitQuery(args.query, args.format);
-        const text = typeof result === "string" ? result : JSON.stringify(result);
-        return { content: [{ type: "text", text }] };
-      }
-
-      case "orbit_get_schema": {
-        rejectIfStrictProjectScope("orbit_get_schema");
-        OrbitSchemaSchema.parse(params.arguments);
-        const result = await orbitGetSchema();
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "orbit_get_status": {
-        rejectIfStrictProjectScope("orbit_get_status");
-        OrbitStatusSchema.parse(params.arguments);
-        const result = await orbitGetStatus();
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
-      case "orbit_list_tools": {
-        rejectIfStrictProjectScope("orbit_list_tools");
-        OrbitToolsSchema.parse(params.arguments);
-        const result = await orbitListTools();
-        return { content: [{ type: "text", text: JSON.stringify(result) }] };
-      }
-
       case "upload_markdown": {
         if (IS_REMOTE) {
           const args = MarkdownUploadRemoteSchema.parse(params.arguments);
@@ -13914,101 +8921,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "list_releases": {
-        const args = ListReleasesSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const releases = await listReleases(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(releases) }],
-        };
-      }
-
-      case "get_release": {
-        const args = GetReleaseSchema.parse(params.arguments);
-        const release = await getRelease(
-          args.project_id,
-          args.tag_name,
-          args.include_html_description
-        );
-        return {
-          content: [{ type: "text", text: JSON.stringify(release) }],
-        };
-      }
-
-      case "create_release": {
-        const args = CreateReleaseSchema.parse(params.arguments);
-        const { project_id, ...options } = args;
-        const release = await createRelease(project_id, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(release) }],
-        };
-      }
-
-      case "update_release": {
-        const args = UpdateReleaseSchema.parse(params.arguments);
-        const { project_id, tag_name, ...options } = args;
-        const release = await updateRelease(project_id, tag_name, options);
-        return {
-          content: [{ type: "text", text: JSON.stringify(release) }],
-        };
-      }
-
-      case "delete_release": {
-        const args = DeleteReleaseSchema.parse(params.arguments);
-        const release = await deleteRelease(args.project_id, args.tag_name);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                { status: "success", message: "Release deleted successfully", release },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
-      case "create_release_evidence": {
-        const args = CreateReleaseEvidenceSchema.parse(params.arguments);
-        await createReleaseEvidence(args.project_id, args.tag_name);
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(
-                { status: "success", message: "Release evidence created successfully" },
-                null,
-                2
-              ),
-            },
-          ],
-        };
-      }
-
-      case "download_release_asset": {
-        const args = DownloadReleaseAssetSchema.parse(params.arguments);
-        if (IS_REMOTE) {
-          const downloadUrl = buildDownloadUrl("release-asset", {
-            project_id: args.project_id,
-            tag_name: args.tag_name,
-            direct_asset_path: args.direct_asset_path,
-          });
-          return {
-            content: [{ type: "text", text: JSON.stringify({ download_url: downloadUrl, filename: args.direct_asset_path.split("/").pop() || args.direct_asset_path }) }],
-          };
-        }
-        const assetContent = await downloadReleaseAsset(
-          args.project_id,
-          args.tag_name,
-          args.direct_asset_path
-        );
-        return {
-          content: [{ type: "text", text: assetContent }],
-        };
-      }
-
       case "list_tags": {
         const args = ListTagsSchema.parse(params.arguments);
         const { project_id, ...options } = args;
@@ -14052,14 +8964,6 @@ async function handleToolCall(params: any) {
         };
       }
 
-      case "get_tag_signature": {
-        const args = GetTagSignatureSchema.parse(params.arguments);
-        const signature = await getTagSignature(args.project_id, args.tag_name);
-        return {
-          content: [{ type: "text", text: JSON.stringify(signature) }],
-        };
-      }
-
       case "list_webhooks": {
         const args = ListWebhooksSchema.parse(params.arguments);
         const webhooks = await listWebhooks(args);
@@ -14089,37 +8993,6 @@ async function handleToolCall(params: any) {
         const result = await deleteWebhook(args);
         return {
           content: [{ type: "text", text: JSON.stringify(result) }],
-        };
-      }
-
-      case "list_webhook_events": {
-        const args = ListWebhookEventsSchema.parse(params.arguments);
-        const events = await listWebhookEvents(args);
-        return {
-          content: [{ type: "text", text: JSON.stringify(events) }],
-        };
-      }
-
-      case "get_webhook_event": {
-        const args = GetWebhookEventSchema.parse(params.arguments);
-        const event = await getWebhookEvent(args);
-        if (!event) {
-          const searchScope = args.page ? `on page ${args.page}` : "in the 500 most recent events";
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(
-                  { error: `Webhook event ${args.event_id} not found ${searchScope}` },
-                  null,
-                  2
-                ),
-              },
-            ],
-          };
-        }
-        return {
-          content: [{ type: "text", text: JSON.stringify(event) }],
         };
       }
 

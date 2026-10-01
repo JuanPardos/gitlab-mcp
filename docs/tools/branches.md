@@ -16,7 +16,6 @@ Branch management, commit listing/inspection, file blame, and CI commit-status m
 - [`list_commits`](#list_commits) — 📖 Read-only
 - [`get_commit`](#get_commit) — 📖 Read-only
 - [`get_commit_diff`](#get_commit_diff) — 📖 Read-only
-- [`get_file_blame`](#get_file_blame) — 📖 Read-only
 - [`list_commit_statuses`](#list_commit_statuses) — 📖 Read-only
 - [`create_commit_status`](#create_commit_status) — ✏️ Writes
 
@@ -201,22 +200,6 @@ Get changes/diffs of a specific commit. Use this for a known resource or result;
 | `project_id` | string | ✓ | Project ID or complete URL-encoded path to project |
 | `sha` | string | ✓ | The commit hash or name of a repository branch or tag |
 | `full_diff` | boolean |  | Whether to return the full diff or only first page (default: false) |
-
-### `get_file_blame`
-
-*📖 Read-only*
-
-Get git blame for a file at a given ref. Each entry maps a contiguous range of source lines to the commit that last changed them (id, author, authored_date, message). Use range_start/range_end to limit blame to specific lines.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or complete URL-encoded path to project |
-| `file_path` | string | ✓ | The full path of the file to blame, relative to repo root |
-| `ref` | string | ✓ | The name of branch, tag or commit (required by GitLab blame API) |
-| `range_start` | integer |  | First line of the blame range (inclusive, 1-based). Both range[start] and range[end] must be set together. |
-| `range_end` | integer |  | Last line of the blame range (inclusive, 1-based). Both range[start] and range[end] must be set together. |
 
 ### `list_commit_statuses`
 

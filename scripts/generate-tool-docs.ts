@@ -100,10 +100,6 @@ const GROUP_META: Record<ToolsetId, GroupMeta> = {
     title: "Wiki",
     blurb: "Project and group wiki page CRUD. Attachment uploads where supported.",
   },
-  releases: {
-    title: "Releases",
-    blurb: "Release lifecycle, release evidence, and asset download.",
-  },
   tags: {
     title: "Tags",
     blurb: "Tag listing, creation, deletion, and signature inspection.",
@@ -112,11 +108,6 @@ const GROUP_META: Record<ToolsetId, GroupMeta> = {
     title: "Users & Events",
     blurb:
       "User lookup, the authenticated user (`whoami`), event streams, and markdown attachment upload/download.",
-  },
-  workitems: {
-    title: "Work Items",
-    blurb:
-      "Modern unified API for issues, tasks, incidents, and other typed work items — including notes, emoji reactions, and incident timeline events.",
   },
   webhooks: {
     title: "Webhooks",
@@ -130,21 +121,6 @@ const GROUP_META: Record<ToolsetId, GroupMeta> = {
     title: "Variables",
     blurb: "Project and group CI/CD variable CRUD.",
   },
-  dependency_proxy: {
-    title: "Dependency Proxy",
-    blurb:
-      "Inspect and manage the GitLab dependency proxy cache settings, blob storage, and purge operations.",
-  },
-  vulnerabilities: {
-    title: "Vulnerabilities",
-    blurb:
-      "AI-assisted vulnerability triage — list findings, inspect details, dismiss with reason, or confirm for remediation. Backed by the GitLab GraphQL API; requires GitLab Ultimate.",
-  },
-  orbit: {
-    title: "GitLab Orbit",
-    blurb:
-      "Query the Orbit SDLC knowledge graph (Beta; Premium/Ultimate). Graph queries consume GitLab credits; schema, status, and tool listing are free.",
-  },
 };
 
 const GROUP_ORDER: ToolsetId[] = [
@@ -155,20 +131,15 @@ const GROUP_ORDER: ToolsetId[] = [
   "merge_requests",
   "issues",
   "labels",
-  "workitems",
   "ci",
   "pipelines",
   "milestones",
   "wiki",
-  "releases",
   "tags",
   "users",
   "variables",
   "webhooks",
   "search",
-  "dependency_proxy",
-  "vulnerabilities",
-  "orbit",
 ];
 
 // --- Helpers --------------------------------------------------------------

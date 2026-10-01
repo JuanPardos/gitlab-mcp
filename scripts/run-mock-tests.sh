@@ -11,8 +11,8 @@ EXCLUDE_OPTS=(
   ! -name 'multi-server-test.ts' ! -name 'client-pool-test.ts'
   ! -name 'no-proxy-test.ts' ! -name 'no-proxy-integration-test.ts'
   ! -name 'remote-auth-tests.ts' ! -name 'test-mr-diffs-filter.ts'
-  ! -name 'test-mr-file-diffs.ts' ! -name 'test-token-optimizations.ts'
-  ! -name 'test-merge-request-approvals.ts' ! -name 'config-allowed-groups.test.ts'
+  ! -name 'test-token-optimizations.ts'
+  ! -name 'config-allowed-groups.test.ts'
 )
 
 run_mock_tests() {

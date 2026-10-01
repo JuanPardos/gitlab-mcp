@@ -11,7 +11,6 @@ Tag listing, creation, deletion, and signature inspection.
 - [`get_tag`](#get_tag) — 📖 Read-only
 - [`create_tag`](#create_tag) — ✏️ Writes
 - [`delete_tag`](#delete_tag) — ✏️ Writes
-- [`get_tag_signature`](#get_tag_signature) — 📖 Read-only
 
 ---
 
@@ -65,19 +64,6 @@ Create a new repository tag. Use this for a new resource or action; choose the c
 *✏️ Writes*
 
 Delete a repository tag. Use this only after verifying the target; choose a get or list tool first when you need to inspect state without changing it. It changes or removes remote GitLab data and may be irreversible; it requires the necessary project or group permission and returns validation, conflict, permission, or rate-limit errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
-
-**Parameters**
-
-| Parameter | Type | Required | Description |
-|---|---|:-:|---|
-| `project_id` | string | ✓ | Project ID or URL-encoded path |
-| `tag_name` | string | ✓ | The name of the tag |
-
-### `get_tag_signature`
-
-*📖 Read-only*
-
-Get the X.509 signature of a signed tag (404 if unsigned). Use this for a known resource or result; choose the corresponding list or search tool when you need to discover multiple resources. It is read-only and does not mutate GitLab data; missing resources, invalid identifiers, insufficient permission, and rate limits are returned as errors. When `project_id` or `group_id` is accepted, provide the numeric ID or complete URL-encoded path described by the schema; use required identifiers and pagination fields exactly as documented.
 
 **Parameters**
 
